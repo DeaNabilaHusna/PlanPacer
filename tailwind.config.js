@@ -6,7 +6,18 @@ export default {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        raleway : ['Raleway'],
+        paytone : ['Paytone One']
+    },
+    colors: {
+      'yellow': '#FFA33C',
+      'navy': '#11235A',
+      'defwhite': '#FCFEFE',
+      'dafblack': '#121212',
+    }
+    },
   },
   plugins: [],
 }
