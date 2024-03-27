@@ -15,7 +15,8 @@ export default {
       'yellow': '#FFA33C',
       'navy': '#11235A',
       'defwhite': '#FCFEFE',
-      'dafblack': '#121212',
+      'defblack': '#121212',
+      'defgrey': '#F1F2F3'
     }
     },
   },
