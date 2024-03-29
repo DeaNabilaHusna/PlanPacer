@@ -61,7 +61,7 @@
                     </p>
                     <form action="">
                         <div class="mt-5 sm:flex md:mt-8 flex-wrap">
-                            <div class="mr-4 flex items-center mb-4 sm:mb-0"> <!-- Menambahkan kelas mb-4 untuk margin-bottom pada mobile view -->
+                            <div class="mr-4 flex items-center mb-4 sm:mb-0">
                                 <input placeholder="Masukkan Email" id="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-md border-0 px-3 py-1.5 text-gray-950 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                             </div>
                             <div class="flex justify-center">
