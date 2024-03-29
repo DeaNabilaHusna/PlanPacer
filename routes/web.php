@@ -28,3 +28,6 @@ Route::get('/login', function () {
 Route::get('/registrasi', function () {
     return view('registrasi');
 });
+Route::get('/main-menu', function () {
+    return view('mainmenu');
+});
