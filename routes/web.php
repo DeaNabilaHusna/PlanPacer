@@ -31,3 +31,6 @@ Route::get('/registrasi', function () {
 Route::get('/main-menu', function () {
     return view('mainmenu');
 });
+Route::get('/proyek', function () {
+    return view('proyek');
+});
