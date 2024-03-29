@@ -12,13 +12,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-// Route::get('/', function () {
-//     return view('index');
-// });
 Route::get('/', function () {
     return view('landing');
 });
@@ -33,4 +26,7 @@ Route::get('/main-menu', function () {
 });
 Route::get('/proyek', function () {
     return view('proyek');
+});
+Route::get('/tugas', function () {
+    return view('tugas');
 });
