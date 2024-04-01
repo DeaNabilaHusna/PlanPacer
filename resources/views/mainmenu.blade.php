@@ -1,9 +1,10 @@
+@auth
 @extends('layouts.main')
   @section('content')
   <!-- Content -->
     <!-- Page Heading -->
     <header class="mb-4">
-      <p class="text-3xl font-extrabold text-defblack">Halo, User</p>
+      <p class="text-3xl font-extrabold text-defblack">Halo, {{ auth()->user()->username }}</p>
       <h1 class="block text-base font-semibold text-defblack sm:text-md">Selamat Datang Kembali</h1>
     </header>
     <!-- End Page Heading -->
@@ -154,4 +155,6 @@
 
   <!-- End Content -->
   @endsection
+  @endauth
+
   <!-- ========== END MAIN CONTENT ========== -->
