@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LandingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,18 +16,18 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', function () {
-    return view('landing');
-});
-Route::get('/login', function () {
-    return view('login');
-});
-Route::get('/registrasi', function () {
-    return view('registrasi');
-});
-Route::get('/main-menu', function () {
-    return view('mainmenu');
-});
+// Route::get('/', function () {
+//     return view('landing');
+// });
+Route::get('/', [LandingController::class,'index'])->middleware('guest')
+;
+Route::get('/login', [LoginController::class,'index']);
+Route::post('/login', [LoginController::class,'authenticate']);
+Route::post('/logout', [LoginController::class,'logout']);
+Route::get('/registrasi', [RegisterController::class,'index']);
+Route::post('/registrasi', [RegisterController::class,'store']);
+Route::get('/main-menu', [DashboardController::class,'index']);
+
 Route::get('/proyek', function () {
     return view('proyek');
 });
