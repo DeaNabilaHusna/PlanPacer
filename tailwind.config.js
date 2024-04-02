@@ -17,7 +17,8 @@ export default {
       'defwhite': '#FCFEFE',
       'defblack': '#121212',
       'defgrey': '#F1F2F3'
-    }
+    },
+    display: ['group-focus'],
     },
   },
   plugins: [],

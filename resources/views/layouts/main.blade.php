@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <title>PlanPacer</title>
 </head>
 
@@ -54,7 +55,7 @@
           <div class="relative inline-flex [--placement:bottom-right]">
 
             <button type="button" class="w-10 h-10 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none">
-              <img class="inline-block rounded-full" src="images/profile.jpg" alt="Image Description">
+              <img class="inline-block rounded-full" src="../images/profile.jpg" alt="Image Description">
             </button>
           </div>
         </div>
@@ -95,7 +96,7 @@
     <nav class="p-6 w-full flex flex-col flex-wrap font-raleway">
       <ul class="space-y-1.5">
         <li>
-          <a class="sidebar-nav-link flex items-center gap-x-3.5 py-2 px-2.5 text-sm font-semibold text-defwhite rounded-lg hover:bg-defwhite hover:text-defblack active:text-defblack active:bg-defwhite focus:text-defblack focus:bg-defwhite focus:font-extrabold " href="/main-menu">
+          <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm font-semibold text-defwhite rounded-lg hover:bg-defwhite hover:text-defblack focus:text-defblack focus:bg-defwhite focus:font-extrabold {{ Request::is('main-menu') ? 'bg-defwhite text-black' : ''}}" href="/main-menu">
             <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
               <polyline points="9 22 9 12 15 12 15 22" />
@@ -103,14 +104,14 @@
             Dasbor
           </a>
         </li>
-        <li><a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm font-semibold text-defwhite rounded-lg hover:bg-defwhite hover:text-defblack active:text-defblack active:bg-defwhite focus:text-defblack focus:bg-defwhite focus:font-extrabold" href="/proyek">
+        <li><a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm font-semibold text-defwhite rounded-lg hover:bg-defwhite hover:text-defblack focus:text-defblack focus:bg-defwhite focus:font-extrabold {{ Request::is('main-menu/proyek') ? 'bg-defwhite text-black' : ''}}" href="/main-menu/proyek">
             <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
               <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
             </svg>
             Proyek
           </a></li>
-        <li><a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm font-semibold text-defwhite rounded-lg hover:bg-defwhite hover:text-defblack active:text-defblack active:bg-defwhite focus:text-defblack focus:bg-defwhite focus:font-extrabold" href="/tugas">
+        <li><a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm font-semibold text-defwhite rounded-lg hover:bg-defwhite hover:text-defblack focus:text-defblack focus:bg-defwhite focus:font-extrabold {{ Request::is('main-menu/tugas') ? 'bg-defwhite text-black' : ''}}" href="/main-menu/tugas">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" class="flex-shrink-0 size-4" viewBox="0 0 24 24">
               <path fill="#FCFEFE" d="M10 0 9 1v1H7v1H4L2 5a238 238 0 0 0 0 16l2 1h14l1-1 1-8-1-9-1-1h-3V2h-2V1l-1-1h-2Zm2 1v1l2 1v2H8V3l2-1V1h2ZM7 5v1h8V4h3v1h1v7a170 170 0 0 1-1 9H4l-1-1V5l1-1h3v1Z" />
               <path fill="#FCFEFE" d="M8 7 7 8v1H6L5 8v1l1 1 2-1 1-1V7H8ZM10 9v1h4l3-1h-7ZM8 12H7v1H6l-1-1v1l1 1h1l2-2H8ZM10 13v1h7v-1h-7ZM8 16l-1 1H5l1 1v1l2-1 1-2H8ZM10 17v1a100 100 0 0 0 7 0v-1h-7Z" />

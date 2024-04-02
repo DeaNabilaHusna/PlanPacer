@@ -31,4 +31,9 @@ class Proyek extends Model
     public function progress(){
         return $this->hasMany(Progress::class);
     }
+
+    public function getRouteKeyName(): string
+{
+    return 'nama_proyek';
+}
 }
