@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth scroll-pt-24">
 
 <head>
     <meta charset="UTF-8">
@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    <!-- START HEADER  -->
     <header class="fixed top-0 left-0 w-full z-50">
         <nav class=" bg-navy border-gray-200 px-4 lg:px-6 py-2.5">
             <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
@@ -20,7 +21,7 @@
                 </a>
                 <div class="flex items-center lg:order-2">
                     <div class="flex justify-center">
-                        <button type="submit" class="w-28 rounded-md bg-yellow px-3 py-1.5 text-sm font-semibold leading-6 text-defwhite shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Gabung</button>
+                        <a href="/login"><button type="submit" class="w-28 rounded-md bg-yellow px-3 py-1.5 text-sm font-semibold leading-6 text-defwhite shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Gabung</button></a>
                     </div>
                     <button data-collapse-toggle="mobile-menu-2" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="mobile-menu-2" aria-expanded="false">
                         <span class="sr-only">Open main menu</span>
@@ -35,22 +36,24 @@
                 <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1 ml-auto mr-7" id="mobile-menu-2">
                     <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                         <li>
-                            <a href="#" class="block py-2 pr-4 pl-3 text-defwhite p-0 hover:text-yellow focus:text-yellow">Home</a>
+                            <a href="" class="block py-2 pr-4 pl-3 text-defwhite p-0 hover:text-yellow focus:text-yellow">Home</a>
                         </li>
                         <li>
-                            <a href="#" class="block py-2 pr-4 pl-3 text-defwhite p-0 hover:text-yellow focus:text-yellow">Fitur</a>
+                            <a href="#fitur" class="block py-2 pr-4 pl-3 text-defwhite p-0 hover:text-yellow focus:text-yellow">Fitur</a>
                         </li>
                         <li>
-                            <a href="#" class="block py-2 pr-4 pl-3 text-defwhite p-0 hover:text-yellow focus:text-yellow">Panduan</a>
+                            <a href="#panduan" class="block py-2 pr-4 pl-3 text-defwhite p-0 hover:text-yellow focus:text-yellow">Panduan</a>
                         </li>
                         <li>
-                            <a href="#" class="block py-2 pr-4 pl-3 text-defwhite p-0 hover:text-yellow focus:text-yellow">Tentang Kami</a>
+                            <a href="#about" class="block py-2 pr-4 pl-3 text-defwhite p-0 hover:text-yellow focus:text-yellow">Tentang Kami</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+    <!-- END HEADER  -->
+    <!-- START HERO SECTION  -->
     <section class="bg-navy">
         <div class="relative flex flex-col-reverse items-center max-w-screen-xl px-4 mx-auto md:flex-row sm:px-6 p-8">
             <div class="flex items-center py-5 md:w-1/2 md:pb-20 md:pt-10 md:pr-10">
@@ -62,10 +65,10 @@
                     <form action="">
                         <div class="mt-5 sm:flex md:mt-8 flex-wrap">
                             <div class="mr-4 flex items-center mb-4 sm:mb-0">
-                                <input placeholder="Masukkan Email" id="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-md border-0 px-3 py-1.5 text-gray-950 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                <input placeholder="Masukkan Email" id="email" name="email" type="email" autocomplete="email" class="block w-full rounded-md border-0 px-3 py-1.5 text-gray-950 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                             </div>
                             <div class="flex justify-center">
-                                <button type="submit" class="w-28 rounded-md bg-yellow px-3 py-1.5 text-sm font-semibold leading-6 text-defwhite shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Buat Akun</button>
+                                <a href="/registrasi" class="text-center w-28 rounded-md bg-yellow px-3 py-1.5 text-sm font-semibold leading-6 text-defwhite shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Buat Akun</a>
                             </div>
                         </div>
                     </form>
@@ -81,8 +84,10 @@
             </div>
         </div>
     </section>
+    <!-- END HERO SECTION  -->
+    <!-- START ABOUT SECTION  -->
     <section class="bg-defwhite">
-        <div class="container flex justify-center items-center mx-auto py-16 px-4 sm:px-6 lg:px-8">
+        <div id="about" class="container flex justify-center items-center mx-auto py-16 px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
                 <div class="mt-12 md:mt-0">
                     <img src="images/aboutsection.png" alt="About Us Image" class="object-cover rounded-lg shadow-md">
@@ -98,8 +103,10 @@
             </div>
         </div>
     </section>
+    <!-- END ABOUT SECTION  -->
+    <!-- START FEATURE SECTION  -->
     <section class="bg-defgrey py-8">
-        <div class="container mx-auto text-center px-4">
+        <div id="fitur" class="container mx-auto text-center px-4">
             <h2 class="text-3xl font-semibold text-defblack mb-12">Mengapa PlanPacer</h2>
             <div class="container mx-auto max-w-5xl flex gap-12 flex-wrap items-start justify-center md:justify-between font-raleway">
                 <div class="grid gap-4 justify-items-center text-center md:flex-1">
@@ -238,26 +245,26 @@
             </div>
         </div>
     </section>
-    <section>
-        <div class="bg-defwhite py-8">
-
+    <!-- END FEATURE SECTION -->
+    <!-- START GUIDE SECTION -->
+    <section class="py-8">
+        <div id="panduan" class="bg-defwhite md:px-28">
             <div class="text-center mb-8">
                 <h2 class="text-3xl font-semibold text-defblack">Jelajahi Situs dengan Lebih Baik</h2>
             </div>
 
             <!-- ASLi  -->
             <div class="lg:relative flex flex-col-reverse items-center max-w-screen-xl mx-auto md:flex-row mb-8 sm:px-6">
-                <div class="flex items-center py-5 md:w-1/2 md:pb-20 md:pt-10 md:pr-10">
-                    <div class="text-left">
+                <div class="flex items-center justify-center py-5 md:w-1/2 md:pb-20 md:pt-10 md:pr-10">
+                    <div class="justify-center text-center px-6 lg:px-0 md:text-left">
                         <h1 class="text-3xl tracking-wider"><span class="font-semibold text-defblack font-raleway ">1. Mulai Petualangan Proyek</span></h1>
                         <p class="max-w-md mx-auto mt-3 text-medium text-defblack sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
                             Beri inspirasi pada proyek-proyek baru dengan sekali klik dan buatlah dunia Anda sendiri.
                         </p>
-
                     </div>
                 </div>
-                <div class="flex items-center md:w-1/2 md:pl-10 ">
-                    <div class="lg:relative w-full rounded">
+                <div class="flex items-center justify-end md:w-1/2">
+                    <div class="lg:relative rounded">
                         <div class="rounded-lg">
                             <img class="w-max" src="images/rectangle.png" />
                         </div>
@@ -267,37 +274,34 @@
             </div>
             <!-- END ASLI -->
             <div class="lg:relative flex flex-col items-center max-w-screen-xl mx-auto md:flex-row mb-8 sm:px-6">
-                <div class="flex items-center md:w-1/2 md:pl-10 ">
-                    <div class="lg:relative w-full rounded">
+                <div class="flex items-center md:w-1/2">
+                    <div class="lg:relative rounded">
                         <div class="rounded-lg">
                             <img class="w-max" src="images/rectangle.png" />
                         </div>
                     </div>
 
                 </div>
-                <div class="flex items-center py-5 md:w-1/2 md:pb-20 md:pt-10 md:pr-10">
-                    <div class="text-left">
+                <div class="flex items-center justify-end py-5 md:w-1/2 md:pb-20 md:pt-10 md:pl-20 lg:pl-28">
+                    <div class="justify-center text-center px-6 lg:px-0 md:text-left">
                         <h1 class="text-3xl tracking-wider"><span class="font-semibold text-defblack font-raleway ">2. Kelola Tugas dengan Gaya</span></h1>
                         <p class="max-w-md mx-auto mt-3 text-medium text-defblack sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
                             Tambahkan tugas baru dengan pilihan khusus seperti "To-Do", "In Progress", "Done", dan "Upcoming" untuk membantu Anda menentukan skala prioritas.
                         </p>
-
                     </div>
                 </div>
-
             </div>
             <div class="lg:relative flex flex-col-reverse items-center max-w-screen-xl mx-auto md:flex-row mb-8 sm:px-6">
-                <div class="flex items-center py-5 md:w-1/2 md:pb-20 md:pt-10 md:pr-10">
-                    <div class="text-left">
+                <div class="flex items-center justify-center py-5 md:w-1/2 md:pb-20 md:pt-10 md:pr-10">
+                    <div class="justify-center text-center px-6 lg:px-0 md:text-left">
                         <h1 class="text-3xl tracking-wider"><span class="font-semibold text-defblack font-raleway ">3. Tetapkan Batas Waktu</span></h1>
                         <p class="max-w-md mx-auto mt-3 text-medium text-defblack sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
                             Beri tugas-tugas Anda tenggat waktu dengan mudah sehingga Anda selalu berada di jalur yang benar.
                         </p>
-
                     </div>
                 </div>
-                <div class="flex items-center md:w-1/2 md:pl-10 ">
-                    <div class="lg:relative w-full rounded">
+                <div class="flex items-center justify-end md:w-1/2">
+                    <div class="lg:relative rounded">
                         <div class="rounded-lg">
                             <img class="w-max" src="images/rectangle.png" />
                         </div>
@@ -305,25 +309,23 @@
 
                 </div>
             </div>
-            <div class="lg:relative flex flex-col items-center max-w-screen-xl mx-auto md:flex-row sm:px-6">
-                <div class="flex items-center md:w-1/2 md:pl-10 ">
-                    <div class="lg:relative w-full rounded">
+            <div class="lg:relative flex flex-col items-center max-w-screen-xl mx-auto md:flex-row mb-8 sm:px-6">
+                <div class="flex items-center md:w-1/2">
+                    <div class="lg:relative rounded">
                         <div class="rounded-lg">
                             <img class="w-max" src="images/rectangle.png" />
                         </div>
                     </div>
 
                 </div>
-                <div class="flex items-center py-5 md:w-1/2 md:pb-20 md:pt-10 md:pr-10">
-                    <div class="text-left">
+                <div class="flex items-center justify-end py-5 md:w-1/2 md:pb-20 md:pt-10 md:pl-20 lg:pl-28">
+                    <div class="justify-center text-center px-6 lg:px-0 md:text-left">
                         <h1 class="text-3xl tracking-wider"><span class="font-semibold text-defblack font-raleway ">4. Tim yang Solid</span></h1>
                         <p class="max-w-md mx-auto mt-3 text-medium text-defblack sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
                             Undang teman atau rekan kerja Anda untuk bergabung dan berkontribusi pada proyek dengan mudah dan menyenangkan.
                         </p>
-
                     </div>
                 </div>
-
             </div>
             <!-- BATAS -->
             <!-- <div class=" flex flex-col-reverse items-center max-w-screen-xl mx-auto md:flex-row sm:px-6">
@@ -346,12 +348,10 @@
                     </div>
                 </div>
             </div> -->
-
-
-
-
         </div>
     </section>
+    <!-- END GUIDE SECTION  -->
+    <!-- START FOOTER -->
     <footer class="bg-navy">
         <div class="mx-auto max-w-7xl py-14 px-24 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
             <nav class="-mx-5 -my-2 flex flex-wrap justify-center order-1" aria-label="Footer">
@@ -393,6 +393,7 @@
         </div>
         <div class="h-12 bg-yellow">
     </footer>
+    <!-- END FOOTER -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const mobileMenuToggle = document.querySelector('[data-collapse-toggle="mobile-menu-2"]');
