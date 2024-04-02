@@ -30,3 +30,7 @@ Route::get('/proyek', function () {
 Route::get('/tugas', function () {
     return view('tugas');
 });
+
+Route::get('/about', function () {
+    return view('aboutus');
+});
