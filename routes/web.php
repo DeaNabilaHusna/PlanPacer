@@ -36,3 +36,9 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::post('/logout', [LoginController::class, 'logout']);
 });
+
+
+Route::get('/about', function () {
+    return view('aboutus');
+});
+
