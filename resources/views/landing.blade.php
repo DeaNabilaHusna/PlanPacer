@@ -96,7 +96,7 @@
                     <h2 class="text-3xl font-semibold text-defblack sm:text-4xl">Atur rencana proyekmu dengan PlanPacer</h2>
                     <p class="mt-4 text-defblack text-lg font-medium">Solusi manajemen proyek yang inovatif dirancang untuk membantu tim dan individu mengatur, melacak, dan mengeksekusi proyek mereka dengan efisiensi dan keberhasilan yang maksimal.</p>
                     <div class="mt-8">
-                        <a href="#" class=" underline underline-offset-2 font-medium text-yellow hover:text-yellow hover:font-bold">Lihat lebih banyak</a>
+                        <a href="/about" class=" underline underline-offset-2 font-medium text-yellow hover:text-yellow hover:font-bold">Lihat lebih banyak</a>
                     </div>
                 </div>
 

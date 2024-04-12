@@ -4,10 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Proyek;
-use App\Models\Kontributor;
-use App\Models\UserKontributor;
+use App\Models\TugasItem;
+use App\Models\UserTugasitem;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -21,7 +22,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $guarded = ['id'];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -46,7 +46,7 @@ class User extends Authenticatable
         return $this->hasMany(Proyek::class);
     }
 
-    public function kontributor(){
-        return $this->belongsToMany(Kontributor::class, UserKontributor::class);
-    }
+   public function tugasitem(){
+       return $this->belongsToMany(TugasItem::class, UserTugasitem::class);
+   }
 }

@@ -5,11 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class KontributorTugasitem extends Model
+class UserTugasitem extends Model
 {
     use HasFactory;
-
-    protected $table = "kontributor_tugasitems";
+    protected $table = "user_tugasitems";
     protected $guarded = ["id"];
-
 }
