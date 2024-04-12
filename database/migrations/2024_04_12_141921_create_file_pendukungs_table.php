@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kontributor_tugasitems', function (Blueprint $table) {
-            $table->foreignId('kontributor_id');
+        Schema::create('file_pendukungs', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('proyek_id');
+            $table->string('nama_file');
             $table->timestamps();
         });
     }
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kontributor_tugasitems');
+        Schema::dropIfExists('file_pendukungs');
     }
 };

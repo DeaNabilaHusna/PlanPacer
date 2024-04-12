@@ -27,13 +27,11 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/registrasi', [RegisterController::class, 'index']);
     Route::post('/registrasi', [RegisterController::class, 'store']);
 });
-Route::middleware(['auth'])->group(function () {
+
+// PIC Route
+Route::middleware(['auth', 'checkRole:pic'])->group(function () {
     Route::get('/main-menu', [DashboardController::class, 'index']);
-    // Route::get('/main-menu/proyek', function () {
-    //     return view('proyek');
-    // });
     Route::resource('/main-menu/proyek', ProyekController::class);
-    // Route::resource('/main-menu/proyek/PlanPacer', ProyekController::class);
     Route::get('/main-menu/tugas', function () {
         return view('tugas');
     });

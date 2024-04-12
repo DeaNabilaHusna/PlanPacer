@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('proyek_id');
             $table->string('nama_kartu');
-            $table->timestamp('tgl_mulai')->default(now());;
-            $table->timestamp('tgl_selesai')->nullable();
             $table->timestamps();
         });
     }

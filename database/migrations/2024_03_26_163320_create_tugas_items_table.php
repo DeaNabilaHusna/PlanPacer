@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('kartu_id');
             $table->string('nama_tugas_item');
-            $table->timestamp('tenggat_waktu')->nullable();
-            $table->string('penanggung_jawab');
             $table->string('deskripsi_tugas_item')->nullable();
             $table->string('status_tugas_item');
+            $table->date('tgl_mulai_tugas')->default(now());;
+            $table->date('tgl_selesai_tugas');
             $table->timestamps();
         });
     }

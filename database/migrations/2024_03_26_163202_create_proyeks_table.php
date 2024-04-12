@@ -17,10 +17,11 @@ return new class extends Migration
             $table->foreignId('user_id');  
             $table->string('nama_proyek');
             $table->text('deskripsi_proyek');
-            $table->string('url_proyek');
+            $table->string('url_proyek')->nullable();
             $table->integer('visibilitas');
-            $table->integer('file_pendukung')->nullable();
             $table->integer('status_proyek');
+            $table->date('tgl_mulai_proyek')->default(now());;
+            $table->date('tgl_selesai_proyek');
             $table->timestamps();
         });
     }
