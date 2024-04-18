@@ -53,7 +53,6 @@ $segmentCount = count($segments);
                                     </svg>
                                     <div class="absolute group-focus:block top-full min-w-full w-max bg-defwhite shadow-md mt-1 rounded">
                                         <ul class="text-left border rounded">
-                                            <li><a href="#" class="px-4 py-1 hover:bg-gray-100 border-b">Tambah, Edit File</a></li>
                                             <li><a href="#" class="px-4 py-1 hover:bg-gray-100 border-b">Edit</a></li>
                                             <li><a href="" class="px-4 py-1 hover:bg-gray-100 border-b">Detail</a></li>
                                             <li><a href="#" class="px-4 py-1 hover:bg-gray-100 border-b">Hapus</a></li>

@@ -12,7 +12,7 @@
                     <div class="sm:col-span-4">
                         <label for="nama_proyek" class="block text-sm font-medium leading-6 text-gray-900">Nama Proyek</label>
                         <div class="mt-2">
-                            <input type="text" id="nama_proyek" name="nama_proyek" autocomplete="nama_proyek" value="{{ old('nama_proyek', $proyek->nama_proyek) }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            <input type="text" id="nama_proyek" name="nama_proyek" autocomplete="nama_proyek" value="{{ old('nama_proyek', $proyek->nama_proyek) }}" class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                             @error('nama_proyek')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -21,7 +21,7 @@
                     <div class="sm:col-span-4">
                         <label for="url_proyek" class="block text-sm font-medium leading-6 text-gray-900">URL Proyek</label>
                         <div class="mt-2 ">
-                            <input type="text" id="url_proyek" name="url_proyek" value="{{ old('url_proyek', $proyek->url_proyek) }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            <input type="text" id="url_proyek" name="url_proyek" value="{{ old('url_proyek', $proyek->url_proyek) }}" class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                             @error('url_proyek')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -55,7 +55,7 @@
                         <label for="visibilitas" class="block text-sm font-medium leading-6 text-gray-900">Visibilitas</label>
                         <div class="mt-2">
                             <select id="visibilitas" name="visibilitas" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                                <?php foreach (['publik', 'private', 'terbatas'] as $visibility) : ?>
+                                <?php foreach (['private', 'terbatas'] as $visibility) : ?>
                                     @if (old('visibilitas', $proyek->visibilitas) == $visibility)
                                     <option selected value="<?= $visibility ?>"><?= ucfirst($visibility) ?></option>
                                     @else
@@ -72,7 +72,7 @@
                         <label for="status_proyek" class="block text-sm font-medium leading-6 text-gray-900">Status Proyek</label>
                         <div class="mt-2">
                             <select id="status_proyek" name="status_proyek" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                                <?php foreach (['selesai', 'sedang berjalan'] as $status) : ?>
+                                <?php foreach (['sedang berjalan', 'selesai'] as $status) : ?>
                                     @if (old('status_proyek', $proyek->status_proyek) == $status)
                                     <option selected value="<?= $status ?>"><?= ucfirst($status) ?></option>
                                     @else
@@ -89,7 +89,7 @@
                     <div class="col-span-full">
                         <label for="deskripsi_proyek" class="block text-sm font-medium leading-6 text-gray-900">Deskripsi Proyek</label>
                         <div class="mt-2">
-                            <textarea id="deskripsi_proyek" name="deskripsi_proyek" rows="3" value="{{ old('deskripsi_proyek', $proyek->deskripsi_proyek) }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                            <textarea id="deskripsi_proyek" name="deskripsi_proyek" rows="3" value="{{ old('deskripsi_proyek', $proyek->deskripsi_proyek) }}" class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
                         </div>
                     </div>
                     <div class="col-span-full">
