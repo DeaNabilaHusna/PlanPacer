@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('proyeks', function (Blueprint $table) {
             $table->id();
             // $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('user_id');  
+            $table->foreignId('user_id');
             $table->string('nama_proyek');
-            $table->text('deskripsi_proyek');
+            $table->text('deskripsi_proyek')->nullable();
             $table->string('url_proyek')->nullable();
-            $table->integer('visibilitas');
-            $table->integer('status_proyek');
+            $table->enum('visibilitas', ['publik', 'private', 'terbatas'])->default('publik');
+            $table->enum('status_proyek', ['sedang berjalan', 'selesai'])->default('sedang berjalan');
             $table->date('tgl_mulai_proyek')->default(now());;
             $table->date('tgl_selesai_proyek');
             $table->timestamps();
