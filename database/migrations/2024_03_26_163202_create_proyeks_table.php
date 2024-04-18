@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nama_proyek');
             $table->text('deskripsi_proyek')->nullable();
             $table->string('url_proyek')->nullable();
-            $table->enum('visibilitas', ['publik', 'private', 'terbatas'])->default('publik');
+            $table->enum('visibilitas', ['private', 'terbatas'])->default('private');
             $table->enum('status_proyek', ['sedang berjalan', 'selesai'])->default('sedang berjalan');
             $table->date('tgl_mulai_proyek')->default(now());;
             $table->date('tgl_selesai_proyek');

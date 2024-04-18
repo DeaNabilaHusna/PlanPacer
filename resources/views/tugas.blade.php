@@ -19,7 +19,10 @@
                   Proyek
                 </th>
                 <th scope="col" class="px-6 py-3">
-                  Tenggat Waktu
+                  Tanggal Mulai
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Tanggal Selesai
                 </th>
                 <th scope="col" class="px-6 py-3">
                   Status
@@ -41,6 +44,9 @@
                   01-01-2024
                 </td>
                 <td class="px-6 py-4">
+                  01-07-2024
+                </td>
+                <td class="px-6 py-4">
                   <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Selesai</span>
                 </td>
               </tr>
@@ -56,6 +62,9 @@
                 </td>
                 <td class="px-6 py-4">
                   01-01-2024
+                </td>
+                <td class="px-6 py-4">
+                  01-07-2024
                 </td>
                 <td class="px-6 py-4">
                   <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Selesai</span>
@@ -75,6 +84,9 @@
                   01-01-2024
                 </td>
                 <td class="px-6 py-4">
+                  01-07-2024
+                </td>
+                <td class="px-6 py-4">
                   <span class="bg-yellow text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Dalam Proses</span>
                 </td>
               </tr>
@@ -92,6 +104,9 @@
                   01-01-2024
                 </td>
                 <td class="px-6 py-4">
+                  01-07-2024
+                </td>
+                <td class="px-6 py-4">
                   <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Selesai</span>
                 </td>
               </tr>
@@ -107,6 +122,9 @@
                 </td>
                 <td class="px-6 py-4">
                   01-01-2024
+                </td>
+                <td class="px-6 py-4">
+                  01-07-2024
                 </td>
                 <td class="px-6 py-4">
                   <span class="bg-yellow text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Dalam Proses</span>
