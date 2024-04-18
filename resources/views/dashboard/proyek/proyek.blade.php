@@ -38,8 +38,7 @@ $segmentCount = count($segments);
             </div>
 
             <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-12">
-                <!-- <div class="flex justify-center items-center w-56 h-36 bg-defgrey rounded-lg">
-            <span>1</span>-->
+            
                 <div class="max-w-sm p-6 bg-defgrey border border-gray-200 rounded-lg shadow ">
                     <a href="#">
                         <div class="flex items-center justify-between">
@@ -99,10 +98,16 @@ $segmentCount = count($segments);
                                 <div class="absolute group-focus:block top-full min-w-full w-max bg-defwhite shadow-md mt-1 mr-8 rounded">
                                     <ul class="text-left border rounded">
                                         <!-- <li><a href="{{ url('/main-menu/proyek/'.$proyek->nama_proyek).'/upload'}}" class="px-4 py-1 hover:bg-gray-100 border-b">Tambah, Edit File</a></li> -->
-                                        <li><a href="#" class="px-4 py-1 hover:bg-gray-100 border-b">Edit</a></li>
+                                        <li><a href="/main-menu/proyek/{{$proyek->nama_proyek}}/edit" class="px-4 py-1 hover:bg-gray-100 border-b">Edit</a></li>
                                         <!-- <li><a href="{{ url('/main-menu/proyek/'.$proyek->nama_proyek)}}" class="px-4 py-1 hover:bg-gray-100 border-b">Detail</a></li> -->
                                         <li><a href="/main-menu/proyek/{{$proyek->nama_proyek}}" class="px-4 py-1 hover:bg-gray-100 border-b">Detail</a></li>
-                                        <li><a href="#" class="px-4 py-1 hover:bg-gray-100 border-b">Hapus</a></li>
+                                        <li>
+                                            <form action="/main-menu/proyek/{{$proyek->nama_proyek}}" method="post">
+                                                @method('delete')
+                                                @csrf
+                                                <button onclick="return confirm('Apakah anda yakin ingin menghapus proyek ini?')" class="px-4 py-1 hover:bg-gray-100 border-b">Hapus</button>
+                                            </form>
+                                        </li>
                                     </ul>
                                 </div>
                         </div>
