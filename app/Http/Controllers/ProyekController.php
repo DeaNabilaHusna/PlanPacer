@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\FilePendukung;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProyekController extends Controller
 {
@@ -82,22 +83,81 @@ class ProyekController extends Controller
      */
     public function edit(Proyek $proyek)
     {
-        //
+        return view ('dashboard.proyek.updateproyek',[
+            'proyek' => $proyek
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Proyek $proyek)
-    {
-        //
+{
+    $validatedData = $request->validate([
+        'nama_proyek' => 'required|max:255',
+        'url_proyek' => 'nullable|max:255',
+        'deskripsi_proyek' => 'nullable',
+        'tgl_mulai_proyek' => 'required',
+        'tgl_selesai_proyek' => 'required',
+        'visibilitas' => 'required',
+        'status_proyek' => 'required',
+        'nama_file.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
+    ]);
+
+    // Handle file updates
+    if ($request->hasFile('nama_file')) {
+        // Delete file lama
+        if ($proyek->files) {
+            foreach ($proyek->files as $file) {
+                Storage::delete($file->nama_file);
+            }
+        }
+
+        // Upload file baru
+        $docs = [];
+        foreach ($request->file('nama_file') as $key => $file) {
+            $extension = $file->getClientOriginalExtension();
+            $filename = $key.'-'.time().'.'.$extension;
+            $path = $file->storeAs('uploads/docs', $filename);
+            $docs[] = [
+                'proyek_id' => $proyek->id,
+                'nama_file' => $path,
+            ];
+        }
+        // Insert file baru
+        FilePendukung::insert($docs);
     }
+
+    $proyek->update($validatedData);
+    return redirect('/main-menu/proyek')->with('success', 'Berhasil Mengupdate Proyek');
+}
+
+//     public function update(Request $request, Proyek $proyek)
+//     {
+//         $validatedData = $request->validate([
+//             'nama_proyek' => 'required|max:255',
+//             'url_proyek' => 'nullable|max:255',
+//             'deskripsi_proyek' => 'nullable',
+//             'tgl_mulai_proyek' => 'required',
+//             'tgl_selesai_proyek' => 'required',
+//             'visibilitas' => 'required',
+//             'status_proyek' => 'required',
+//             'nama_file.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
+
+//         ]);
+//         $validatedData['user_id'] = auth()->user()->id;
+//         Proyek::where('id', $proyek->id)->update($validatedData);
+//         return redirect('/main-menu/proyek')->with('success', 'Berhasil Mengupdate Proyek');
+// ;
+
+//     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Proyek $proyek)
     {
-        //
+        Proyek::destroy($proyek->id);
+        return redirect('/main-menu/proyek')->with('success', 'Berhasil Menghapus Proyek');
     }
 }
