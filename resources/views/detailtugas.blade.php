@@ -41,13 +41,6 @@
         </select>
     </div>
     <div class="mb-4">
-        <label for="file_pendukung" class="block font-semibold mb-2">File Pendukung</label>
-        <div class="flex items-center">
-            <input type="file" id="file_pendukung" name="file_pendukung" class="flex-1 border rounded-md p-2">
-            <button class="ml-2 bg-blue-500 text-white py-2 px-4 rounded-md">Unduh</button>
-        </div>
-    </div>
-    <div class="mb-4">
         <label for="deskripsi" class="block font-semibold mb-2">Deskripsi</label>
         <textarea id="deskripsi" name="deskripsi" class="w-full border rounded-md p-2 h-24"></textarea>
     </div>
