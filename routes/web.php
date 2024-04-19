@@ -36,6 +36,9 @@ Route::middleware(['auth', 'checkRole:pic'])->group(function () {
         return view('tugas');
     });
     Route::post('/logout', [LoginController::class, 'logout']);
+    Route::get('/detailtugas', function () {
+        return view('detailtugas');
+    });
 });
 
 
