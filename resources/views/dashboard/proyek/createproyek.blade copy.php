@@ -59,6 +59,23 @@
                             </div>
                         </div>
                     </div>
+                    <!-- <div class="sm:col-span-4">
+                        <label for="visibilitas" class="block text-sm font-medium leading-6 text-gray-900">Visibilitas</label>
+                        <div class="mt-2">
+                            <select id="visibilitas" name="visibilitas" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                                <?php foreach (['private', 'terbatas'] as $visibility) : ?>
+                                    @if (old('visibilitas') == $visibility)
+                                    <option selected value="<?= $visibility ?>"><?= ucfirst($visibility) ?></option>
+                                    @else
+                                    <option value="<?= $visibility ?>"><?= ucfirst($visibility) ?></option>
+                                    @endif
+                                <?php endforeach; ?>
+                            </select>
+                            @error('visibilitas')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div> -->
                     <div class="sm:col-span-4">
                         <label for="visibilitas" class="block text-sm font-medium leading-6 text-gray-900">Visibilitas</label>
                         <div class="mt-2">
@@ -78,13 +95,12 @@
                     </div>
                     <div class="sm:col-span-4 hidden" id="kolaboratorInput">
                         <label for="kolaborator" class="block text-sm font-medium leading-6 text-gray-900">Kolaborator</label>
+                        <div id="selected-kolaborator"></div>
 
                         <div class="mt-2">
-                            <select id="kolaborator" name="kolaborator[]" class="block w-full md:w-80 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" multiple>
+                            <select id="kolaborator" name="kolaborator[]" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" multiple onchange="displaySelectedKolaborator()">
                                 @foreach($users as $user)
-                                @if($user->id !== auth()->user()->id)
                                 <option value="{{ $user->id }}">{{ $user->email }}</option>
-                                @endif
                                 @endforeach
                             </select>
                             @error('kolaborator')
@@ -165,7 +181,6 @@
     }
 </script>
 <script>
-    //Func menampilkan kolom kolabolator
     function toggleKolaborator(selectElement) {
         var kolaboratorInput = document.getElementById('kolaboratorInput');
         if (selectElement.value === 'terbatas') {
@@ -175,52 +190,28 @@
         }
     }
 </script>
-
 <script>
-    //library select2 untuk add kolabolator
-    $(document).ready(function() {
-        $('#kolaborator').select2();
+    function displaySelectedKolaborator() {
+        var selectedKolaborator = document.getElementById('kolaborator').selectedOptions;
+        var selectedKolaboratorHTML = ''; // Inisialisasi variabel daftar kolaborator + HTML
 
-        $('#kolaborator').on('select2:select', function(e) {
-            displaySelectedKolaborator();
-        });
-
-        $('#kolaborator').on('select2:unselect', function(e) {
-            displaySelectedKolaborator();
-        });
-
-        function displaySelectedKolaborator() {
-            var selectedKolaborator = $('#kolaborator').val();
-            var selectedKolaboratorHTML = '';
-
-            if (selectedKolaborator) {
-                selectedKolaborator.forEach(function(email, index) {
-                    selectedKolaboratorHTML += email;
-                    if (index < selectedKolaborator.length - 1) {
-                        selectedKolaboratorHTML += ', ';
-                    }
-                    selectedKolaboratorHTML += '<button type="button" class="text-red-500 font-bold" onclick="removeKolaborator(\'' + email + '\')">x</button>';
-                });
+        for (var i = 0; i < selectedKolaborator.length; i++) {
+            selectedKolaboratorHTML += selectedKolaborator[i].text;
+            if (i < selectedKolaborator.length - 1) {
+                selectedKolaboratorHTML += ', ';
             }
+            selectedKolaboratorHTML += '<button type="button" class="text-red-500 font-bold" onclick="removeKolaborator(' + selectedKolaborator[i].index + ')">x</button>';
+        if (i < selectedKolaborator.length - 1) {
+            selectedKolaboratorHTML += ', ';
         }
-
-        function removeKolaborator(email) {
-            var select = $('#kolaborator').select2();
-            var data = select.select2('data');
-
-            var newData = data.filter(function(obj) {
-                return obj.text !== email;
-            });
-
-            select.val(null).trigger('change');
-
-            newData.forEach(function(obj) {
-                select.append('<option value="' + obj.text + '" selected>' + obj.text + '</option>');
-            });
-
-            displaySelectedKolaborator();
         }
-    });
+        document.getElementById('selected-kolaborator').innerHTML = selectedKolaboratorHTML;
+    }
+    function removeKolaborator(index) {
+    var kolaboratorSelect = document.getElementById('kolaborator');
+    kolaboratorSelect.options[index].selected = false;
+    displaySelectedKolaborator();
+}
 </script>
 
 @endsection

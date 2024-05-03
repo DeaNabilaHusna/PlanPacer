@@ -2,7 +2,8 @@
 @section('content')
 
 <section class="mb-4">
-    <form method="post" action="/main-menu/proyek" enctype="multipart/form-data">
+    <form method="post" action="/main-menu/proyek/{{ $proyek->nama_proyek }}" enctype="multipart/form-data">
+        @method('put')
         @csrf
         <div class="space-y-12 font-medium">
             <div class="border-b border-gray-900/10 pb-12">
@@ -11,17 +12,8 @@
                     <div class="sm:col-span-4">
                         <label for="nama_proyek" class="block text-sm font-medium leading-6 text-gray-900">Nama Proyek</label>
                         <div class="mt-2">
-                            <input type="text" id="nama_proyek" name="nama_proyek" autocomplete="nama_proyek" value="{{ old('nama_proyek') }}" class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            <input type="text" id="nama_proyek" name="nama_proyek" autocomplete="nama_proyek" value="{{ old('nama_proyek', $proyek->nama_proyek) }}" class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                             @error('nama_proyek')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="sm:col-span-4">
-                        <label for="penanggungjawab_proyek" class="block text-sm font-medium leading-6 text-gray-900">Penanggung Jawab</label>
-                        <div class="mt-2">
-                            <input type="text" id="penanggungjawab_proyek" name="penanggungjawab_proyek" autocomplete="penanggungjawab_proyek" value="{{ auth()->user()->username }}" readonly disabled class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
-                            @error('penanggungjawab_proyek')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -29,7 +21,7 @@
                     <div class="sm:col-span-4">
                         <label for="url_proyek" class="block text-sm font-medium leading-6 text-gray-900">URL Proyek</label>
                         <div class="mt-2 ">
-                            <input type="text" id="url_proyek" name="url_proyek" value="{{ old('url_proyek') }}" class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            <input type="text" id="url_proyek" name="url_proyek" value="{{ old('url_proyek', $proyek->url_proyek) }}" class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                             @error('url_proyek')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -40,7 +32,7 @@
                             <label for="tgl_mulai_proyek" class="block text-sm font-medium leading-6 text-gray-900">Tanggal Mulai Proyek</label>
                             <div class="mt-2 ">
                                 <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="date" name="tgl_mulai_proyek" id="tgl_mulai_proyek" value="{{ old('tgl_mulai_proyek') }}" class="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 placeholder:pl-2 focus:ring-0 sm:text-sm sm:leading-6" placeholder="">
+                                    <input type="date" name="tgl_mulai_proyek" id="tgl_mulai_proyek" value="{{ old('tgl_mulai_proyek', $proyek->tgl_mulai_proyek) }}" class="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 placeholder:pl-2 focus:ring-0 sm:text-sm sm:leading-6" placeholder="">
                                 </div>
                                 @error('tgl_mulai_proyek')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -51,7 +43,7 @@
                             <label for="tgl_selesai_proyek" class="block text-sm font-medium leading-6 text-gray-900">Tanggal Selesai Proyek</label>
                             <div class="mt-2">
                                 <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input type="date" name="tgl_selesai_proyek" id="tgl_selesai_proyek" value="{{ old('tgl_selesai_proyek') }}" class="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 placeholder:pl-2 focus:ring-0 sm:text-sm sm:leading-6" placeholder="">
+                                    <input type="date" name="tgl_selesai_proyek" id="tgl_selesai_proyek" value="{{ old('tgl_selesai_proyek', $proyek->tgl_selesai_proyek) }}" class="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 placeholder:pl-2 focus:ring-0 sm:text-sm sm:leading-6" placeholder="">
                                 </div>
                                 @error('tgl_selesai_proyek')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -62,9 +54,9 @@
                     <div class="sm:col-span-4">
                         <label for="visibilitas" class="block text-sm font-medium leading-6 text-gray-900">Visibilitas</label>
                         <div class="mt-2">
-                            <select id="visibilitas" name="visibilitas" onchange="toggleKolaborator(this)" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                            <select id="visibilitas" name="visibilitas" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
                                 <?php foreach (['private', 'terbatas'] as $visibility) : ?>
-                                    @if (old('visibilitas') == $visibility)
+                                    @if (old('visibilitas', $proyek->visibilitas) == $visibility)
                                     <option selected value="<?= $visibility ?>"><?= ucfirst($visibility) ?></option>
                                     @else
                                     <option value="<?= $visibility ?>"><?= ucfirst($visibility) ?></option>
@@ -76,6 +68,7 @@
                             @enderror
                         </div>
                     </div>
+
                     <div class="sm:col-span-4 hidden" id="kolaboratorInput">
                         <label for="kolaborator" class="block text-sm font-medium leading-6 text-gray-900">Kolaborator</label>
 
@@ -83,7 +76,9 @@
                             <select id="kolaborator" name="kolaborator[]" class="block w-full md:w-80 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" multiple>
                                 @foreach($users as $user)
                                 @if($user->id !== auth()->user()->id)
-                                <option value="{{ $user->id }}">{{ $user->email }}</option>
+                                @if(old('kolaborator', $proyek->kolaborator) == $user->id)
+                                <option selected value="{{ $user->id }}">{{ $user->email }}</option>
+                                @endif
                                 @endif
                                 @endforeach
                             </select>
@@ -92,13 +87,12 @@
                             @enderror
                         </div>
                     </div>
-
                     <div class="sm:col-span-3">
                         <label for="status_proyek" class="block text-sm font-medium leading-6 text-gray-900">Status Proyek</label>
                         <div class="mt-2">
                             <select id="status_proyek" name="status_proyek" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
                                 <?php foreach (['sedang berjalan', 'selesai'] as $status) : ?>
-                                    @if (old('status_proyek') == $status)
+                                    @if (old('status_proyek', $proyek->status_proyek) == $status)
                                     <option selected value="<?= $status ?>"><?= ucfirst($status) ?></option>
                                     @else
                                     <option value="<?= $status ?>"><?= ucfirst($status) ?></option>
@@ -114,7 +108,7 @@
                     <div class="col-span-full">
                         <label for="deskripsi_proyek" class="block text-sm font-medium leading-6 text-gray-900">Deskripsi Proyek</label>
                         <div class="mt-2">
-                            <textarea id="deskripsi_proyek" name="deskripsi_proyek" rows="3" value="{{ old('deskripsi_proyek') }}" class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                            <textarea id="deskripsi_proyek" name="deskripsi_proyek" rows="3" value="{{ old('deskripsi_proyek', $proyek->deskripsi_proyek) }}" class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
                         </div>
                     </div>
                     <div class="col-span-full">
@@ -125,11 +119,9 @@
                                 <div class="mt-4 flex text-sm leading-6 text-gray-600">
                                     <label for="nama_file" class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
                                         <span>Unggah File Pendukung</span>
-                                        <input id="nama_file" name="nama_file[]" value="{{ old('nama_file') }}" type="file" class="sr-only" onchange="displaySelectedFiles()" multiple>
+                                        <input id="nama_file" name="nama_file[]" value="{{ old('nama_file', $proyek->nama_file) }}" type="file" class="sr-only" onchange="displaySelectedFiles()" multiple>
                                     </label>
                                     <!-- <p class="pl-1">atau tarik dan lepaskan</p> -->
-
-                                    <h5 id="message"></h5>
                                 </div>
                                 <p class="text-xs leading-5 text-gray-600">:pdf,doc,docx,xls,xlsx,ppt,pptx hingga 10MB</p>
                             </div>
@@ -138,6 +130,7 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
 
                 </div>
             </div>
@@ -162,9 +155,9 @@
         }
         document.getElementById('file-list').innerHTML = fileListHTML;
         document.getElementById('file-upload-section').style.display = 'none';
-    }
+    } 
 </script>
-<script>
+<!-- <script>
     //Func menampilkan kolom kolabolator
     function toggleKolaborator(selectElement) {
         var kolaboratorInput = document.getElementById('kolaboratorInput');
@@ -174,6 +167,26 @@
             kolaboratorInput.classList.add('hidden');
         }
     }
+</script> -->
+<script>
+    // Func menampilkan kolom kolabolator
+    function toggleKolaborator(selectElement) {
+        var kolaboratorInput = document.getElementById('kolaboratorInput');
+        var visibilitasValue = selectElement.value;
+
+        // Memeriksa apakah visibilitas adalah private
+        if (visibilitasValue === 'private') {
+            kolaboratorInput.classList.add('hidden'); // Sembunyikan kolom kolaborator jika visibilitas adalah private
+        } else {
+            kolaboratorInput.classList.remove('hidden'); // Tampilkan kolom kolaborator untuk visibilitas lainnya
+        }
+    }
+
+    // Fungsi ini akan dipanggil saat dokumen siap
+    $(document).ready(function() {
+        // Panggil fungsi untuk menyesuaikan visibilitas kolaborator pada saat pemuatan halaman
+        toggleKolaborator(document.getElementById('visibilitas'));
+    });
 </script>
 
 <script>

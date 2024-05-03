@@ -8,6 +8,8 @@ use App\Http\Controllers\ProyekController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserProyekController;
 use App\Http\Controllers\ProyekTugasController;
 
 /*
@@ -28,11 +30,18 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/registrasi', [RegisterController::class, 'index']);
     Route::post('/registrasi', [RegisterController::class, 'store']);
 });
+// Route::resource('/hak-akses', PermissionController::class)->parameters([
+//     'hak_akses' => 'permission:name'
+// ]);
 
 // PIC Route
 Route::middleware(['auth', 'checkRole:pic'])->group(function () {
-    Route::get('/main-menu', [DashboardController::class, 'index']);
+    Route::resource('/main-menu/role', RoleController::class);
+    Route::get('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'addPermissionsToRole']);
+    Route::put('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'updatePermissionsToRole']);
+    Route::resource('/main-menu/kolaborator', UserProyekController::class);
     Route::resource('/main-menu/proyek', ProyekController::class);
+    Route::get('/main-menu', [DashboardController::class, 'index']);
     Route::resource('/proyektugas', ProyekTugasController::class);
     Route::get('/main-menu/tugas', function () {
         return view('tugas');
