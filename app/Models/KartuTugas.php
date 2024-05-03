@@ -7,7 +7,7 @@ use App\Models\TugasItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class KartuTugas extends Model
+class ProyekTugas extends Model
 {
     use HasFactory;
 
