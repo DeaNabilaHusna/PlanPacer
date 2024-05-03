@@ -8,7 +8,7 @@ use App\Http\Controllers\ProyekController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controlllers\ProyekTugasController;
+use App\Http\Controllers\ProyekTugasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +33,7 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth', 'checkRole:pic'])->group(function () {
     Route::get('/main-menu', [DashboardController::class, 'index']);
     Route::resource('/main-menu/proyek', ProyekController::class);
-    // Route::resource('/main-menu/tugas', ProyekTugasController::class);
+    Route::resource('/proyektugas', ProyekTugasController::class);
     Route::get('/main-menu/tugas', function () {
         return view('tugas');
     });
@@ -48,4 +48,14 @@ Route::get('/about', function () {
     return view('aboutus');
 });
 
+// Route::get('/proyektugas', function () {
+//     return view('proyektugas');
+// });
 
+Route::get('/tambahproyektugas', function () {
+    return view('tambahproyektugas');
+});
+
+Route::get('/editproyektugas', function () {
+    return view('editproyektugas');
+});

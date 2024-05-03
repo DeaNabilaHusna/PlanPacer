@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProyekTugas;
 use Illuminate\Http\Request;
-use App\Models\KartuTugas; // Import model KartuTugas
+use App\Http\Controllers\Controller;
+use illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProyekTugasController extends Controller
 {
@@ -12,9 +16,7 @@ class ProyekTugasController extends Controller
      */
     public function index()
     {
-        // Ambil semua data kartu tugas dari database
-        $kartuTugas = KartuTugas::all();
-        return view('tugas.index', ['kartuTugas' => $kartuTugas]);
+        return view('proyektugas');
     }
 
     /**
@@ -23,7 +25,7 @@ class ProyekTugasController extends Controller
     public function create()
     {
         // Tampilkan form untuk membuat kartu tugas baru
-        return view('tugas.create');
+        return view('tambahproyektugas');
     }
 
     /**
@@ -33,15 +35,19 @@ class ProyekTugasController extends Controller
     {
         // Validasi data input
         $validatedData = $request->validate([
-            'proyek_id' => 'required',
-            'nama_kartu' => 'required|max:255',
+            'nama_tugas' => 'required|max:255',
+            'tgl_mulai_proyek' => 'required',
+            'tgl_selesai_proyek' => 'required',
+            'status_proyek' => 'required',
+            'deskripsi_proyek' => 'nullable',
         ]);
 
         // Simpan data kartu tugas baru ke database
-        KartuTugas::create($validatedData);
+        // ProyekTugas::create($validatedData);
+        $validatedData['user_id'] = auth()->user()->id;
 
         // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('kartu-tugas.index')->with('success', 'Kartu Tugas berhasil dibuat.');
+        return redirect()->route('proyektugas')->with('success', 'Kartu Tugas berhasil dibuat.');
     }
 
     /**
@@ -49,11 +55,12 @@ class ProyekTugasController extends Controller
      */
     public function show(string $id)
     {
-        // Temukan kartu tugas dengan ID yang diberikan
-        $kartuTugas = KartuTugas::findOrFail($id);
+        // // Temukan kartu tugas dengan ID yang diberikan
+        // $proyektugas = ProyekTugas::findOrFail($id);
 
         // Tampilkan halaman detail kartu tugas
-        return view('tugas.show', ['kartuTugas' => $kartuTugas]);
+        // return view('tugas.show', ['kartuTugas' => $proyektugas]);
+        return view('editproyektugas');
     }
 
     /**
@@ -62,10 +69,11 @@ class ProyekTugasController extends Controller
     public function edit(string $id)
     {
         // Temukan kartu tugas dengan ID yang diberikan
-        $kartuTugas = KartuTugas::findOrFail($id);
+        // $kartuTugas = ProyekTugas::findOrFail($id);
 
         // Tampilkan form untuk mengedit kartu tugas
-        return view('tugas.edit', ['kartuTugas' => $kartuTugas]);
+        // return view('tugas.edit', ['kartuTugas' => $kartuTugas]);
+        return view('editproyektugas');
     }
 
     /**
@@ -75,27 +83,31 @@ class ProyekTugasController extends Controller
     {
         // Validasi data input
         $validatedData = $request->validate([
-            'proyek_id' => 'required',
-            'nama_kartu' => 'required|max:255',
+            'nama_tugas' => 'required|max:255',
+            'tgl_mulai_proyek' => 'required',
+            'tgl_selesai_proyek' => 'required',
+            'status_proyek' => 'required',
+            'deskripsi_proyek' => 'nullable',
         ]);
 
         // Temukan dan perbaharui kartu tugas dengan ID yang diberikan
-        KartuTugas::findOrFail($id)->update($validatedData);
+        ProyekTugas::findOrFail($id)->update($validatedData);
+        // $validatedData['user_id'] = auth()->user()->id;
 
         // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('kartu-tugas.index')->with('success', 'Kartu Tugas berhasil diperbaharui.');
+        return redirect()->route('proyektugas')->with('success', 'Kartu Tugas berhasil diperbaharui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    
-    // public function destroy(string $id)
-    // {
-    //     // Temukan dan hapus kartu tugas dengan ID yang diberikan
-    //     KartuTugas::findOrFail($id)->delete();
 
-    //     // Redirect ke halaman index dengan pesan sukses
-    //     return redirect()->route('kartu-tugas.index')->with('success', 'Kartu Tugas berhasil dihapus.');
-    // }
+    public function destroy(string $id)
+    {
+        // Temukan dan hapus kartu tugas dengan ID yang diberikan
+        ProyekTugas::findOrFail($id)->delete();
+
+        // Redirect ke halaman index dengan pesan sukses
+        return redirect()->route('proyektugas')->with('success', 'Kartu Tugas berhasil dihapus.');
+    }
 }
