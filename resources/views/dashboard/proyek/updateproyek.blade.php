@@ -68,6 +68,7 @@
                             @enderror
                         </div>
                     </div>
+
                     <div class="sm:col-span-3">
                         <label for="status_proyek" class="block text-sm font-medium leading-6 text-gray-900">Status Proyek</label>
                         <div class="mt-2">
@@ -130,11 +131,12 @@
         var fileListHTML = ''; // Inisialisasi variabel daftar nama file + HTML
 
         for (var i = 0; i < fileList.length; i++) {
-            fileListHTML += '<div>' + fileList[i].name + '</div>'; 
+            fileListHTML += '<div>' + fileList[i].name + '</div>';
         }
         document.getElementById('file-list').innerHTML = fileListHTML;
         document.getElementById('file-upload-section').style.display = 'none';
     }
 </script>
+
 
 @endsection

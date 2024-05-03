@@ -17,7 +17,7 @@ class KartuTugas extends Model
         return $this->belongsTo(Proyek::class);
     }
 
-    public function tugasitem(){
+    public function tugasitems(){
         return $this->hasMany(TugasItem::class);
     }
 }
