@@ -63,11 +63,11 @@ $segmentCount = count($segments);
                                 {{ $role->name }}
                             </td>
                             <td class="px-6 py-4 flex justify-center space-x-2">
-                                <button>
+                                <!-- <button>
                                     <a href="/main-menu/role/{{ $role->id }}" class="bg-blue-700 hover:bg-navy text-white font-bold py-2 px-4 border border-blue-700 rounded">
                                         Detail
                                     </a>
-                                </button>
+                                </button> -->
                                 <a href="/main-menu/role/{{ $role->id }}/tambah-hak-akses" class="bg-emerald-600 hover:bg-emerald-900 text-white font-bold py-2 px-4 border border-emerald-700 rounded">
                                     Tambah Hak Akses
                                 </a>

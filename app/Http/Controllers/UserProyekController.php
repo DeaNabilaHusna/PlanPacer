@@ -19,14 +19,16 @@ class UserProyekController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        $kolaborators = DB::table('user_proyeks')
+        // $kolaborators = DB::table('user_proyeks')
+        $userProyeks = DB::table('user_proyeks')
+
             ->join('proyeks', 'user_proyeks.proyek_id', '=', 'proyeks.id')
             ->join('users', 'user_proyeks.user_id', '=', 'users.id')
             ->where('proyeks.user_id', $userId) //proyek milik pengguna saat ini
             ->select('users.email', 'users.username', 'users.id', 'proyeks.nama_proyek')
             ->get();
 
-        return view('dashboard.user.index', compact('kolaborators'));
+        return view('dashboard.user.index', compact('userProyeks'));
 
         // $userId = auth()->user()->id;
         // $kolaborators = User::find($userId)->proyeks()
@@ -66,7 +68,8 @@ class UserProyekController extends Controller
      */
     public function show(UserProyek $userProyek)
     {
-        //
+        dd($userProyek);
+        // return view('dashboard.user.detail');
     }
 
     /**
@@ -79,15 +82,17 @@ class UserProyekController extends Controller
     // }
     public function edit(UserProyek $userProyek)
     {
-        $userProyek = UserProyek::find(2);
-
-        // $userProyek = UserProyek::find($userProyek->id);
+        // $userProyek = UserProyek::all();
+        $roles = Role::pluck('name', 'id');
+        return view('dashboard.user.edit', [
+            'userProyek' => $userProyek,
+            'roles' => $roles,
+        ]);
+        // $userProyek = $kolaborator;
+        // dd($kolaborator);
+        // $kolaborator = $userProyek;
         // dd ($userProyek);
 
-        // Mendapatkan semua roles yang tersedia
-        $roles = Role::pluck('name', 'id');
-
-        return view('dashboard.user.edit', compact('roles', 'userProyek'));
     }
     //     public function edit(UserProyek $userProyek)
     // {
