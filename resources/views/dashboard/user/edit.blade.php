@@ -3,8 +3,10 @@
 
 <section class="mb-4">
     <form method="post" action="/main-menu/kolaborator/{{ $userProyek->id }}" enctype="multipart/form-data">
-        @csrf
+        
+        
         @method('put')
+        @csrf
         <div class="space-y-12 font-medium">
             <div class="border-b border-gray-900/10 pb-12">
                 <h2 class="text-base font-semibold leading-7 text-gray-900">Atur Role</h2>

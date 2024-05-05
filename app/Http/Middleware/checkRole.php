@@ -16,7 +16,7 @@ class checkRole
      */
     public function handle(Request $request, Closure $next, $roles): Response
     {
-        $roles = array('pic', 'analyst', 'designer', 'programmer');
+        $roles = array('pic', 'analyst', 'designer', 'programmer', 'mentor', 'client');
         if (!auth()->check()) {
             return redirect()->route('login');
         }

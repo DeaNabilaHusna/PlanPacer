@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Proyek;
 use Illuminate\Http\Request;
 use App\Models\FilePendukung;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use App\Models\User;
 
 class ProyekController extends Controller
 {
@@ -41,7 +41,6 @@ class ProyekController extends Controller
 
     public function store(Request $request)
     {
-        // ddd ($request->all());
         try {
             $validatedData = $request->validate([
                 'nama_proyek' => 'required|max:255',
@@ -60,13 +59,13 @@ class ProyekController extends Controller
             $validatedData['penanggungjawab_proyek'] = auth()->user()->username;
             $validatedData['kolaborator'] = json_encode($request->input('kolaborator', []));
 
-
             $proyek = Proyek::create($validatedData);
-            // kolabolator
-            $kolaborator = $request->input('kolaborator', []);
-            $proyek->users()->sync($request->input('kolaborator', []));
 
-            // file
+            if ($request->has('kolaborator')) {
+                $proyek->users()->attach($request->input('kolaborator'));
+            }
+
+            // file 
             $docs = [];
             if ($files = $request->file('nama_file')) {
                 foreach ($files as $key => $file) {
@@ -87,6 +86,55 @@ class ProyekController extends Controller
             return back()->withError($e->getMessage())->withInput();
         }
     }
+
+    // public function store(Request $request)
+    // {
+    //     // ddd ($request->all());
+    //     try {
+    //         $validatedData = $request->validate([
+    //             'nama_proyek' => 'required|max:255',
+    //             'penanggungjawab_proyek' => 'max:255',
+    //             'url_proyek' => 'nullable|max:255',
+    //             'deskripsi_proyek' => 'nullable',
+    //             'tgl_mulai_proyek' => 'required|date',
+    //             'tgl_selesai_proyek' => 'required|date|after:tgl_mulai_proyek',
+    //             'visibilitas' => 'required',
+    //             'status_proyek' => 'required',
+    //             'nama_file.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
+    //             'kolaborator.*' => 'nullable|exists:users,id',
+    //         ]);
+
+    //         $validatedData['user_id'] = auth()->user()->id;
+    //         $validatedData['penanggungjawab_proyek'] = auth()->user()->username;
+    //         $validatedData['kolaborator'] = json_encode($request->input('kolaborator', []));
+
+
+    //         $proyek = Proyek::create($validatedData);
+    //         // kolabolator
+    //         $kolaborator = $request->input('kolaborator', []);
+    //         $proyek->users()->sync($request->input('kolaborator', []));
+
+    //         // file
+    //         $docs = [];
+    //         if ($files = $request->file('nama_file')) {
+    //             foreach ($files as $key => $file) {
+    //                 $extension = $file->getClientOriginalExtension();
+    //                 $filename = $key . '-' . time() . '.' . $extension;
+    //                 $path = $file->storeAs('uploads/docs', $filename);
+    //                 $file->move($path, $filename);
+    //                 $docs[] = [
+    //                     'proyek_id' => $proyek->id,
+    //                     'nama_file' => $path . $file,
+    //                 ];
+    //             }
+    //         }
+    //         FilePendukung::insert($docs);
+
+    //         return redirect('/main-menu/proyek')->with('success', 'Berhasil Membuat Proyek Baru');
+    //     } catch (\Exception $e) {
+    //         return back()->withError($e->getMessage())->withInput();
+    //     }
+    // }
 
     /**
      * Display the specified resource.

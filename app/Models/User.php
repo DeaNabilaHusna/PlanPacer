@@ -50,7 +50,8 @@ class User extends Authenticatable
 
     public function proyeks()
     {
-        return $this->belongsToMany(Proyek::class, UserProyek::class);
+        return $this->belongsToMany(Proyek::class, 'user_proyeks')->withTimestamps();
+        // return $this->belongsToMany(Proyek::class, UserProyek::class);
     }
 
     public function tugasitems()

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProyekTugas;
+use App\Models\KartuTugas;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use illuminate\Support\Facades\Auth;
@@ -91,7 +91,7 @@ class ProyekTugasController extends Controller
         ]);
 
         // Temukan dan perbaharui kartu tugas dengan ID yang diberikan
-        ProyekTugas::findOrFail($id)->update($validatedData);
+        KartuTugas::findOrFail($id)->update($validatedData);
         // $validatedData['user_id'] = auth()->user()->id;
 
         // Redirect ke halaman index dengan pesan sukses
@@ -105,7 +105,7 @@ class ProyekTugasController extends Controller
     public function destroy(string $id)
     {
         // Temukan dan hapus kartu tugas dengan ID yang diberikan
-        ProyekTugas::findOrFail($id)->delete();
+        KartuTugas::findOrFail($id)->delete();
 
         // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('proyektugas')->with('success', 'Kartu Tugas berhasil dihapus.');
