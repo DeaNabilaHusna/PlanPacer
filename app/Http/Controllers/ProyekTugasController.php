@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Proyek;
 use App\Models\KartuTugas;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\TugasItem;
+use GuzzleHttp\Handler\Proxy;
 use illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,16 +20,29 @@ class ProyekTugasController extends Controller
      */
     public function index()
     {
-        return view('proyektugas');
+        $proyek = Proyek::where('user_id', Auth::id())
+            ->orWhereHas('users', function ($query) {
+                $query->where('users.id', Auth::id());
+            })->get();
+        $tugas = KartuTugas::all();
+        return view('dashboard.tugas.proyektugas', [
+            'tugas' => $tugas,
+            'proyek' => $proyek,
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        // Tampilkan form untuk membuat kartu tugas baru
-        return view('tambahproyektugas');
+        session(['nama_proyek' => $request->nama_proyek]);
+        $users = User::all();
+        $proyeks = Proyek::all();
+        return view('dashboard.tugas.tambahproyektugas', [
+            'users' => $users,
+            'proyeks' => $proyeks,
+        ]);
     }
 
     /**
@@ -36,18 +53,19 @@ class ProyekTugasController extends Controller
         // Validasi data input
         $validatedData = $request->validate([
             'nama_tugas' => 'required|max:255',
-            'tgl_mulai_proyek' => 'required',
-            'tgl_selesai_proyek' => 'required',
-            'status_proyek' => 'required',
-            'deskripsi_proyek' => 'nullable',
         ]);
 
-        // Simpan data kartu tugas baru ke database
-        // ProyekTugas::create($validatedData);
         $validatedData['user_id'] = auth()->user()->id;
+        $namaProyek = session('nama_proyek');
+        dd('nama_proyek');
+        // Simpan data kartu tugas baru ke database
+        $validatedData['nama_proyek'] = $namaProyek;
+        $tugas = KartuTugas::create($validatedData);
+        $tugasId = $tugas->id;
+
 
         // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('proyektugas')->with('success', 'Kartu Tugas berhasil dibuat.');
+        return redirect()->back()->with('success', 'Kartu Tugas berhasil dibuat.'. $tugasId);
     }
 
     /**
@@ -60,7 +78,7 @@ class ProyekTugasController extends Controller
 
         // Tampilkan halaman detail kartu tugas
         // return view('tugas.show', ['kartuTugas' => $proyektugas]);
-        return view('editproyektugas');
+        return view('dashboard.tugas.editproyektugas');
     }
 
     /**
@@ -73,7 +91,7 @@ class ProyekTugasController extends Controller
 
         // Tampilkan form untuk mengedit kartu tugas
         // return view('tugas.edit', ['kartuTugas' => $kartuTugas]);
-        return view('editproyektugas');
+        return view('dashboard.tugas.editproyektugas');
     }
 
     /**
