@@ -49,21 +49,21 @@ $segmentCount = count($segments);
 
                         </tr>
                     </thead>
-                    @foreach ($kolaborators as $kolaborator)
+                    @foreach ($userProyeks as $userProyek)
                     <tbody>
                         <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
                             <td class="px-6 py-4 font-medium whitespace-nowrap">
                                 {{ $loop->iteration }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $kolaborator->email }}
+                                {{ $userProyek->email }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $kolaborator->nama_proyek }}
+                                {{ $userProyek->nama_proyek }}
                             </td>
                             <td class="px-6 py-4">
-                                @if (!empty($kolaborator->roles))
-                                @foreach ($kolaborator->roles as $rolename)
+                                @if (!empty($userProyek->roles))
+                                @foreach ($userProyek->roles as $rolename)
                                 {{ $rolename }}
                                 @endforeach
                                 @else
@@ -72,14 +72,13 @@ $segmentCount = count($segments);
                             </td>
                             <td class="px-6 py-4 flex justify-center space-x-2">
                                 <button>
-                                    <a href="/main-menu/kolaborator/{{ $kolaborator->id }}/detail" class="bg-blue-700 hover:bg-navy text-white font-bold py-2 px-4 border border-blue-700 rounded">
+                                    <a href="/main-menu/kolaborator/{{ $userProyek->id }}" class="bg-blue-700 hover:bg-navy text-white font-bold py-2 px-4 border border-blue-700 rounded">
                                         Detail
                                     </a>
                                 </button>
-                                <a href="/main-menu/kolaborator/{{ $kolaborator->id }}/edit" class="bg-yellow hover:bg-orange-600 text-white font-bold py-2 px-4 border border-yellow rounded">
+                                <a href="/main-menu/kolaborator/{{$userProyek->id}}/edit" class="bg-yellow hover:bg-orange-600 text-white font-bold py-2 px-4 border border-yellow rounded">
                                     Atur Role
                                 </a>
-                                <button>
                             </td>
                         </tr>
                     </tbody>

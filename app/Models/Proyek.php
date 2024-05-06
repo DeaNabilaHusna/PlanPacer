@@ -15,16 +15,18 @@ class Proyek extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-
+ 
     public function users(){
         // return $this->belongsToMany(User::class, UserProyek::class);
-        return $this->belongsToMany(User::class, 'user_proyeks', 'proyek_id', 'user_id');
+        // return $this->belongsToMany(User::class, 'user_proyeks', 'proyek_id', 'user_id');
+        return $this->belongsToMany(User::class, 'user_proyeks')->withTimestamps();
+
     }
 
-    public function kartutugas(){
+    public function kartuTugas(){
         return $this->hasMany(KartuTugas::class);
     }
-
+    
     public function progress(){
         return $this->hasMany(Progress::class);
     }
