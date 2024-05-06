@@ -14,7 +14,7 @@ $segmentCount = count($segments);
         </svg>
         @endif
         </div>
-        @endfor 
+        @endfor
 
         <!-- End Breadcrumb -->
 

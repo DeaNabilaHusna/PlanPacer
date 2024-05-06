@@ -42,7 +42,8 @@ Route::middleware(['auth', 'checkRole:pic'])->group(function () {
     Route::resource('/main-menu/kolaborator', UserProyekController::class);
     Route::resource('/main-menu/proyek', ProyekController::class);
     Route::get('/main-menu', [DashboardController::class, 'index']);
-    Route::resource('/proyektugas', ProyekTugasController::class);
+    Route::resource('/main-menu/proyek/{nama_proyek}/tugas', ProyekTugasController::class);
+    // Route::get('/main-menu/proyek/{nama_proyek}/tugas/create', [ProyekTugasController::class, 'create']);
     Route::get('/main-menu/tugas', function () {
         return view('tugas');
     });
