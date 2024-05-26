@@ -31,11 +31,11 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/registrasi', [RegisterController::class, 'store']);
 });
 // Route::resource('/hak-akses', PermissionController::class)->parameters([
-//     'hak_akses' => 'permission:name'
-// ]);
+    //     'hak_akses' => 'permission:name'
+    // ]);
+    // Route::group(['middleware' => ['role:pic']], function () {
 
-// PIC Route
-// Route::middleware(['auth', 'checkRole:pic'])->group(function () {
+//     Route::group(['middleware' => ['auth'], 'as' => 'pic'], function () {
 //     Route::resource('/main-menu/kolaborator', UserProyekController::class);
 //     Route::resource('/main-menu/role', RoleController::class);
 //     Route::resource('/main-menu/proyek', ProyekController::class);
@@ -43,6 +43,8 @@ Route::middleware(['guest'])->group(function () {
 //     Route::get('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'addPermissionsToRole']);
 //     Route::put('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'updatePermissionsToRole']);
 //     Route::get('/main-menu', [DashboardController::class, 'index']);
+//     Route::resource('/main-menu/proyek/{nama_proyek}/tugas', ProyekTugasController::class);
+//     // Route::get('/main-menu/proyek/{nama_proyek}/tugas/create', [ProyekTugasController::class, 'create']);
 //     Route::get('/main-menu/tugas', function () {
 //         return view('tugas');
 //     });
@@ -51,28 +53,6 @@ Route::middleware(['guest'])->group(function () {
 //         return view('detailtugas');
 //     });
 // });
-
-Route::group(['middleware' => ['checkRole:pic|mentor']], function () {
-    Route::resource('/main-menu/kolaborator', UserProyekController::class);
-    Route::resource('/main-menu/role', RoleController::class);
-    Route::resource('/main-menu/proyek', ProyekController::class);
-    Route::put('/main-menu/proyek/{proyek}/update', [ProyekController::class, 'update'])
-    ->middleware('permission:update proyek');
-    Route::resource('/proyektugas', ProyekTugasController::class);
-    Route::get('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'addPermissionsToRole']);
-    Route::put('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'updatePermissionsToRole']);
-    Route::get('/main-menu', [DashboardController::class, 'index']);
-    Route::resource('/main-menu/proyek/{nama_proyek}/tugas', ProyekTugasController::class);
-    // Route::get('/main-menu/proyek/{nama_proyek}/tugas/create', [ProyekTugasController::class, 'create']);
-    Route::get('/main-menu/tugas', function () {
-        return view('tugas');
-    });
-    Route::post('/logout', [LoginController::class, 'logout']);
-    Route::get('/detailtugas', function () {
-        return view('detailtugas');
-    });
-});
-
 Route::get('/about', function () {
     return view('aboutus');
 });
@@ -88,3 +68,46 @@ Route::get('/tambahproyektugas', function () {
 Route::get('/editproyektugas', function () {
     return view('editproyektugas');
 });
+
+// PIC Route
+Route::middleware(['auth', 'checkRole:pic'])->group(function () {
+    Route::resource('/main-menu/kolaborator', UserProyekController::class);
+    Route::resource('/main-menu/role', RoleController::class);
+    Route::resource('/main-menu/proyek', ProyekController::class);
+    Route::resource('/proyektugas', ProyekTugasController::class);
+    Route::get('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'addPermissionsToRole']);
+    Route::put('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'updatePermissionsToRole']);
+    Route::get('/main-menu', [DashboardController::class, 'index']);
+    Route::get('/main-menu/tugas', function () {
+        return view('tugas');
+    });
+    Route::post('/logout', [LoginController::class, 'logout']);
+    Route::get('/detailtugas', function () {
+        return view('detailtugas');
+    });
+});
+
+
+// Route::group(['middleware' => ['checkRole:pic']], function () {
+//     Route::resource('/main-menu/kolaborator', UserProyekController::class);
+//     Route::resource('/main-menu/role', RoleController::class);
+//     Route::resource('/main-menu/proyek', ProyekController::class);
+//     // Route::put('/main-menu/proyek/{proyek}/update', [ProyekController::class, 'update'])
+//     // ->middleware('permission:update proyek');
+//     Route::resource('/proyektugas', ProyekTugasController::class);
+//     Route::get('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'addPermissionsToRole']);
+//     Route::put('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'updatePermissionsToRole']);
+//     Route::get('/main-menu', [DashboardController::class, 'index']);
+//     Route::resource('/main-menu/proyek/{nama_proyek}/tugas', ProyekTugasController::class);
+//     // Route::get('/main-menu/proyek/{nama_proyek}/tugas/create', [ProyekTugasController::class, 'create']);
+//     Route::get('/main-menu/tugas', function () {
+//         return view('tugas');
+//     });
+//     Route::post('/logout', [LoginController::class, 'logout']);
+//     Route::get('/detailtugas', function () {
+//         return view('detailtugas');
+//     });
+// });
+
+
+

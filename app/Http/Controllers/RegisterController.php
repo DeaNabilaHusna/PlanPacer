@@ -23,7 +23,8 @@ class RegisterController extends Controller
             'phone' => 'nullable|min:7|max:14',
         ]);
         $validatedData['password'] = Hash::make($validatedData['password']);
-        User::create($validatedData);
+        $user = User::create($validatedData);
+        $user->assignRole('pic');
 
         // dd('berhasil regis');
         return redirect('/login')->with('success', 'Registrasi Berhasil');

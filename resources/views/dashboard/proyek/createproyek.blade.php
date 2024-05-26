@@ -3,6 +3,10 @@
 
 <section class="mb-4">
     <form method="post" action="/main-menu/proyek" enctype="multipart/form-data">
+    @if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
+
         @csrf
         <div class="space-y-12 font-medium">
             <div class="border-b border-gray-900/10 pb-12">

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\FilePendukung;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class ProyekController extends Controller
@@ -22,6 +23,11 @@ class ProyekController extends Controller
                 $query->where('users.id', Auth::id());
             })
             ->get();
+            foreach ($proyeks as $proyek) {
+                $jumlahKontributor = $proyek->users->count(); // Mengurangi satu untuk menghapus pemilik proyek
+                $proyek->jumlahKontributor = $jumlahKontributor;
+            }
+            // dd ($proyek->users);
         return view('dashboard.proyek.proyek', compact('proyeks'));
     }
 
@@ -83,7 +89,8 @@ class ProyekController extends Controller
 
             return redirect('/main-menu/proyek')->with('success', 'Berhasil Membuat Proyek Baru');
         } catch (\Exception $e) {
-            return back()->withError($e->getMessage())->withInput();
+            Session::flash('error', $e->getMessage());
+        return back()->withInput();
         }
     }
 

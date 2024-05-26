@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Models\Progress;
 use App\Models\KartuTugas;
 use App\Models\UserProyek;
-use App\Models\FilePendukung;
+use App\Models\FilePendukung;   
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -33,6 +33,11 @@ class Proyek extends Model
 
     public function filePendukungs(){
         return $this->hasMany(FilePendukung::class);
+    }
+
+    public function userProyeks()
+    {
+        return $this->hasMany(UserProyek::class, 'proyek_id');
     }
 
     public function getRouteKeyName(): string

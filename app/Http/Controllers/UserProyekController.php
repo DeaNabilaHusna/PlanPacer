@@ -7,7 +7,9 @@ use App\Models\Proyek;
 use App\Models\UserProyek;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreUserProyekRequest;
 use App\Http\Requests\UpdateUserProyekRequest;
 
@@ -25,23 +27,10 @@ class UserProyekController extends Controller
             ->join('proyeks', 'user_proyeks.proyek_id', '=', 'proyeks.id')
             ->join('users', 'user_proyeks.user_id', '=', 'users.id')
             ->where('proyeks.user_id', $userId) //proyek milik pengguna saat ini
-            ->select('users.email', 'users.username', 'users.id', 'proyeks.nama_proyek')
+            ->select('users.email', 'users.username', 'users.id as user_id', 'proyeks.nama_proyek', 'user_proyeks.id as id')
             ->get();
 
         return view('dashboard.user.index', compact('userProyeks'));
-
-        // $userId = auth()->user()->id;
-        // $kolaborators = User::find($userId)->proyeks()
-        //     ->join('user_proyeks as up', 'proyeks.id', '=', 'up.proyek_id')
-        //     ->join('users', 'up.user_id', '=', 'users.id')
-        //     ->select('users.email', 'users.username', 'proyeks.nama_proyek', 'users.id as user_id')
-        //     ->get();
-        // $kolaborators->each(function ($kolaborator) {
-        //     $user = User::find($kolaborator->user_id);
-        //     $kolaborator->roles = $user ? $user->getRoleNames() : [];
-        // });
-
-        // return view('dashboard.user.index', compact('kolaborators'));
     }
 
 
@@ -75,17 +64,21 @@ class UserProyekController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    // public function edit(UserProyek $userProyek){
-    //     dd ($userProyek);
-    //     $kolaborator = $userProyek->user;
-
-    // }
-    public function edit(UserProyek $userProyek)
+    public function edit(UserProyek $kolaborator)
     {
-        // $userProyek = UserProyek::all();
+        $kolaborator = UserProyek::with('proyek')->find($kolaborator->id);
+        // Log::info("Trying to edit UserProyek with ID: {$kolaborator->id} by user ID: " . auth()->user()->id);
+        // dd ($kolaborator);
+        $this->authorize('update', $kolaborator);
+        $kolaborator = UserProyek::join('users', 'user_proyeks.user_id', '=', 'users.id')
+        ->join('proyeks', 'user_proyeks.proyek_id', '=', 'proyeks.id')
+        ->select('user_proyeks.*', 'users.email', 'proyeks.nama_proyek')
+        ->where('user_proyeks.id', $kolaborator->id)
+        ->first();
+
         $roles = Role::pluck('name', 'id');
         return view('dashboard.user.edit', [
-            'userProyek' => $userProyek,
+            'kolaborator' => $kolaborator,
             'roles' => $roles,
         ]);
         // $userProyek = $kolaborator;
@@ -94,37 +87,42 @@ class UserProyekController extends Controller
         // dd ($userProyek);
 
     }
-    //     public function edit(UserProyek $userProyek)
-    // {
-    //     $userId = auth()->user()->id;
-    //     $userProyek = DB::table('user_proyeks')
-    //         ->join('proyeks', 'user_proyeks.proyek_id', '=', 'proyeks.id')
-    //         ->join('users', 'user_proyeks.user_id', '=', 'users.id')
-    //         ->where('user_proyeks.id', $userProyek->id)
-    //         ->where('proyeks.user_id', $userId)
-    //         ->select('users.email', 'users.username', 'proyeks.nama_proyek', 'user_proyeks.id as user_proyek_id')
-    //         ->first();
-    // dd ($userProyek);
-
-    //     // Mendapatkan semua roles yang tersedia
-    //     $roles = Role::pluck('name', 'id');
-
-    //     return view('dashboard.user.edit', compact('userProyek', 'roles'));
-    // }
-
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserProyekRequest $request, UserProyek $userProyek)
+    // public function update(UpdateUserProyekRequest $request, UserProyek $kolaborator)
+    // {
+    //     // $this->authorize('update', $kolaborator);
+    //     // if (Auth::check() && Auth::user()->role === 'pic') {
+
+    //         $validatedData = $request->validate([
+    //             'roles' => 'required',
+    //         ]);
+
+    //         $validatedData = $request->validated();
+    //         $kolaborator->roles()->sync($validatedData['roles']);
+    //         // dd($kolaborator);
+
+    //         // Redirect ke halaman yang sesuai
+    //         // return redirect()->back()->with('success', 'Berhasil Mengubah Role Kolaborator');
+    //         return redirect('/main-menu/kolaborator')->with('success', 'Berhasil Mengubah Role Kolaborator');
+    //     // }
+    // }
+    public function update(UpdateUserProyekRequest $request, UserProyek $kolaborator)
     {
-        // // Mendapatkan user yang terkait dengan kolaborator
-        // $user = $userProyek->user;
+        $kolaborator = UserProyek::with('proyek')->find($kolaborator->id);
+        // Otorisasi pengguna untuk melakukan update
+        $this->authorize('update', $kolaborator);
 
-        // // Memperbarui roles untuk user
-        // $user->syncRoles($request->roles);
+        $validatedData = $request->validate([
+            'roles' => 'required|array',
+            'roles.*' => 'exists:roles,id',
+        ]);
 
-        // return redirect()->route('dashboard.user.index')->with('success', 'Roles kolaborator berhasil diperbarui.');
+        // Sinkronisasi peran kolaborator
+        $kolaborator->roles()->sync($validatedData['roles']);
+
+        return redirect('/main-menu/kolaborator')->with('success', 'Berhasil Mengubah Role Kolaborator');
     }
 
     /**
