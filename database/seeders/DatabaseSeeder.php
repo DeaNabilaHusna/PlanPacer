@@ -94,15 +94,19 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $PermissionSatu = Permission::updateOrCreate([
-            'name' => 'update_proyek',
+            'name' => 'edit proyek',
             'guard_name' => 'web'
         ]);
         $PermissionDua = Permission::updateOrCreate([
-            'name' => 'update_tugas',
+            'name' => 'edit tugas',
             'guard_name' => 'web'
         ]);
         $PermissionTiga = Permission::updateOrCreate([
-            'name' => 'update_role_kolaborator',
+            'name' => 'view tugas',
+            'guard_name' => 'web'
+        ]);
+        $PermissionTiga = Permission::updateOrCreate([
+            'name' => 'view proyek',
             'guard_name' => 'web'
         ]);
         // $role_pic->givePermissionTo($PermissionSatu);

@@ -93,6 +93,92 @@ class ProyekController extends Controller
         return back()->withInput();
         }
     }
+
+    public function show(Proyek $proyek)
+    {
+        $this->authorize('view', $proyek);
+        $docs = FilePendukung::where('proyek_id', $proyek->id)->get();
+        return view('dashboard.proyek.detailproyek', [
+            'proyek' => $proyek,
+            'file_pendukung' => $docs
+        ]);
+        // return $proyek;
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Proyek $proyek)
+    {
+        $this->authorize('update', $proyek);
+        $users = User::all();
+        return view('dashboard.proyek.updateproyek', [
+            'proyek' => $proyek,
+            'users' => $users,
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Proyek $proyek)
+    {
+        $this->authorize('update', $proyek);
+        $validatedData = $request->validate([
+            'nama_proyek' => 'required|max:255',
+            'url_proyek' => 'nullable|max:255',
+            'deskripsi_proyek' => 'nullable',
+            'tgl_mulai_proyek' => 'required',
+            'tgl_selesai_proyek' => 'required',
+            'visibilitas' => 'required',
+            'status_proyek' => 'required',
+            'nama_file.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
+        ]);
+
+        // Handle file updates
+        if ($request->hasFile('nama_file')) {
+            // Delete old files
+            if ($proyek->files) {
+                foreach ($proyek->files as $file) {
+                    Storage::delete($file->nama_file);
+                }
+            }
+
+            // Upload new files
+            $docs = [];
+            foreach ($request->file('nama_file') as $key => $file) {
+                $extension = $file->getClientOriginalExtension();
+                $filename = $key . '-' . time() . '.' . $extension;
+                $path = $file->storeAs('uploads/docs', $filename);
+                $docs[] = [
+                    'proyek_id' => $proyek->id,
+                    'nama_file' => $path,
+                ];
+            }
+            // Insert new files
+            FilePendukung::insert($docs);
+        }
+
+        // Handle collaborators based on visibility
+        if ($request->visibilitas === 'private') {
+            $proyek->kolaborators()->detach();
+        } else {
+            $validatedData['kolaborator'] = $request->kolaborator;
+        }
+
+        $proyek->update($validatedData);
+        return redirect('/main-menu/proyek')->with('success', 'Berhasil Mengupdate Proyek');
+    }
+    
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Proyek $proyek)
+    {
+        $this->authorize('delete', $proyek);
+        Proyek::destroy($proyek->id);
+        return redirect('/main-menu/proyek')->with('success', 'Berhasil Menghapus Proyek');
+    }
     // public function store(Request $request)
     // {
     //     try {
@@ -202,78 +288,7 @@ class ProyekController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Proyek $proyek)
-    {
-        $docs = FilePendukung::where('proyek_id', $proyek->id)->get();
-        return view('dashboard.proyek.detailproyek', [
-            'proyek' => $proyek,
-            'file_pendukung' => $docs
-        ]);
-        // return $proyek;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Proyek $proyek)
-    {
-        $users = User::all();
-        return view('dashboard.proyek.updateproyek', [
-            'proyek' => $proyek,
-            'users' => $users,
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Proyek $proyek)
-    {
-        $validatedData = $request->validate([
-            'nama_proyek' => 'required|max:255',
-            'url_proyek' => 'nullable|max:255',
-            'deskripsi_proyek' => 'nullable',
-            'tgl_mulai_proyek' => 'required',
-            'tgl_selesai_proyek' => 'required',
-            'visibilitas' => 'required',
-            'status_proyek' => 'required',
-            'nama_file.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
-        ]);
-
-        // Handle file updates
-        if ($request->hasFile('nama_file')) {
-            // Delete old files
-            if ($proyek->files) {
-                foreach ($proyek->files as $file) {
-                    Storage::delete($file->nama_file);
-                }
-            }
-
-            // Upload new files
-            $docs = [];
-            foreach ($request->file('nama_file') as $key => $file) {
-                $extension = $file->getClientOriginalExtension();
-                $filename = $key . '-' . time() . '.' . $extension;
-                $path = $file->storeAs('uploads/docs', $filename);
-                $docs[] = [
-                    'proyek_id' => $proyek->id,
-                    'nama_file' => $path,
-                ];
-            }
-            // Insert new files
-            FilePendukung::insert($docs);
-        }
-
-        // Handle collaborators based on visibility
-        if ($request->visibilitas === 'private') {
-            $proyek->kolaborators()->detach();
-        } else {
-            $validatedData['kolaborator'] = $request->kolaborator;
-        }
-
-        $proyek->update($validatedData);
-        return redirect('/main-menu/proyek')->with('success', 'Berhasil Mengupdate Proyek');
-    }
+    
 
     // public function update(Request $request, Proyek $proyek)
     // {
@@ -338,12 +353,4 @@ class ProyekController extends Controller
 
     //     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Proyek $proyek)
-    {
-        Proyek::destroy($proyek->id);
-        return redirect('/main-menu/proyek')->with('success', 'Berhasil Menghapus Proyek');
-    }
 }

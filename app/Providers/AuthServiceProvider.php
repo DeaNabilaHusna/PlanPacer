@@ -6,6 +6,8 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use App\Models\UserProyek;
 use App\Policies\UserProyekPolicy;
+use App\Models\Proyek;
+use App\Policies\ProyekPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -16,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         UserProyek::class => UserProyekPolicy::class,
+        // Proyek::class => ProyekPolicy::class,
     ];
 
     /**
