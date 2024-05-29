@@ -4,9 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response;
 use Spatie\Permission\Traits\HasRoles;
+use Symfony\Component\HttpFoundation\Response;
 
 class checkRole
 {
@@ -41,6 +42,7 @@ class checkRole
         $user = auth()->user();
 
         if ($user->role === $role) {
+            Log::info('Authorization successful for user ID: ' . auth()->id());
             return $next($request);
         }
         

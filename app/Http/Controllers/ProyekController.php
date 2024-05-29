@@ -93,6 +93,62 @@ class ProyekController extends Controller
         return back()->withInput();
         }
     }
+    // public function store(Request $request)
+    // {
+    //     try {
+    //         $validatedData = $request->validate([
+    //             'nama_proyek' => 'required|max:255',
+    //             'penanggungjawab_proyek' => 'max:255',
+    //             'url_proyek' => 'nullable|max:255',
+    //             'deskripsi_proyek' => 'nullable',
+    //             'tgl_mulai_proyek' => 'required|date',
+    //             'tgl_selesai_proyek' => 'required|date|after:tgl_mulai_proyek',
+    //             'visibilitas' => 'required',
+    //             'status_proyek' => 'required',
+    //             'nama_file.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
+    //             'kolaborator.*' => 'nullable|exists:users,id',
+    //         ]);
+
+    //         $validatedData['user_id'] = auth()->user()->id;
+    //         $validatedData['penanggungjawab_proyek'] = auth()->user()->username;
+    //         $validatedData['kolaborator'] = json_encode($request->input('kolaborator', []));
+
+    //         $proyek = Proyek::create($validatedData);
+
+    //         if ($request->has('kolaborator')) {
+    //             $proyek->users()->attach($request->input('kolaborator'));
+    //         }
+
+    //         // file 
+    //         $docs = [];
+    //         if ($files = $request->file('nama_file')) {
+    //             foreach ($files as $key => $file) {
+    //                 $extension = $file->getClientOriginalExtension();
+    //                 $filename = $key . '-' . time() . '.' . $extension;
+    //                 $path = $file->storeAs('uploads/docs', $filename);
+    //                 $file->move($path, $filename);
+    //                 $docs[] = [
+    //                     'proyek_id' => $proyek->id,
+    //                     'nama_file' => $path . $file,
+    //                 ];
+    //             }
+    //         }
+    //         FilePendukung::insert($docs);
+    //         $rolePic = Role::where('name', 'pic')->first();
+    //         if ($rolePic) {
+    //             UserProyek::create([
+    //                 'user_id' => auth()->user()->id,
+    //                 'proyek_id' => $proyek->id,
+    //                 'role_id' => $rolePic->id,
+    //             ]);
+    //         }
+
+    //         return redirect('/main-menu/proyek')->with('success', 'Berhasil Membuat Proyek Baru');
+    //     } catch (\Exception $e) {
+    //         Session::flash('error', $e->getMessage());
+    //         return back()->withInput();
+    //     }
+    // }
 
     // public function store(Request $request)
     // {

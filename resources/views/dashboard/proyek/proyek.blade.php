@@ -81,7 +81,6 @@ $segmentCount = count($segments);
 
                     <!-- STATUS  -->
                     <div class="flex items-center justify-between">
-                        <!-- <span class="bg-orange-300 text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $proyek -> status }}</span> -->
                         @php
                         $bgColor = '';
                         $textColor = '';

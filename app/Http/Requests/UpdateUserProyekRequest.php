@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateUserProyekRequest extends FormRequest
 {
@@ -11,7 +12,16 @@ class UpdateUserProyekRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+// return true;
+    $user = Auth::user();
+    $kolaborator = $this->route('kolaborator');
+
+    // Periksa apakah pengguna yang login adalah pemilik proyek atau memiliki peran 'pic'
+    if ($user->id === $kolaborator->user_id || $user->role === 'pic') {
+        return true;
+    }
+
+    return false;
     }
 
     /**
