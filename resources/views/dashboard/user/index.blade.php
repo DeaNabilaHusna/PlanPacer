@@ -27,8 +27,8 @@ $segmentCount = count($segments);
                 <h1 class="text-xl font-semibold text-defblack sm:text-lg">Kolabolator</h1>
             </div>
 
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 font-raleway">
+            <div class="mb-6 relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table class=" w-full text-sm text-left rtl:text-right text-gray-500 font-raleway">
                     <thead class="text-xs text-gray-700 uppercase bg-defgrey">
                         <tr>
                             <th scope="col" class="px-6 py-3">
@@ -49,36 +49,48 @@ $segmentCount = count($segments);
 
                         </tr>
                     </thead>
-                    @foreach ($userProyeks as $userProyek)
+                    @foreach ($kolaborators as $kolaborator)
                     <tbody>
                         <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
                             <td class="px-6 py-4 font-medium whitespace-nowrap">
                                 {{ $loop->iteration }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $userProyek->email }}
+                                {{ $kolaborator->email }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $userProyek->nama_proyek }}
+                                {{ $kolaborator->nama_proyek }}
                             </td>
-                            <td class="px-6 py-4">
-                                @if (!empty($userProyek->roles))
-                                @foreach ($userProyek->roles as $rolename)
+                            <!-- <td class="px-6 py-4">
+                            @if (!empty($kolaborator->roles))
+                                @foreach ($kolaborator->roles as $rolename)
                                 {{ $rolename }}
                                 @endforeach
+                                @else
+                                <p class="text-red-500">Belum ditetapkan</p>
+                                @endif
+                            </td> -->
+                            <td class="px-6 py-4">
+                            @if (!empty($kolaborator->role_name))
+                            {{ $kolaborator->role_name }}
                                 @else
                                 <p class="text-red-500">Belum ditetapkan</p>
                                 @endif
                             </td>
                             <td class="px-6 py-4 flex justify-center space-x-2">
                                 <button>
-                                    <a href="/main-menu/kolaborator/{{ $userProyek->id }}" class="bg-blue-700 hover:bg-navy text-white font-bold py-2 px-4 border border-blue-700 rounded">
+                                    <a href="/main-menu/kolaborator/{{ $kolaborator->id }}" class="bg-blue-700 hover:bg-navy text-white font-bold py-2 px-4 border border-blue-700 rounded">
                                         Detail
                                     </a>
                                 </button>
-                                <a href="/main-menu/kolaborator/{{$userProyek->id}}/edit" class="bg-yellow hover:bg-orange-600 text-white font-bold py-2 px-4 border border-yellow rounded">
+                                <a href="/main-menu/kolaborator/{{$kolaborator->id}}/edit" class="bg-yellow hover:bg-orange-600 text-white font-bold py-2 px-4 border border-yellow rounded">
                                     Atur Role
                                 </a>
+                                <form action="/main-menu/kolaborator/{{ $kolaborator->id }}" method="post" class="mb-0">
+                                    @method('delete')
+                                    @csrf
+                                    <button onclick="return confirm('Apakah anda yakin ingin menghapus kolaborator ini?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 border border-red-700 rounded">Hapus</button>
+                                </form>
                             </td>
                         </tr>
                     </tbody>

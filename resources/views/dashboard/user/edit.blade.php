@@ -2,9 +2,7 @@
 @section('content')
 
 <section class="mb-4">
-    <form method="post" action="/main-menu/kolaborator/{{ $kolaborator->id }}" enctype="multipart/form-data">
-
-
+    <form method="post" action="{{ route('kolaborator.update', $kolaborator->id) }}">
         @method('put')
         @csrf
         <div class="space-y-12 font-medium">
@@ -30,13 +28,14 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="sm:col-span-4">
+                   
+                    <!-- <div class="sm:col-span-4">
                         <label for="roles" class="block text-sm font-medium leading-6 text-gray-900">Pilih Role</label>
                         <div class="mt-2">
                             @foreach($roles as $roleId => $roleName)
                             @if($roleName !== 'pic')
                             <div class="flex items-center mb-2">
-                                <input id="role-{{ $roleId }}" name="roles" type="radio" value="{{ $roleId }}" class="form-radio h-5 w-5 text-indigo-600 transition duration-150 ease-in-out" {{ optional($kolaborator)->roles && in_array($roleId, $kolaborator->roles->pluck('id')->toArray()) ? 'checked' : '' }}>
+                                <input id="role-{{ $roleId }}" name="roles[]" type="radio" value="{{ $roleId }}" {{ ($kolaborator->role_id == $roleId) ? 'checked' : '' }} class="form-radio h-5 w-5 text-indigo-600 transition duration-150 ease-in-out">
                                 <label for="role-{{ $roleId }}" class="ml-2 block text-sm leading-5 text-gray-900">{{ $roleName }}</label>
                             </div>
                             @endif
@@ -45,8 +44,25 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
-                    </div>
+                    </div> -->
 
+                    <div class="sm:col-span-4">
+                        <label for="roles" class="block text-sm font-medium leading-6 text-gray-900">Pilih Role</label>
+                        <div class="mt-2">
+                            @foreach($roles as $roleId => $roleName)
+                            @if($roleName !== 'pic')
+                            <div class="flex items-center mb-2">
+                                <input id="role-{{ $roleId }}" name="role_id" type="radio" value="{{ $roleId }}" {{ ($kolaborator->role_id == $roleId) ? 'checked' : '' }} class="form-radio h-5 w-5 text-indigo-600 transition duration-150 ease-in-out">
+                                <label for="role-{{ $roleId }}" class="ml-2 block text-sm leading-5 text-gray-900">{{ $roleName }}</label>
+                            </div>
+                            @endif
+                            @endforeach
+                            @error('role_id')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+ 
 
                 </div>
             </div>

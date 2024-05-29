@@ -12,9 +12,9 @@ class UserProyek extends Model
     protected $table = "user_proyeks";
     protected $guarded = ["id"];
 
-    public function role()
+    public function roles()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class, 'role_id');
     }
 
     public function proyek()
@@ -23,6 +23,6 @@ class UserProyek extends Model
     }
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -46,6 +46,9 @@ $segmentCount = count($segments);
                             <th scope="col" class="px-6 py-3">
                                 Nama Role
                             </th>
+                            <th scope="col" class="px-6 py-3 text-center">
+                                Hak Akses
+                            </th>
                             <th scope="col" class="text-center px-6 py-3">
                                 Aksi
                             </th>
@@ -57,10 +60,21 @@ $segmentCount = count($segments);
                     <tbody>
                         <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
                             <td class="px-6 py-4 font-medium whitespace-nowrap">
-                                1
+                                {{ $loop->iteration }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $role->name }}
+                            </td>
+                            <td class="px-6 py-4">
+                                @if($role->permissions->isNotEmpty())
+                                <div class="flex flex-wrap gap-1">
+                                    @foreach($role->permissions as $permission)
+                                    <span class="inline-block bg-green-300 text-green-800 text-xs font-semibold py-1 px-2 rounded-full">{{ str_replace('_', ' ', $permission->name) }}</span>
+                                    @endforeach
+                                </div>
+                                @else
+                                <span>Belum diberikan hak akses</span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 flex justify-center space-x-2">
                                 <!-- <button>
@@ -72,15 +86,15 @@ $segmentCount = count($segments);
                                     Tambah Hak Akses
                                 </a>
                                 <button>
-                                <a href="/main-menu/role/{{ $role->id }}/edit" class="bg-yellow hover:bg-orange-600 text-white font-bold py-2 px-4 border border-yellow rounded">
-                                    Edit
-                                </a>
+                                    <a href="/main-menu/role/{{ $role->id }}/edit" class="bg-yellow hover:bg-orange-600 text-white font-bold py-2 px-4 border border-yellow rounded">
+                                        Edit
+                                    </a>
                                 </button>
                                 <form action="/main-menu/role/{{ $role->id }}" method="post" class="mb-0">
-                                            @method('delete')
-                                            @csrf
-                                            <button onclick="return confirm('Apakah anda yakin ingin menghapus role ini?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 border border-red-700 rounded">Hapus</button>
-                                        </form>
+                                    @method('delete')
+                                    @csrf
+                                    <button onclick="return confirm('Apakah anda yakin ingin menghapus role ini?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 border border-red-700 rounded">Hapus</button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach

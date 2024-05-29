@@ -44,7 +44,8 @@ class UserProyekPolicy
     {
          // Memeriksa apakah user adalah pemilik proyek atau memiliki role 'pic'
         //  $authorized = $user->role === 'pic' || $user->id === $userProyek->proyek->user_id;
-             $authorized = $user->role === 'pic' && $user->id === $userProyek->proyek->user_id;
+            //  $authorized = $user->role === 'pic' && $user->id === $userProyek->proyek->user_id;
+            $authorized = $user->id === $userProyek->proyek->user_id && $user->hasRole('pic');
         // $authorized = $user->hasAnyRole(['pic']) && $user->id === $userProyek->proyek->user_id;
 
          // Log untuk debugging
