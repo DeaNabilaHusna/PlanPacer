@@ -52,6 +52,16 @@ Route::middleware(['auth', 'checkRole:pic'])->group(function () {
     });
 });
 
+Route::group(['middleware' => ['auth', 'checkRoleCollaborators:analyst']], function () {
+     // Rute GET untuk mengambil detail proyek
+     Route::get('/main-menu/proyek/{proyek}', [ProyekController::class, 'show'])
+     ->name('proyek.show');
+ 
+ // Rute PUT untuk memperbarui detail proyek
+ Route::put('/main-menu/proyek/{proyek}', [ProyekController::class, 'update'])
+     ->name('proyek.update');
+});
+
 Route::get('/about', function () {
     return view('aboutus');
 });
