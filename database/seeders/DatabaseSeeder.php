@@ -5,7 +5,6 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\User;
 use Spatie\Permission\Models\Permission;
 
 class DatabaseSeeder extends Seeder
@@ -49,7 +48,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'zayn@gmail.com',
             'password' => bcrypt('Zayn1234!'),
         ]);
-      
+
         User::create([
             'username' => 'doni',
             'email' => 'doni@gmail.com',

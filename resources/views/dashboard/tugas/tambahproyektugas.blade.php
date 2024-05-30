@@ -28,6 +28,7 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                    <input type="hidden" name="proyek_id" value="{{ session('proyek_id') }}"> <!-- Pastikan proyek_id ada -->
                     <div class="mt-6 flex items-center justify-end gap-x-6">
                         {{-- <a href="/main-menu/proyek/{{ $proyek->nama_proyek }}/tugas"
                         class="bg-gray-400 text-white py-2 px-4 rounded-md">Kembali</a> --}}
