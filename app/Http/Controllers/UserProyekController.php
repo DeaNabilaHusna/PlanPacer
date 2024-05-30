@@ -7,41 +7,42 @@ use App\Models\Proyek;
 use App\Models\UserProyek;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreUserProyekRequest;
 use App\Http\Requests\UpdateUserProyekRequest;
 
 class UserProyekController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('checkRole:pic'); // Hapus atau sesuaikan ini jika diperlukan
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $userId = auth()->user()->id;
-        // $kolaborators = DB::table('user_proyeks')
-        $userProyeks = DB::table('user_proyeks')
+        $kolaborators = DB::table('user_proyeks')
 
-            ->join('proyeks', 'user_proyeks.proyek_id', '=', 'proyeks.id')
-            ->join('users', 'user_proyeks.user_id', '=', 'users.id')
-            ->where('proyeks.user_id', $userId) //proyek milik pengguna saat ini
-            ->select('users.email', 'users.username', 'users.id', 'proyeks.nama_proyek')
-            ->get();
+        ->join('proyeks', 'user_proyeks.proyek_id', '=', 'proyeks.id')
+        ->join('users', 'user_proyeks.user_id', '=', 'users.id')
+        ->leftJoin('roles', 'user_proyeks.role_id', '=', 'roles.id')
+        ->where('proyeks.user_id', $userId) // proyek milik pengguna saat ini
+        ->select(
+            'users.email', 
+            'users.username', 
+            'users.id as user_id', 
+            'proyeks.nama_proyek', 
+            'user_proyeks.id as id', 
+            'roles.name as role_name' // mengambil nama role, bisa null jika tidak ada
+        )
+        ->get();
 
-        return view('dashboard.user.index', compact('userProyeks'));
-
-        // $userId = auth()->user()->id;
-        // $kolaborators = User::find($userId)->proyeks()
-        //     ->join('user_proyeks as up', 'proyeks.id', '=', 'up.proyek_id')
-        //     ->join('users', 'up.user_id', '=', 'users.id')
-        //     ->select('users.email', 'users.username', 'proyeks.nama_proyek', 'users.id as user_id')
-        //     ->get();
-        // $kolaborators->each(function ($kolaborator) {
-        //     $user = User::find($kolaborator->user_id);
-        //     $kolaborator->roles = $user ? $user->getRoleNames() : [];
-        // });
-
-        // return view('dashboard.user.index', compact('kolaborators'));
+        return view('dashboard.user.index', compact('kolaborators'));
     }
 
 
@@ -75,63 +76,56 @@ class UserProyekController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    // public function edit(UserProyek $userProyek){
-    //     dd ($userProyek);
-    //     $kolaborator = $userProyek->user;
-
-    // }
-    public function edit(UserProyek $userProyek)
+    public function edit(UserProyek $kolaborator)
     {
-        // $userProyek = UserProyek::all();
+        // return $kolaborator;
+        $kolaborator = UserProyek::with('proyek', 'roles')->find($kolaborator->id);
+        Log::info("Trying to edit UserProyek with ID: {$kolaborator->id} by user ID: " . auth()->user()->id);
+        // dd ($kolaborator);
+        $this->authorize('update', $kolaborator);
+        $kolaborator = UserProyek::join('users', 'user_proyeks.user_id', '=', 'users.id')
+        ->join('proyeks', 'user_proyeks.proyek_id', '=', 'proyeks.id')
+        ->select('user_proyeks.*', 'users.email', 'proyeks.nama_proyek')
+        ->where('user_proyeks.id', $kolaborator->id)
+        ->first();
+
         $roles = Role::pluck('name', 'id');
         return view('dashboard.user.edit', [
-            'userProyek' => $userProyek,
+            'kolaborator' => $kolaborator,
             'roles' => $roles,
         ]);
-        // $userProyek = $kolaborator;
-        // dd($kolaborator);
-        // $kolaborator = $userProyek;
-        // dd ($userProyek);
 
     }
-    //     public function edit(UserProyek $userProyek)
-    // {
-    //     $userId = auth()->user()->id;
-    //     $userProyek = DB::table('user_proyeks')
-    //         ->join('proyeks', 'user_proyeks.proyek_id', '=', 'proyeks.id')
-    //         ->join('users', 'user_proyeks.user_id', '=', 'users.id')
-    //         ->where('user_proyeks.id', $userProyek->id)
-    //         ->where('proyeks.user_id', $userId)
-    //         ->select('users.email', 'users.username', 'proyeks.nama_proyek', 'user_proyeks.id as user_proyek_id')
-    //         ->first();
-    // dd ($userProyek);
-
-    //     // Mendapatkan semua roles yang tersedia
-    //     $roles = Role::pluck('name', 'id');
-
-    //     return view('dashboard.user.edit', compact('userProyek', 'roles'));
-    // }
-
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserProyekRequest $request, UserProyek $userProyek)
+     public function update(UpdateUserProyekRequest $request, UserProyek $kolaborator)
     {
-        // // Mendapatkan user yang terkait dengan kolaborator
-        // $user = $userProyek->user;
-
-        // // Memperbarui roles untuk user
-        // $user->syncRoles($request->roles);
-
-        // return redirect()->route('dashboard.user.index')->with('success', 'Roles kolaborator berhasil diperbarui.');
+        // Log::info('Update method called for UserProyek ID: ' . $kolaborator->id);
+        $this->authorize('update', $kolaborator);
+    
+        $validatedData = $request->validate([
+            'role_id' => 'required|exists:roles,id', // Ubah validasi role_id
+        ]);
+    
+        // Simpan role_id valid ke dalam model UserProyek
+        $kolaborator->update([
+            'role_id' => $validatedData['role_id'],
+        ]);
+    
+        return redirect('/main-menu/kolaborator')->with('success', 'Berhasil Mengubah Role Kolaborator');
     }
 
-    /**
+     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserProyek $userProyek)
+    public function destroy(UserProyek $kolaborator)
     {
-        //
+        // dd ($userProyek);
+        $this->authorize('delete', $kolaborator);
+            $kolaborator->delete();
+            return redirect('/main-menu/kolaborator')->with('success', 'Berhasil Menghapus Kolaborator');
+       
     }
+   
 }

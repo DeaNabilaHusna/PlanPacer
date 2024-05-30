@@ -15,20 +15,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('proyek_id');
+            $table->unsignedBigInteger('role_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('proyek_id')->references('id')->on('proyeks')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->timestamps();
         });
     }
-    // public function up(): void
-    // {
-    //     Schema::create('user_proyeks', function (Blueprint $table) {
-    //         $table->id();
-    //         $table->foreignId('user_id')->constrained();
-    //         $table->foreignId('proyek_id')->constrained();
-    //         $table->timestamps();
-    //     });
-    // }
 
     /**
      * Reverse the migrations.

@@ -64,6 +64,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        'roles' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\CustomRole::class,
+        ],
 
         // 'users' => [
         //     'driver' => 'database',

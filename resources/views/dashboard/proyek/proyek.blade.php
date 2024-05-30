@@ -81,7 +81,18 @@ $segmentCount = count($segments);
 
                     <!-- STATUS  -->
                     <div class="flex items-center justify-between">
-                        <span class="bg-orange-300 text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $proyek -> status }}</span>
+                        @php
+                        $bgColor = '';
+                        $textColor = '';
+                        if ($proyek->status_proyek == 'sedang berjalan') {
+                        $bgColor = 'bg-orange-300';
+                        $textColor = 'text-orange-800';
+                        } elseif ($proyek->status_proyek == 'selesai') {
+                        $bgColor = 'bg-green-300';
+                        $textColor = 'text-green-800';
+                        }
+                        @endphp
+                        <span class="{{ $bgColor }} {{ $textColor }} text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $proyek->status_proyek }}</span>
                         <div class="relative flex justify-center items-center bg-defgrey group">
                             <a href="#" id="dropdown-toggle">
                                 <svg width="22" height="6" viewBox="0 0 22 6" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -107,11 +118,21 @@ $segmentCount = count($segments);
 
                     </div>
                     <!-- JUDUL  -->
-                    <a href="/main-menu/proyek/{{$proyek->nama_proyek}}/tugas">
-                        <h5 class="pt-2 text-xl font-bold tracking-tight text-defblack">{{$proyek->nama_proyek}}</h5>
+                    @php
+                    $lockIcon = '<svg fill="#000000" width="12px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M25 12h-1v-3.816c0-4.589-3.32-8.184-8.037-8.184-4.736 0-7.963 3.671-7.963 8.184v3.816h-1c-2.206 0-4 1.794-4 4v12c0 2.206 1.794 4 4 4h18c2.206 0 4-1.794 4-4v-12c0-2.206-1.794-4-4-4zM10 8.184c0-3.409 2.33-6.184 5.963-6.184 3.596 0 6.037 2.716 6.037 6.184v3.816h-12v-3.816zM27 28c0 1.102-0.898 2-2 2h-18c-1.103 0-2-0.898-2-2v-12c0-1.102 0.897-2 2-2h18c1.102 0 2 0.898 2 2v12zM16 18c-1.104 0-2 0.895-2 2 0 0.738 0.405 1.376 1 1.723v3.277c0 0.552 0.448 1 1 1s1-0.448 1-1v-3.277c0.595-0.346 1-0.985 1-1.723 0-1.105-0.895-2-2-2z"></path>
+                    </svg>';
+                    @endphp
+                    <a href="/main-menu/proyek/{{ $proyek->nama_proyek }}/tugas">
+                        <h5 class="flex items-center gap-2 pt-2 text-xl font-bold tracking-tight text-defblack">
+                            {{ $proyek->nama_proyek }}
+                            @if ($proyek->visibilitas == 'private')
+                            {!! $lockIcon !!}
+                            @endif
+                        </h5>
                     </a>
                     <!-- KONTRIBUTOR  -->
-                    <p class="py-1font-normal text-gray-700">3 Kontributor</p>
+                    <p class="py-1font-normal text-gray-700">{{ $proyek->jumlahKontributor }} Kontributor</p>
                     <!-- PROGRESS  -->
                     <div class="flex justify-between mb-1">
                         <span class="text-base font-sm text-defblack">Progress</span>

@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,60 +21,108 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        User::create([
-            'username' => 'fitri',
-            'email' => 'fitri@gmail.com',
-            'password' => bcrypt('Fitri1234!'),
-        ]);
-        User::create([
-            'username' => 'muli',
-            'email' => 'muli@gmail.com',
-            'password' => bcrypt('Muli1234!'),
+        // User::updateOrCreate([
+        //     'username' => 'fitri',
+        //     'email' => 'fitri@gmail.com',
+        //     'password' => bcrypt('Fitri1234!'),
+        // ]);
+        // User::updateOrCreate([
+        //     'username' => 'muli',
+        //     'email' => 'muli@gmail.com',
+        //     'password' => bcrypt('Muli1234!'),
+        // ]);
+
+        // User::updateOrCreate([
+        //     'username' => 'lilo',
+        //     'email' => 'lilo@gmail.com',
+        //     'password' => bcrypt('Lilo1234!'),
+        // ]);
+
+        // User::updateOrCreate([
+        //     'username' => 'dea',
+        //     'email' => 'dea@gmail.com',
+        //     'password' => bcrypt('Dea1234!'),
+        // ]);
+
+        // User::updateOrCreate([
+        //     'username' => 'zayn',
+        //     'email' => 'zayn@gmail.com',
+        //     'password' => bcrypt('Zayn1234!'),
+        // ]);
+
+        // User::updateOrCreate([
+        //     'username' => 'doni',
+        //     'email' => 'doni@gmail.com',
+        //     'password' => bcrypt('Doni1234!'),
+        // ]);
+
+        // User::updateOrCreate([
+        //     'username' => 'risa',
+        //     'email' => 'risa@gmail.com',
+        //     'password' => bcrypt('Risa1234!'),
+        // ]);
+
+        // User::updateOrCreate([
+        //     'username' => 'lala',
+        //     'email' => 'lala@gmail.com',
+        //     'password' => bcrypt('Lala1234!'),
+        // ]);
+
+        $role_pic = Role::updateOrCreate([
+            'name' => 'pic',
         ]);
 
-        User::create([
-            'username' => 'lilo',
-            'email' => 'lilo@gmail.com',
-            'password' => bcrypt('Lilo1234!'),
+
+        $role_analyst = Role::updateOrCreate([
+            'name' => 'analyst',
+
+        ]);
+        $role_designer = Role::updateOrCreate([
+            'name' => 'designer',
+        ]);
+        $role_programmer = Role::updateOrCreate([
+            'name' => 'programmer',
+        ]);
+        $role_mentor = Role::updateOrCreate([
+            'name' => 'mentor',
         ]);
 
-        User::create([
-            'username' => 'dea',
-            'email' => 'dea@gmail.com',
-            'password' => bcrypt('Dea1234!'),
-        ]);
+        // Permission::updateOrCreate([
+        //     'name' => 'update proyek',
+        //     'guard_name' => 'web'
+        // ]);
+        // Permission::updateOrCreate([
+        //     'name' => 'update tugas',
+        //     'guard_name' => 'web'
+        // ]);
 
-        User::create([
-            'username' => 'zayn',
-            'email' => 'zayn@gmail.com',
-            'password' => bcrypt('Zayn1234!'),
-        ]);
-
-        User::create([
-            'username' => 'doni',
-            'email' => 'doni@gmail.com',
-            'password' => bcrypt('Doni1234!'),
-        ]);
-
-        User::create([
-            'username' => 'risa',
-            'email' => 'risa@gmail.com',
-            'password' => bcrypt('Risa1234!'),
-        ]);
-
-        User::create([
-            'username' => 'lala',
-            'email' => 'lala@gmail.com',
-            'password' => bcrypt('Lala1234!'),
-        ]);
-
-        Permission::create([
-            'name' => 'update proyek',
+        $PermissionSatu = Permission::updateOrCreate([
+            'name' => 'edit proyek',
             'guard_name' => 'web'
         ]);
-        Permission::create([
-            'name' => 'update tugas',
+        $PermissionDua = Permission::updateOrCreate([
+            'name' => 'edit tugas',
             'guard_name' => 'web'
         ]);
+        $PermissionTiga = Permission::updateOrCreate([
+            'name' => 'view tugas',
+            'guard_name' => 'web'
+        ]);
+        $PermissionTiga = Permission::updateOrCreate([
+            'name' => 'view proyek',
+            'guard_name' => 'web'
+        ]);
+        // $role_pic->givePermissionTo($PermissionSatu);
+        // $role_pic->givePermissionTo($PermissionDua);
+        // $role_pic->givePermissionTo($PermissionTiga);
+
+        // $role_analyst->givePermissionTo($PermissionSatu);
+        // $role_analyst->givePermissionTo($PermissionDua);
+
+        // foreach (User::all() as $user) {
+        //     $user->assignRole($role_pic);
+        // }
+        // $user = User::find(1);
+        // $user->assignRole($role_analyst);
     }
 }
