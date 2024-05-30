@@ -71,8 +71,11 @@ class DatabaseSeeder extends Seeder
         $role_pic = Role::updateOrCreate([
             'name' => 'pic',
         ]);
+
+
         $role_analyst = Role::updateOrCreate([
             'name' => 'analyst',
+
         ]);
         $role_designer = Role::updateOrCreate([
             'name' => 'designer',

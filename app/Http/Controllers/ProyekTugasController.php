@@ -36,7 +36,8 @@ class ProyekTugasController extends Controller
      */
     public function create(Request $request)
     {
-        session(['nama_proyek' => $request->nama_proyek]);
+        // session(['nama_proyek' => $request->nama_proyek]);
+        session(['proyek_id' => $request->proyek_id]);
         $users = User::all();
         $proyeks = Proyek::all();
         return view('dashboard.tugas.tambahproyektugas', [
@@ -52,20 +53,27 @@ class ProyekTugasController extends Controller
     {
         // Validasi data input
         $validatedData = $request->validate([
-            'nama_tugas' => 'required|max:255',
+            'nama_kartu' => 'required|max:255', //diubah//
+            'proyek_id' => 'required|exists:proyeks,id',
         ]);
 
         $validatedData['user_id'] = auth()->user()->id;
         $namaProyek = session('nama_proyek');
-        dd('nama_proyek');
+
+        //memeriksa apakah namaproyek ada dalam session
+        if (!$namaProyek) {
+            return redirect()->back()->withErrors('Nama proyek tidak ditemukan dalam session.');
+        }
+        // dd('nama_proyek');
         // Simpan data kartu tugas baru ke database
         $validatedData['nama_proyek'] = $namaProyek;
         $tugas = KartuTugas::create($validatedData);
-        $tugasId = $tugas->id;
+        // $tugasId = $tugas->id;
+        // KartuTugas::create($validatedData); //diubah//
 
 
         // Redirect ke halaman index dengan pesan sukses
-        return redirect()->back()->with('success', 'Kartu Tugas berhasil dibuat.'. $tugasId);
+        return redirect()->back()->with('success', 'Kartu Tugas berhasil dibuat. ID Tugas: '. $tugas->id);
     }
 
     /**
@@ -91,7 +99,11 @@ class ProyekTugasController extends Controller
 
         // Tampilkan form untuk mengedit kartu tugas
         // return view('tugas.edit', ['kartuTugas' => $kartuTugas]);
-        return view('dashboard.tugas.editproyektugas');
+        $users = User::all();
+        return view('dashboard.tugas.editproyektugas', [
+            // 'proyek' => $proyek,
+             'users' => $users,
+        ]);
     }
 
     /**
@@ -101,7 +113,7 @@ class ProyekTugasController extends Controller
     {
         // Validasi data input
         $validatedData = $request->validate([
-            'nama_tugas' => 'required|max:255',
+            'nama_kartu' => 'required|max:255', //diubah//
             'tgl_mulai_proyek' => 'required',
             'tgl_selesai_proyek' => 'required',
             'status_proyek' => 'required',
