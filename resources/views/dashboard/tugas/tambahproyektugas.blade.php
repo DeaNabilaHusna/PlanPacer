@@ -1,11 +1,13 @@
 @extends('layouts.main')
 @section('content')
     <section class="mb-4">
+
             <form method="post" action="/main-menu/proyek/{{ session('nama_proyek') }}/tugas">
                 @csrf
                 <!-- Breadcrumb -->
                 <ol class="flex items-center whitespace-nowrap" aria-label="Breadcrumb">
                     <li class="flex items-center text-sm text-gray-800">
+                        {{-- Proyek 1 --}}
                         Proyek 1
                         <svg class="flex-shrink-0 mx-3 overflow-visible size-2.5 text-gray-400" width="16" height="16"
                             viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,10 +23,10 @@
                 <!-- End Breadcrumb -->
                 <div class="max-w-screen-xl mx-auto bg-white p-8 rounded-md shadow-md w-1113 h-830">
                     <div class="mb-4">
-                        <label for="nama_kartu" class="block font-semibold mb-2">Nama Tugas</label>
-                        <input type="text" id="nama_kartu" name="nama_kartu" class="w-full border rounded-md p-2"
-                            value="{{ old('nama_kartu') }}">
-                        @error('nama_kartu')
+                        <label for="nama_tugas" class="block font-semibold mb-2">Nama Tugas</label>
+                        <input type="text" id="nama_tugas" name="nama_tugas" class="w-full border rounded-md p-2"
+                            value="{{ old('nama_tugas') }}" required>
+                        @error('nama_tugas')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>

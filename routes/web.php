@@ -44,7 +44,7 @@ Route::middleware(['auth', 'checkRole:pic'])->group(function () {
     Route::put('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'updatePermissionsToRole']);
     Route::get('/main-menu', [DashboardController::class, 'index']);
 
-    Route::post('/main-menu/proyek/{nama_proyek}/tugas', [ProyekTugasController::class, 'store']);
+    Route::resource('/main-menu/proyek/{nama_proyek}/tugas', ProyekTugasController::class);
     // Route::get('/main-menu/proyek/{nama_proyek}/tugas/create', [ProyekTugasController::class, 'create']);
 
     Route::get('/main-menu/tugas', function () {
@@ -60,7 +60,7 @@ Route::group(['middleware' => ['auth', 'checkRoleCollaborators:analyst']], funct
      // Rute GET untuk mengambil detail proyek
      Route::get('/main-menu/proyek/{proyek}', [ProyekController::class, 'show'])
      ->name('proyek.show');
- 
+
  // Rute PUT untuk memperbarui detail proyek
  Route::put('/main-menu/proyek/{proyek}', [ProyekController::class, 'update'])
      ->name('proyek.update');
