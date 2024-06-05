@@ -11,13 +11,8 @@ class KartuTugas extends Model
 {
     use HasFactory;
 
-    // protected $guarded = ['id'];
-    protected $fillable = [
-        'nama_kartu',
-        'proyek_id',
-        'user_id',
-        'nama_proyek',
-    ];
+    protected $guarded = ['id'];
+
 
     public function proyek(){
         return $this->belongsTo(Proyek::class);
