@@ -50,8 +50,24 @@ class User extends Authenticatable
 
     public function proyeks()
     {
-        return $this->belongsToMany(Proyek::class, 'user_proyeks')->withTimestamps();
+        // return $this->belongsToMany(Proyek::class, 'user_proyeks')->withTimestamps();
+        return $this->belongsToMany(Proyek::class, 'user_proyeks')->withPivot('role_id', 'assigned_by_user_id')
+            ->withTimestamps();
         // return $this->belongsToMany(Proyek::class, UserProyek::class);
+    }
+
+    public function hasGlobalRole($role)
+    {
+        return $this->hasRole($role);
+    }
+
+    // Method untuk memeriksa apakah pengguna memiliki role dalam suatu proyek
+    public function hasRoleInProject($role, $projectId)
+    {
+        return $this->proyeks()
+                    ->where('id', $projectId)
+                    ->wherePivot('role_id', $role)
+                    ->exists();
     }
 
     public function tugasitems()

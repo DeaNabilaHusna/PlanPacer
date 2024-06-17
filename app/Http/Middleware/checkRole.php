@@ -33,6 +33,11 @@ class checkRole
         
     //     return redirect()->route('unauthorized');
     // }
+
+
+
+
+    // BATAS DIPAKAI
     public function handle(Request $request, Closure $next, $role): Response
     {
         if (!auth()->check()) {
@@ -48,6 +53,11 @@ class checkRole
         
         return redirect()->route('unauthorized');
     }
+
+    // END BATAS 
+
+
+
     // {
     //     if (!Auth::check()) {
     //         return redirect()->route('login');

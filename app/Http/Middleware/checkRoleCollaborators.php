@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\UserProyek;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -58,25 +59,50 @@ class checkRoleCollaborators
 
     //     return redirect()->route('unauthorized');
     // }
-    public function handle(Request $request, Closure $next, $roleName) : Response
+    // public function handle(Request $request, Closure $next, $roleName) : Response
+    // {
+    //     if (!Auth::check()) {
+    //         return redirect()->route('login');
+    //     }
+
+    //     $user = Auth::user();
+    //     $projectId = $request->route('projectId'); // Ambil projectId dari route parameter
+
+    //     // Ambil role name dari user_proyeks berdasarkan user_id, proyek_id, dan roles
+    //     $role = DB::table('user_proyeks')
+    //         ->join('roles', 'user_proyeks.role_id', '=', 'roles.id')
+    //         ->where('user_proyeks.user_id', $user->id)
+    //         ->where('user_proyeks.proyek_id', $projectId)
+    //         ->value('roles.name');
+
+    //     if ($role === $roleName) {
+    //         Log::info('Authorization successful for user collab ID: ' . $user->id . ' with role: ' . $role);
+    //         return $next($request);
+    //     }
+
+    //     return redirect()->route('unauthorized');
+    // }
+
+    public function handle(Request $request, Closure $next, $role): Response
     {
-        if (!Auth::check()) {
+        if (!auth()->check()) {
             return redirect()->route('login');
         }
 
-        $user = Auth::user();
-        $projectId = $request->route('projectId'); // Ambil projectId dari route parameter
+        $user = auth()->user();
+        $proyekId = $request->route('nama_proyek'); // Pastikan parameter proyek_id ada dalam route
 
-        // Ambil role name dari user_proyeks berdasarkan user_id, proyek_id, dan roles
-        $role = DB::table('user_proyeks')
-            ->join('roles', 'user_proyeks.role_id', '=', 'roles.id')
-            ->where('user_proyeks.user_id', $user->id)
-            ->where('user_proyeks.proyek_id', $projectId)
-            ->value('roles.name');
+        if ($proyekId) {
+            $userProyek = UserProyek::where('assignee_user_id', $user->id)
+                                    ->where('nama_proyek', $proyekId)
+                                    ->whereHas('role', function ($query) use ($role) {
+                                        $query->where('name', $role);
+                                    })
+                                    ->first();
 
-        if ($role === $roleName) {
-            Log::info('Authorization successful for user collab ID: ' . $user->id . ' with role: ' . $role);
-            return $next($request);
+            if ($userProyek) {
+                return $next($request);
+            }
         }
 
         return redirect()->route('unauthorized');

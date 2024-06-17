@@ -19,7 +19,10 @@ class Proyek extends Model
     public function users(){
         // return $this->belongsToMany(User::class, UserProyek::class);
         // return $this->belongsToMany(User::class, 'user_proyeks', 'proyek_id', 'user_id');
-        return $this->belongsToMany(User::class, 'user_proyeks')->withTimestamps();
+        // return $this->belongsToMany(User::class, 'user_proyeks')->withTimestamps();
+        return $this->belongsToMany(User::class, 'user_proyeks', 'proyek_id', 'assignee_user_id')
+            ->withPivot('role_id', 'assigned_by_user_id')
+            ->withTimestamps();
 
     }
 
