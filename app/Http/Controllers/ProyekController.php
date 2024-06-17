@@ -24,11 +24,12 @@ class ProyekController extends Controller
             })
             ->get();
             foreach ($proyeks as $proyek) {
-                $jumlahKontributor = $proyek->users->count(); // Mengurangi satu untuk menghapus pemilik proyek
+                $jumlahKontributor = $proyek->users->count(); 
                 $proyek->jumlahKontributor = $jumlahKontributor;
             }
             // dd ($proyek->users);
         return view('dashboard.proyek.proyek', compact('proyeks'));
+        
     }
 
     /**

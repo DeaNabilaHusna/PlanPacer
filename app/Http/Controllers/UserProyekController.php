@@ -15,11 +15,11 @@ use App\Http\Requests\UpdateUserProyekRequest;
 
 class UserProyekController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('checkRole:pic'); // Hapus atau sesuaikan ini jika diperlukan
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    //     $this->middleware('checkRole:pic'); // Hapus atau sesuaikan ini jika diperlukan
+    // }
     /**
      * Display a listing of the resource.
      */
@@ -27,18 +27,17 @@ class UserProyekController extends Controller
     {
         $userId = auth()->user()->id;
         $kolaborators = DB::table('user_proyeks')
-
         ->join('proyeks', 'user_proyeks.proyek_id', '=', 'proyeks.id')
-        ->join('users', 'user_proyeks.user_id', '=', 'users.id')
+        ->join('users', 'user_proyeks.assignee_user_id', '=', 'users.id')
         ->leftJoin('roles', 'user_proyeks.role_id', '=', 'roles.id')
-        ->where('proyeks.user_id', $userId) // proyek milik pengguna saat ini
+        ->where('proyeks.user_id', $userId)
         ->select(
             'users.email', 
             'users.username', 
-            'users.id as user_id', 
+            'users.id as assignee_user_id', 
             'proyeks.nama_proyek', 
             'user_proyeks.id as id', 
-            'roles.name as role_name' // mengambil nama role, bisa null jika tidak ada
+            'roles.name as role_name' 
         )
         ->get();
 
@@ -83,7 +82,7 @@ class UserProyekController extends Controller
         Log::info("Trying to edit UserProyek with ID: {$kolaborator->id} by user ID: " . auth()->user()->id);
         // dd ($kolaborator);
         $this->authorize('update', $kolaborator);
-        $kolaborator = UserProyek::join('users', 'user_proyeks.user_id', '=', 'users.id')
+        $kolaborator = UserProyek::join('users', 'user_proyeks.assignee_user_id', '=', 'users.id')
         ->join('proyeks', 'user_proyeks.proyek_id', '=', 'proyeks.id')
         ->select('user_proyeks.*', 'users.email', 'proyeks.nama_proyek')
         ->where('user_proyeks.id', $kolaborator->id)
@@ -108,9 +107,9 @@ class UserProyekController extends Controller
             'role_id' => 'required|exists:roles,id', // Ubah validasi role_id
         ]);
     
-        // Simpan role_id valid ke dalam model UserProyek
         $kolaborator->update([
             'role_id' => $validatedData['role_id'],
+            'assigned_by_user_id' => auth()->user()->id,
         ]);
     
         return redirect('/main-menu/kolaborator')->with('success', 'Berhasil Mengubah Role Kolaborator');
