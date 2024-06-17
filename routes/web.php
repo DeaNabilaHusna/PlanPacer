@@ -55,6 +55,7 @@ Route::middleware(['auth', 'checkRole:pic'])->group(function () {
         return view('detailtugas');
     });
 });
+
 Route::middleware(['auth', 'checkRoleCollaborators:analyst'])->group(function () {
     Route::resource('/main-menu/proyek/{nama_proyek}/tugas', ProyekTugasController::class);
 });
