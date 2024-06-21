@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Proyek;
+use App\Models\UserProyek;
 use Illuminate\Http\Request;
 use App\Models\FilePendukung;
 use App\Http\Controllers\Controller;
@@ -95,8 +96,12 @@ class ProyekController extends Controller
         }
     }
 
-    public function show(Proyek $proyek)
+    public function show(Proyek $proyek, $slug, UserProyek $userProyek)
     {
+        // $userProyek = UserProyek::where('assignee_user_id', Auth::id())->first();
+        // dd($userProyek);
+        
+        $proyek = Proyek::where('slug', $slug)->firstOrFail();
         $this->authorize('view', $proyek);
         $docs = FilePendukung::where('proyek_id', $proyek->id)->get();
         return view('dashboard.proyek.detailproyek', [
@@ -109,8 +114,9 @@ class ProyekController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Proyek $proyek)
+    public function edit(Proyek $proyek, $slug)
     {
+        $proyek = Proyek::where('slug', $slug)->firstOrFail();
         $this->authorize('update', $proyek);
         $users = User::all();
         return view('dashboard.proyek.updateproyek', [
@@ -122,8 +128,9 @@ class ProyekController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Proyek $proyek)
+    public function update(Request $request, Proyek $proyek, $slug)
     {
+        $proyek = Proyek::where('slug', $slug)->firstOrFail();
         $this->authorize('update', $proyek);
         $validatedData = $request->validate([
             'nama_proyek' => 'required|max:255',
@@ -174,8 +181,9 @@ class ProyekController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Proyek $proyek)
+    public function destroy(Proyek $proyek, $slug)
     {
+        $proyek = Proyek::where('slug', $slug)->firstOrFail();
         $this->authorize('delete', $proyek);
         Proyek::destroy($proyek->id);
         return redirect('/main-menu/proyek')->with('success', 'Berhasil Menghapus Proyek');

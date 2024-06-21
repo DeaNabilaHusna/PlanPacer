@@ -49,7 +49,7 @@ class UserProyekPolicy
         // $authorized = $user->hasAnyRole(['pic']) && $user->id === $userProyek->proyek->user_id;
 
          // Log untuk debugging
-         Log::info("Authorization check for user {$user->id} on project {$userProyek->id}: " . ($authorized ? 'authorized' : 'not authorized'));
+         Log::info("Authorization check for user {$user->id} on edit project {$userProyek->id}: " . ($authorized ? 'authorized' : 'not authorized'));
  
          return $authorized;
         

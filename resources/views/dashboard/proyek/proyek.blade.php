@@ -103,10 +103,10 @@ $segmentCount = count($segments);
                             </a>
                             <div id="dropdown-menu" class=" absolute group-focus:block top-full min-w-full w-max bg-defwhite shadow-md mt-1 mr-8 rounded ">
                                 <ul class="text-center border rounded">
-                                    <li><a href="/main-menu/proyek/{{$proyek->nama_proyek}}/edit" class="px-4 py-1 hover:bg-gray-100 border-b">Edit</a></li>
-                                    <li><a href="/main-menu/proyek/{{$proyek->nama_proyek}}" class="px-4 py-1 hover:bg-gray-100 border-b">Detail</a></li>
+                                    <li><a href="/main-menu/proyek/{{$proyek->slug}}/edit" class="px-4 py-1 hover:bg-gray-100 border-b">Edit</a></li>
+                                    <li><a href="/main-menu/proyek/{{$proyek->slug}}" class="px-4 py-1 hover:bg-gray-100 border-b">Detail</a></li>
                                     <li>
-                                        <form action="/main-menu/proyek/{{$proyek->nama_proyek}}" method="post" class="mb-0">
+                                        <form action="/main-menu/proyek/{{$proyek->slug}}" method="post" class="mb-0">
                                             @method('delete')
                                             @csrf
                                             <button onclick="return confirm('Apakah anda yakin ingin menghapus proyek ini?')" class="px-4 py-1 hover:bg-gray-100 border-b">Hapus</button>
@@ -123,8 +123,9 @@ $segmentCount = count($segments);
                         <path d="M25 12h-1v-3.816c0-4.589-3.32-8.184-8.037-8.184-4.736 0-7.963 3.671-7.963 8.184v3.816h-1c-2.206 0-4 1.794-4 4v12c0 2.206 1.794 4 4 4h18c2.206 0 4-1.794 4-4v-12c0-2.206-1.794-4-4-4zM10 8.184c0-3.409 2.33-6.184 5.963-6.184 3.596 0 6.037 2.716 6.037 6.184v3.816h-12v-3.816zM27 28c0 1.102-0.898 2-2 2h-18c-1.103 0-2-0.898-2-2v-12c0-1.102 0.897-2 2-2h18c1.102 0 2 0.898 2 2v12zM16 18c-1.104 0-2 0.895-2 2 0 0.738 0.405 1.376 1 1.723v3.277c0 0.552 0.448 1 1 1s1-0.448 1-1v-3.277c0.595-0.346 1-0.985 1-1.723 0-1.105-0.895-2-2-2z"></path>
                     </svg>';
                     @endphp
-                    <a href="/main-menu/proyek/{{ $proyek->nama_proyek }}/tugas">
-                        <h5 class="flex items-center gap-2 pt-2 text-xl font-bold tracking-tight text-defblack">
+                    <!-- <a href="/main-menu/proyek/{{ $proyek->nama_proyek }}/tugas"> -->
+                    <a href="/main-menu/proyek/{{ $proyek->slug }}/tugas">
+                    <h5 class="flex items-center gap-2 pt-2 text-xl font-bold tracking-tight text-defblack">
                             {{ $proyek->nama_proyek }}
                             @if ($proyek->visibilitas == 'private')
                             {!! $lockIcon !!}

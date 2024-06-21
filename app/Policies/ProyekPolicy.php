@@ -13,7 +13,7 @@ class ProyekPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -25,6 +25,9 @@ class ProyekPolicy
         if ($user->id === $proyek->user_id || $proyek->users()->where('users.id', $user->id)->exists()) {
             return true;
         };
+        // return $user->id === $proyek->user_id || 
+        //        $user->can('view proyek') && $proyek->users()->where('users.id', $user->id)->exists();
+    
     }
 
     /**
@@ -44,7 +47,9 @@ class ProyekPolicy
         if ($user->id === $proyek->user_id || $proyek->users()->where('users.id', $user->id)->exists()) {
             return true;
         };
-    }
+        // return $user->id === $proyek->user_id || 
+        // $user->can('update proyek') && $proyek->users()->where('users.id', $user->id)->exists();
+}
 
     /**
      * Determine whether the user can delete the model.
@@ -60,7 +65,7 @@ class ProyekPolicy
      */
     public function restore(User $user, Proyek $proyek): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -68,6 +73,6 @@ class ProyekPolicy
      */
     public function forceDelete(User $user, Proyek $proyek): bool
     {
-        //
+        return true;
     }
 }

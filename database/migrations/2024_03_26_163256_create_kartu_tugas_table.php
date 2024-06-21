@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('proyek_id');
             $table->string('nama_kartu');
+            $table->string('slug')->unique(); 
             $table->timestamps();
         });
     }

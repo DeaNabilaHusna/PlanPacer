@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
+// use Spatie\Permission\Models\Role;
+use App\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 
@@ -17,7 +18,12 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::get();
+        // ID pengguna yang sedang login
+        $userId = auth()->user()->id;
+
+        // Mengambil semua role yang dimiliki oleh pengguna yang sedang login
+        $roles = Role::where('owned_by_id', $userId)->get();
+
         return view('dashboard.role.index', [
             'roles' => $roles
         ]);
@@ -34,17 +40,19 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request)
     {
-        // dd ($request);
-        //
-        $validatedData = $request->validate([
-            'name' => 'required|unique:roles,name|max:255',
-        ]);
-        Role::create($validatedData);
+        $validatedData = $request->validate(Role::rules());
+
+        $role = new Role();
+        $role->name = $validatedData['name'];
+        $role->owned_by_id = auth()->user()->id;
+        $role->guard_name = 'web';
+        $role->save();
+
         return redirect('/main-menu/role')->with('success', 'Role Berhasil Ditambahkan');
     }
-
     /**
      * Display the specified resource.
      */
@@ -70,10 +78,14 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|unique:roles,name|max:255'. $role->id,
+        $validatedData = $request->validate(Role::rules($role->id));
+
+        // $role->update($validatedData);
+        $role->update([
+            'name' => $validatedData['name'],
+            'guard_name' => 'web'
         ]);
-        $role->update($validatedData);
+
         return redirect('/main-menu/role')->with('success', 'Role Berhasil Diubah');
     }
 
@@ -89,12 +101,14 @@ class RoleController extends Controller
     public function addPermissionsToRole($roleId){
         $permissions = Permission::get();
         $role = Role::findorFail($roleId);
+        $loggedInUserId = auth()->user()->id;
         $rolePermissions = DB::table('role_has_permissions')->where('role_has_permissions.role_id', $role->id)->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')->all();
         // $rolePermissions = DB::table('role_has_permissions')->where('role_has_permissions.role_id', $role->id);
         return view('dashboard.role.add-permissions', [
             'role' => $role,
             'permissions' => $permissions,
-            'rolePermissions' => $rolePermissions
+            'rolePermissions' => $rolePermissions,
+            'loggedInUserId' => $loggedInUserId,
         ]);
     }
 
@@ -104,9 +118,14 @@ class RoleController extends Controller
         ]);
         $role = Role::findorFail($roleId);
         $role->syncPermissions($request->permission);
+        $loggedInUserId = auth()->user()->id;
+          DB::table('role_has_permissions')
+        ->where('role_id', $role->id)
+        ->update(['assigned_by_id' => $loggedInUserId]);
 
         return redirect()->back()->with('success', 'Hak Akses Berhasil Diberikan ke Role');
     }
+
 
     
 }
