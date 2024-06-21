@@ -20,18 +20,6 @@ class ProyekTugasController extends Controller
     /**
      * Display a listing of the resource.
      */
-    // public function index()
-    // {
-    //     $proyek = Proyek::where('user_id', Auth::id())
-    //         ->orWhereHas('users', function ($query) {
-    //             $query->where('users.id', Auth::id());
-    //         })->get();
-    //     $tugas = KartuTugas::all();
-    //     return view('dashboard.tugas.proyektugas', [
-    //         'tugas' => $tugas,
-    //         'proyek' => $proyek,
-    //     ]);
-    // }
 
     public function index(Request $request, $slug)
     {
@@ -53,7 +41,7 @@ class ProyekTugasController extends Controller
         $tugas->load('tugasItems');
 
 
-        return view('dashboard.tugas.proyektugas', [
+        return view('dashboard.modul.proyektugas', [
             'tugas' => $tugas,
             'proyek' => $proyek,
         ]);
@@ -61,16 +49,6 @@ class ProyekTugasController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    // public function create(Request $request)
-    // {
-    //     session(['nama_proyek' => $request->nama_proyek]);
-    //     $users = User::all();
-    //     $proyeks = Proyek::all();
-    //     return view('dashboard.tugas.tambahproyektugas', [
-    //         'users' => $users,
-    //         'proyeks' => $proyeks,
-    //     ]);
-    // }
     public function create(Request $request, $slug)
     {
         // Ambil proyek berdasarkan slug
@@ -86,43 +64,17 @@ class ProyekTugasController extends Controller
             abort(404); // Handle jika proyek tidak ditemukan
         }
 
-        $users = User::all(); // Ambil semua user (jika diperlukan)
-
         // Simpan slug proyek ke session
         session(['slug' => $slug]);
 
-        return view('dashboard.tugas.tambahproyektugas', [
+        return view('dashboard.modul.tambahproyektugas', [
             'proyek' => $proyek,
-            'users' => $users,
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    // public function store(Request $request)
-    // {
-    //     // Validasi data input
-    //     $validatedData = $request->validate([
-    //         'nama_tugas' => 'required|max:255',
-    //     ]);
-
-    //     $validatedData['user_id'] = auth()->user()->id;
-    //     $namaProyek = session('nama_proyek');
-    //     if (!$namaProyek) {
-    //         return redirect()->back()->withErrors(['nama_proyek' => 'Nama proyek tidak ditemukan dalam session.']);
-    //     }
-    //     // dd('nama_proyek');
-    //     // Simpan data kartu tugas baru ke database
-    //     $validatedData['nama_proyek'] = $namaProyek;
-    //     $tugas = KartuTugas::create($validatedData);
-    //     $tugasId = $tugas->id;
-    //     // KartuTugas::create($validatedData); //diubah//
-
-
-    //     // Redirect ke halaman index dengan pesan sukses
-    //     return redirect()->back()->with('success', 'Kartu Tugas berhasil dibuat. ID Tugas: '. $tugasId);
-    // }
     public function store(Request $request, $slug)
     {
         try {
@@ -144,12 +96,10 @@ class ProyekTugasController extends Controller
             }
 
             // Simpan data kartu tugas baru ke database
-            // $validatedData['user_id'] = auth()->user()->id;
-            $validatedData['proyek_id'] = $proyek->id; // Assign proyek_id dari proyek yang ditemukan
+            $validatedData['proyek_id'] = $proyek->id; 
             $tugas = KartuTugas::create($validatedData);
 
-            // Redirect ke halaman index dengan pesan sukses
-            return redirect('/main-menu/proyek/'. $slug .'/tugas')->with('success', 'Berhasil Membuat Proyek Baru'. $tugas->id);
+            return redirect('/main-menu/proyek/' . $slug . '/modul')->with('success', 'Berhasil Membuat Modul Baru');
             // return redirect()->back()->with('success', 'Kartu Tugas berhasil dibuat. ID Tugas: ' . $tugas->id);
         } catch (\Exception $e) {
             Session::flash('error', $e->getMessage());
@@ -163,63 +113,70 @@ class ProyekTugasController extends Controller
      */
     public function show(string $id)
     {
-        // // Temukan kartu tugas dengan ID yang diberikan
-        // $proyektugas = ProyekTugas::findOrFail($id);
-
-        // Tampilkan halaman detail kartu tugas
-        // return view('tugas.show', ['kartuTugas' => $proyektugas]);
-        return view('dashboard.tugas.editproyektugas');
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($slug, $id)
     {
-        // Temukan kartu tugas dengan ID yang diberikan
-        // $kartuTugas = ProyekTugas::findOrFail($id);
+        $proyek = Proyek::where('slug', $slug)->firstOrFail();
+        $kartuTugas = KartuTugas::where('id', $id)->where('proyek_id', $proyek->id)->firstOrFail();
 
-        // Tampilkan form untuk mengedit kartu tugas
-        // return view('tugas.edit', ['kartuTugas' => $kartuTugas]);
-        $users = User::all();
-        return view('dashboard.tugas.editproyektugas', [
-            // 'proyek' => $proyek,
-            'users' => $users,
+        return view('dashboard.modul.edit', [
+            'proyek' => $proyek,
+            'kartuTugas' => $kartuTugas,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+
+    public function update(Request $request, $slug, $id)
     {
-        // Validasi data input
         $validatedData = $request->validate([
-            'nama_tugas' => 'required|max:255',
-            'tgl_mulai_proyek' => 'required',
-            'tgl_selesai_proyek' => 'required',
-            'status_proyek' => 'required',
-            'deskripsi_proyek' => 'nullable',
+            'nama_kartu' => 'required|max:255',
         ]);
 
-        // Temukan dan perbaharui kartu tugas dengan ID yang diberikan
-        KartuTugas::findOrFail($id)->update($validatedData);
-        // $validatedData['user_id'] = auth()->user()->id;
+        $proyek = Proyek::where('slug', $slug)->firstOrFail();
+        $kartuTugas = KartuTugas::where('id', $id)->where('proyek_id', $proyek->id)->firstOrFail();
 
-        // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('proyektugas')->with('success', 'Kartu Tugas berhasil diperbaharui.');
+        $kartuTugas->nama_kartu = $validatedData['nama_kartu'];
+        $kartuTugas->save();
+
+        return redirect('/main-menu/proyek/' . $proyek->slug . '/modul')->with('success', 'Modul berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
 
-    public function destroy(string $id)
+    public function destroy(Request $request, $slug, $kartuslug)
     {
-        // Temukan dan hapus kartu tugas dengan ID yang diberikan
-        KartuTugas::findOrFail($id)->delete();
+        // Ambil proyek berdasarkan slug
+        $proyek = Proyek::where('slug', $slug)
+            ->where(function ($query) {
+                $query->where('user_id', Auth::id())
+                    ->orWhereHas('users', function ($query) {
+                        $query->where('users.id', Auth::id());
+                    });
+            })->first();
 
-        // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('proyektugas')->with('success', 'Kartu Tugas berhasil dihapus.');
+        if (!$proyek) {
+            abort(404); // Handle jika proyek tidak ditemukan
+        }
+
+        // Temukan kartu tugas dengan ID yang diberikan 
+        $kartuTugas = KartuTugas::where('slug', $kartuslug)->where('proyek_id', $proyek->id)->first();
+
+        if (!$kartuTugas) {
+            abort(404); // Handle jika kartu tugas tidak ditemukan
+        }
+
+        $kartuTugas->delete();
+
+        return redirect()->back()->with('success', 'Modul berhasil dihapus.');
     }
 }

@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('tugas_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kartu_id');
+            $table->foreignId('kartu_id')
+                  ->constrained('kartu_tugas')
+                  ->onDelete('cascade');
             $table->string('nama_tugas_item');
             $table->string('deskripsi_tugas_item')->nullable();
             $table->string('status_tugas_item');
             $table->date('tgl_mulai_tugas')->default(now());;
             $table->date('tgl_selesai_tugas');
+            $table->string('slug')->unique(); 
             $table->timestamps();
         });
     }
