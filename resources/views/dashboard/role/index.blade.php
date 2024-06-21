@@ -98,60 +98,6 @@ $segmentCount = count($segments);
                             </td>
                         </tr>
                         @endforeach
-                        <!-- <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
-                        <td class="px-6 py-4 font-medium whitespace-nowrap">
-                            2
-                        </td>
-                        <td class="px-6 py-4">
-                            Tugas 1
-                        <td class="px-6 py-4">
-                            <a href="/detailtugas"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
-                                Detail
-                            </a>
-                        </td>
-                    </tr>
-                    <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
-                        <td class="px-6 py-4 font-medium whitespace-nowrap">
-                            3
-                        </td>
-                        <td class="px-6 py-4">
-                            Tugas 1
-                        </td>
-                        <td class="px-6 py-4">
-                            <a href="/detailtugas"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
-                                Detail
-                            </a>
-                        </td>
-                    </tr>
-                    <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
-                        <td class="px-6 py-4 font-medium whitespace-nowrap">
-                            4
-                        </td>
-                        <td class="px-6 py-4">
-                            Tugas 1
-                        <td class="px-6 py-4">
-                            <a href="/detailtugas"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
-                                Detail
-                            </a>
-                        </td>
-                    </tr>
-                    <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
-                        <td class="px-6 py-4 font-medium whitespace-nowrap">
-                            5
-                        </td>
-                        <td class="px-6 py-4">
-                            Tugas 1
-                        </td>
-                        <td class="px-6 py-4">
-                            <a href="/detailtugas"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
-                                Detail
-                            </a>
-                        </td>
-                    </tr> -->
                     </tbody>
                 </table>
             </div>

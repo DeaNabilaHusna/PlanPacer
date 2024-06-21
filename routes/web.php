@@ -11,6 +11,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProyekTugasController;
+use App\Http\Controllers\TugasItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,9 +55,23 @@ Route::middleware(['auth', 'checkRole:pic,analyst,programmer'])->group(function 
     Route::get('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'addPermissionsToRole']);
     Route::put('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'updatePermissionsToRole']);
     Route::get('/main-menu', [DashboardController::class, 'index']);
-    Route::resource('/main-menu/proyek/{slug}/tugas', ProyekTugasController::class);
+    // Route::resource('/main-menu/proyek/{slug}/tugas', ProyekTugasController::class);
+    Route::resource('/main-menu/proyek/{slug}/modul', ProyekTugasController::class)->parameters([
+        'slug' => 'slug',
+        'tugas' => 'id',
+    ]);
+    // Route::resource('/main-menu/proyek/{slug}/modul/{modul_slug}', TugasItemController::class);
+//     Route khusus untuk TugasItem
+Route::prefix('/main-menu/proyek/{proyek}/modul/{modul}')->group(function () {
+    Route::resource('/tugas', TugasItemController::class)->parameters([
+        'tugas' => 'id'
+    ])->except(['create', 'store']);
+});
+// // Route khusus untuk create dan store dari TugasItem
+Route::post('/main-menu/proyek/{proyek}/modul/{modul}', [TugasItemController::class, 'store'])->name('tugas.store');
+Route::get('/main-menu/proyek/{proyek}/modul/{modul}/create', [TugasItemController::class, 'create'])->name('tugas.create');
 
-    // Route::get('/main-menu/proyek/{nama_proyek}/tugas/create', [ProyekTugasController::class, 'create']);
+    // Route::resource('/main-menu/proyek/{slug}/modul/{tugas_slug}', TugasItemController::class);
 
     Route::get('/main-menu/tugas', function () {
         return view('tugas');
