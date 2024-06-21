@@ -31,19 +31,30 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/registrasi', [RegisterController::class, 'store']);
 });
 // PIC Route
-Route::middleware(['auth', 'checkRole:pic'])->group(function () {
+Route::middleware(['auth', 'checkRole:pic,analyst,programmer'])->group(function () {
     Route::resource('/main-menu/kolaborator', UserProyekController::class);
     Route::put('/main-menu/kolaborator/{kolaborator}', [UserProyekController::class, 'update'])->name('kolaborator.update');
     // Route::put('/main-menu/kolaborator/{kolaborator}', function($kolaborator) {
     //     return response('Update method reached', 200);
     // })->name('kolaborator.update');
     Route::resource('/main-menu/role', RoleController::class);
-    Route::resource('/main-menu/proyek', ProyekController::class);
+    // Route::resource('/main-menu/proyek', ProyekController::class);
+    Route::resource('main-menu/proyek', ProyekController::class)->parameters([
+        'proyek' => 'slug'
+    ])->except(['show']);
+    Route::get('/main-menu/proyek/{slug}', [ProyekController::class, 'show'])->name('proyek.show');
+    // // Route::get('/main-menu/proyek', [ProyekController::class, 'index'])->middleware('check.role:pic');
+    // // Route::get('/main-menu/proyek/create', [ProyekController::class, 'create'])->middleware('check.role:admin');
+    // // Route::post('/main-menu/proyek', [ProyekController::class, 'store'])->middleware('check.role:pic');
+    // Route::get('/main-menu/proyek/{nama_proyek}', [ProyekController::class, 'show'])->middleware('permission:view proyek');
+    // // Route::get('/main-menu/proyek/{proyek}/edit', [ProyekController::class, 'edit'])->middleware('check.role:admin');
+    // // Route::put('/main-menu/proyek/{proyek}', [ProyekController::class, 'update'])->middleware('check.role:pic');
+    // // Route::delete('/main-menu/proyek/{proyek}', [ProyekController::class, 'destroy'])->middleware('check.role:admin');
     Route::resource('/proyektugas', ProyekTugasController::class);
     Route::get('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'addPermissionsToRole']);
     Route::put('/main-menu/role/{roleId}/tambah-hak-akses', [RoleController::class, 'updatePermissionsToRole']);
     Route::get('/main-menu', [DashboardController::class, 'index']);
-    Route::resource('/main-menu/proyek/{nama_proyek}/tugas', ProyekTugasController::class);
+    Route::resource('/main-menu/proyek/{slug}/tugas', ProyekTugasController::class);
 
     // Route::get('/main-menu/proyek/{nama_proyek}/tugas/create', [ProyekTugasController::class, 'create']);
 
@@ -56,9 +67,14 @@ Route::middleware(['auth', 'checkRole:pic'])->group(function () {
     });
 });
 
-Route::middleware(['auth', 'checkRoleCollaborators:analyst'])->group(function () {
-    Route::resource('/main-menu/proyek/{nama_proyek}/tugas', ProyekTugasController::class);
-});
+// Route::middleware(['auth', 'checkRoleCollaborators:analyst'])->group(function () {
+//     Route::resource('/main-menu/proyek', ProyekController::class)->except(['show']);
+//     // Route::get('/main-menu/proyek', [ProyekController::class, 'index'])->middleware('check.role:pic');
+//     // Route::get('/main-menu/proyek/create', [ProyekController::class, 'create'])->middleware('check.role:admin');
+//     // Route::post('/main-menu/proyek', [ProyekController::class, 'store'])->middleware('check.role:pic');
+//     Route::get('/main-menu/proyek/{proyek}', [ProyekController::class, 'show'])->middleware('permission:view proyek');
+//     Route::resource('/main-menu/proyek/{nama_proyek}/tugas', ProyekTugasController::class);
+// });
 // Route::group(['middleware' => ['auth', 'checkRoleCollaborators:analyst']], function () {
 //      // Rute GET untuk mengambil detail proyek
 //      Route::get('/main-menu/proyek/{proyek}', [ProyekController::class, 'show'])

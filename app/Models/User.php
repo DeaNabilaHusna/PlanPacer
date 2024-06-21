@@ -5,13 +5,16 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Proyek;
 use App\Models\TugasItem;
+use App\Models\UserProyek;
 use App\Models\UserTugasitem;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 
 
 class User extends Authenticatable
@@ -48,6 +51,14 @@ class User extends Authenticatable
     //     return $this->hasMany(Proyek::class);
     // }
 
+    protected static function booted()
+    {
+        parent::booted();
+        Log::info('User model booted and HasRoles trait used.');
+    }
+
+
+
     public function proyeks()
     {
         // return $this->belongsToMany(Proyek::class, 'user_proyeks')->withTimestamps();
@@ -65,9 +76,9 @@ class User extends Authenticatable
     public function hasRoleInProject($role, $projectId)
     {
         return $this->proyeks()
-                    ->where('id', $projectId)
-                    ->wherePivot('role_id', $role)
-                    ->exists();
+            ->where('id', $projectId)
+            ->wherePivot('role_id', $role)
+            ->exists();
     }
 
     public function tugasitems()

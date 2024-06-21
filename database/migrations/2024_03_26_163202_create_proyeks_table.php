@@ -16,6 +16,7 @@ return new class extends Migration
             // $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('user_id');
             $table->string('nama_proyek');
+            $table->string('slug')->unique(); 
             $table->string('penanggungjawab_proyek');
             $table->text('deskripsi_proyek')->nullable();
             $table->string('url_proyek')->nullable();

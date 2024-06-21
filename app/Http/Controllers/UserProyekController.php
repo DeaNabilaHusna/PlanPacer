@@ -77,6 +77,10 @@ class UserProyekController extends Controller
      */
     public function edit(UserProyek $kolaborator)
     {
+        $userId = auth()->id();
+
+        // Ambil role yang dimiliki oleh pengguna yang sedang login
+        $roles = Role::where('owned_by_id', $userId)->pluck('name', 'id');
         // return $kolaborator;
         $kolaborator = UserProyek::with('proyek', 'roles')->find($kolaborator->id);
         Log::info("Trying to edit UserProyek with ID: {$kolaborator->id} by user ID: " . auth()->user()->id);
@@ -88,7 +92,7 @@ class UserProyekController extends Controller
         ->where('user_proyeks.id', $kolaborator->id)
         ->first();
 
-        $roles = Role::pluck('name', 'id');
+        // $roles = Role::pluck('name', 'id');
         return view('dashboard.user.edit', [
             'kolaborator' => $kolaborator,
             'roles' => $roles,

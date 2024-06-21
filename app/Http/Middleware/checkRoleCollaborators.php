@@ -86,25 +86,31 @@ class checkRoleCollaborators
     public function handle(Request $request, Closure $next, $role): Response
     {
         if (!auth()->check()) {
+            Log::warning('User not authenticated. Redirecting to login.');
             return redirect()->route('login');
         }
 
         $user = auth()->user();
-        $proyekId = $request->route('nama_proyek'); // Pastikan parameter proyek_id ada dalam route
+        Log::info('Authenticated user: ' . $user->id);
+        $namaproyek = $request->route('nama_proyek'); // Pastikan parameter proyek_id ada dalam route
+        Log::info('Proyek name from route: ' . $namaproyek);
 
-        if ($proyekId) {
+        if ($namaproyek) {
+            Log::info('Checking user project roles.');
             $userProyek = UserProyek::where('assignee_user_id', $user->id)
-                                    ->where('nama_proyek', $proyekId)
-                                    ->whereHas('role', function ($query) use ($role) {
+                                    ->where('proyek_id', $namaproyek)
+                                    ->whereHas('roles', function ($query) use ($role) {
                                         $query->where('name', $role);
                                     })
                                     ->first();
 
             if ($userProyek) {
+                Log::info('User has the required role. Proceeding to next middleware.');
                 return $next($request);
             }
         }
 
+        Log::warning('User does not have the required role or project ID is missing. Redirecting to unauthorized.');
         return redirect()->route('unauthorized');
     }
 }

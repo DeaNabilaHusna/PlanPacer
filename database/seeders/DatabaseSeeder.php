@@ -72,20 +72,19 @@ class DatabaseSeeder extends Seeder
             'name' => 'pic',
         ]);
 
+        // $role_analyst = Role::updateOrCreate([
+        //     'name' => 'analyst',
 
-        $role_analyst = Role::updateOrCreate([
-            'name' => 'analyst',
-
-        ]);
-        $role_designer = Role::updateOrCreate([
-            'name' => 'designer',
-        ]);
-        $role_programmer = Role::updateOrCreate([
-            'name' => 'programmer',
-        ]);
-        $role_mentor = Role::updateOrCreate([
-            'name' => 'mentor',
-        ]);
+        // ]);
+        // $role_designer = Role::updateOrCreate([
+        //     'name' => 'designer',
+        // ]);
+        // $role_programmer = Role::updateOrCreate([
+        //     'name' => 'programmer',
+        // ]);
+        // $role_mentor = Role::updateOrCreate([
+        //     'name' => 'mentor',
+        // ]);
 
         // Permission::updateOrCreate([
         //     'name' => 'update proyek',
