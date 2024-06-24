@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\TugasItem;
 use Illuminate\Support\Facades\Session;
-
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 use GuzzleHttp\Handler\Proxy;
 use illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -76,36 +77,45 @@ class ProyekTugasController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request, $slug)
-    {
-        try {
-            $validatedData = $request->validate([
-                'nama_kartu' => 'required|max:255',
-            ]);
+{
+    try {
+        $validatedData = $request->validate([
+            'nama_kartu' => [
+                'required',
+                'max:255',
+                Rule::unique('kartu_tugas')->where(function ($query) use ($slug) {
+                    return $query->where('proyek_id', Proyek::where('slug', $slug)->first()->id);
+                }),
+            ],
+        ]);
+        
+        // Ambil proyek berdasarkan slug
+        $proyek = Proyek::where('slug', $slug)
+            ->where(function ($query) {
+                $query->where('user_id', Auth::id())
+                    ->orWhereHas('users', function ($query) {
+                        $query->where('users.id', Auth::id());
+                    });
+            })->first();
 
-            // Ambil proyek berdasarkan slug
-            $proyek = Proyek::where('slug', $slug)
-                ->where(function ($query) {
-                    $query->where('user_id', Auth::id())
-                        ->orWhereHas('users', function ($query) {
-                            $query->where('users.id', Auth::id());
-                        });
-                })->first();
-
-            if (!$proyek) {
-                return redirect()->back()->withErrors(['slug' => 'Proyek tidak ditemukan.']);
-            }
-
-            // Simpan data kartu tugas baru ke database
-            $validatedData['proyek_id'] = $proyek->id; 
-            $tugas = KartuTugas::create($validatedData);
-
-            return redirect('/main-menu/proyek/' . $slug . '/modul')->with('success', 'Berhasil Membuat Modul Baru');
-            // return redirect()->back()->with('success', 'Kartu Tugas berhasil dibuat. ID Tugas: ' . $tugas->id);
-        } catch (\Exception $e) {
-            Session::flash('error', $e->getMessage());
-            return back()->withInput();
+        if (!$proyek) {
+            return redirect()->back()->withErrors(['slug' => 'Proyek tidak ditemukan.']);
         }
+        $kartuSlug = Str::slug($validatedData['nama_kartu']) . '-' . $proyek->slug;
+        
+        // Simpan data kartu tugas baru ke database
+        $validatedData['proyek_id'] = $proyek->id;
+        $validatedData['slug'] = $kartuSlug; 
+        $tugas = KartuTugas::create($validatedData);
+
+        return redirect('/main-menu/proyek/' . $slug . '/modul')->with('success', 'Berhasil Membuat Modul Baru');
+        // return redirect()->back()->with('success', 'Kartu Tugas berhasil dibuat. ID Tugas: ' . $tugas->id);
+    } catch (\Exception $e) {
+        Session::flash('error', $e->getMessage());
+        return back()->withInput();
     }
+}
+
 
 
     /**

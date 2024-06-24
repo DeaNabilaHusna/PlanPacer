@@ -12,6 +12,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProyekTugasController;
 use App\Http\Controllers\TugasItemController;
+use App\Http\Controllers\TugasController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -58,8 +60,14 @@ Route::middleware(['auth', 'checkRole:pic,analyst,programmer'])->group(function 
     // Route::resource('/main-menu/proyek/{slug}/tugas', ProyekTugasController::class);
     Route::resource('/main-menu/proyek/{slug}/modul', ProyekTugasController::class)->parameters([
         'slug' => 'slug',
-        'tugas' => 'id',
+        'tugas' => 'slug',
     ]);
+    // Route::resource('/main-menu/proyek/{slug}/modul/{modul}/tugas', TugasItemController::class);
+
+    Route::resource('/main-menu/proyek/{slug}/modul/{modul}/tugas', TugasItemController::class)->parameters([
+        'tugas' => 'tugas',
+    ]);
+    Route::resource('/main-menu/tugas', TugasController::class);
     // Route::resource('/main-menu/proyek/{slug}/modul/{modul_slug}', TugasItemController::class);
 //     Route khusus untuk TugasItem
 Route::prefix('/main-menu/proyek/{proyek}/modul/{modul}')->group(function () {

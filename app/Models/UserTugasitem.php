@@ -10,4 +10,13 @@ class UserTugasitem extends Model
     use HasFactory;
     protected $table = "user_tugasitems";
     protected $guarded = ["id"];
+
+    public function tugasItems()
+    {
+        return $this->belongsTo(TugasItem::class, 'id');
+    }
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'penanggungjawab_id', 'id');
+    }
 }

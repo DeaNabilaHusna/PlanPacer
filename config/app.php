@@ -83,7 +83,8 @@ return [
     |
     */
 
-    'locale' => 'en',
+    // 'locale' => 'en',
+    'locale' => 'id',
 
     /*
     |--------------------------------------------------------------------------
@@ -166,6 +167,7 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
+        Carbon\Laravel\ServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
@@ -181,6 +183,10 @@ return [
     | the aliases are "lazy" loaded so they don't hinder performance.
     |
     */
+    'aliases' => [
+    'Carbon' => Carbon\Laravel\ServiceProvider::class,
+],
+
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,

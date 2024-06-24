@@ -17,22 +17,54 @@ class TugasItem extends Model
     public static function boot()
     {
         parent::boot();
-
+    
         static::creating(function ($model) {
-            $model->slug = Str::slug($model->nama_tugas_item);
+            $model->generateSlug();
         });
-
+    
         static::updating(function ($model) {
-            $model->slug = Str::slug($model->nama_tugas_item);
+            if ($model->isDirty('nama_tugas_item') || $model->isDirty('kartu_id')) {
+                $model->generateSlug();
+            }
         });
     }
+    
+    public function generateSlug()
+    {
+        $nama_tugas_slug = Str::slug($this->nama_tugas_item);
+        
+        // Ambil proyek terkait dengan kartu ini
+        $kartu = $this->kartutugas()->first();
+    
+        if ($kartu) {
+            $nama_kartu_slug = Str::slug($kartu->nama_kartu); // Sesuaikan dengan nama field kartu di model
+            $this->slug = $nama_tugas_slug . '-' . $nama_kartu_slug;
+        } else {
+            // kartu tidak ditemukan, gunakan hanya nama_kartu
+            $this->slug = $nama_tugas_slug;
+        }
+    
+        // Pastikan slug unik
+        $count = static::where('slug', $this->slug)->where('id', '!=', $this->id)->count();
+        if ($count > 0) {
+            $this->slug .= '-' . ($count + 1);
+        }
+    }
 
-    public function kartutugas(){
+    public function kartutugas()
+    {
         return $this->belongsTo(KartuTugas::class);
     }
 
-    public function user(){
-        return $this->belongsTo(User::class, UserTugasitem::class);
+    public function user()
+    {
+        return $this->belongsToMany(User::class, UserTugasitem::class);
+    }
+    public function penanggungjawab()
+    {
+        return $this->belongsToMany(User::class, 'user_proyeks', 'proyek_id', 'assignee_user_id')
+            ->withTimestamps();
     }
 
+    
 }
