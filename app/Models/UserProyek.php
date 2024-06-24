@@ -19,10 +19,10 @@ class UserProyek extends Model
 
     public function proyek()
     {
-        return $this->belongsTo(Proyek::class, 'proyek_id');
+        return $this->belongsTo(Proyek::class, 'proyek_id', 'id');
     }
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'assignee_user_id', 'id');
     }
 }

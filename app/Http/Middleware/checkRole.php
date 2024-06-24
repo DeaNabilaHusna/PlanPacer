@@ -100,63 +100,130 @@ class checkRole
 
     // PERCOBAAN 
 
-    public function handle($request, Closure $next, ...$roles)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
+//     public function handle($request, Closure $next, ...$roles)
+//     {
+//         if (!Auth::check()) {
+//             return redirect()->route('login');
+//         }
 
-        $userId = Auth::id();
-        $projectName = $request->route('slug');
+//         $userId = Auth::id();
+//         $projectName = $request->route('slug');
 
-        // Jika tidak ada nama proyek, lanjutkan request
-        if (!$projectName) {
-            return $next($request);
-        }
+//         // Jika tidak ada nama proyek, lanjutkan request
+//         if (!$projectName) {
+//             return $next($request);
+//         }
 
-        // Ambil proyek berdasarkan nama_proyek
-        $project = Proyek::where('slug', $projectName)->first();
+//         // Ambil proyek berdasarkan nama_proyek
+//         $project = Proyek::where('slug', $projectName)->first();
 
-        if (!$project) {
-            Log::warning('Project not found: ' . $projectName);
-            return redirect()->route('unauthorized');
-        }
+//         if (!$project) {
+//             Log::warning('Project not found: ' . $projectName);
+//             return redirect()->route('unauthorized');
+//         }
 
-        // Cek apakah user adalah pemilik proyek
-        if ($project->user_id == $userId) {
-            return $next($request);
-        }
+//         // Cek apakah user adalah pemilik proyek
+//         if ($project->user_id == $userId) {
+//             return $next($request);
+//         }
 
-        // Cek apakah user adalah kontributor dengan role yang diberikan
-        $userProject = UserProyek::where('proyek_id', $project->id)
-            ->where('assignee_user_id', $userId)
-            ->first();
+//         // Cek apakah user adalah kontributor dengan role yang diberikan
+//         $userProject = UserProyek::where('proyek_id', $project->id)
+//             ->where('assignee_user_id', $userId)
+//             ->first();
 
-        if ($userProject && in_array($userProject->role_id, $roles)) {
+//         if ($userProject && in_array($userProject->role_id, $roles)) {
+//             // Cek apakah user memiliki permission untuk route ini
+//             // Anda perlu mendefinisikan cara untuk mengecek permission berdasarkan route dan role
+//             $permissions = $this->getPermissionsForRole($userProject->role_id);
+//             if ($this->checkPermission($permissions, $request->route()->getName())) {
+//                 return $next($request);
+//             } else {
+//                 return response()->json(['error' => 'Permission Denied'], 403);
+//             }
+//         }
+
+//         // Jika user adalah kontributor tanpa role yang sesuai, hanya dapat mengakses detail proyek
+//         if ($userProject && !$userProject->role_id) {
+//             if ($request->route()->getName() == 'proyek.show') {
+//                 return $next($request);
+//             }
+//         }
+
+//         return response()->json(['error' => 'Unauthorized'], 403);
+//     }
+
+//     private function getPermissionsForRole($roleId)
+// {
+//     // Ambil role berdasarkan ID
+//     $role = Role::findById($roleId);
+
+//     if (!$role) {
+//         return [];
+//     }
+
+//     // Ambil semua permissions untuk role ini
+//     $permissions = $role->permissions;
+
+//     // Kembalikan daftar nama permissions
+//     return $permissions->pluck('name')->toArray();
+// }
+
+//     private function checkPermission($permissions, $routeName)
+//     {
+//         // Cek apakah routeName ada dalam permissions
+//         // Implementasikan logika ini sesuai dengan kebutuhan Anda
+//         return in_array($routeName, $permissions);
+//     }
+public function handle($request, Closure $next, ...$roles)
+{
+    if (!Auth::check()) {
+        return redirect()->route('login');
+    }
+
+    $userId = Auth::id();
+    $projectSlug = $request->route('proyekslug'); // Ganti `slug` dengan `proyekslug`
+
+    // Jika tidak ada nama proyek, lanjutkan request
+    if (!$projectSlug) {
+        return $next($request);
+    }
+
+    // Ambil proyek berdasarkan slug
+    $project = Proyek::where('slug', $projectSlug)->first();
+
+    if (!$project) {
+        Log::warning('Project not found: ' . $projectSlug);
+        return redirect()->route('unauthorized');
+    }
+
+    // Cek apakah user adalah pemilik proyek atau kontributor dengan role yang diberikan
+    if ($project->user_id == $userId) {
+        return $next($request);
+    } else if ($userProject = UserProyek::where('proyek_id', $project->id)
+                                        ->where('assignee_user_id', $userId)
+                                        ->first()) {
+        if (in_array($userProject->role_id, $roles)) {
             // Cek apakah user memiliki permission untuk route ini
-            // Anda perlu mendefinisikan cara untuk mengecek permission berdasarkan route dan role
             $permissions = $this->getPermissionsForRole($userProject->role_id);
             if ($this->checkPermission($permissions, $request->route()->getName())) {
                 return $next($request);
             } else {
                 return response()->json(['error' => 'Permission Denied'], 403);
             }
+        } else if (!$userProject->role_id && $request->route()->getName() == 'proyek.show') {
+            // Jika user adalah kontributor tanpa role yang sesuai, hanya dapat mengakses detail proyek
+            return $next($request);
         }
-
-        // Jika user adalah kontributor tanpa role yang sesuai, hanya dapat mengakses detail proyek
-        if ($userProject && !$userProject->role_id) {
-            if ($request->route()->getName() == 'proyek.show') {
-                return $next($request);
-            }
-        }
-
-        return response()->json(['error' => 'Unauthorized'], 403);
     }
 
-    private function getPermissionsForRole($roleId)
+    return response()->json(['error' => 'Unauthorized'], 403);
+}
+
+private function getPermissionsForRole($roleId)
 {
     // Ambil role berdasarkan ID
-    $role = Role::findById($roleId);
+    $role = Role::find($roleId); // Ganti `findById` dengan `find`
 
     if (!$role) {
         return [];
@@ -169,10 +236,11 @@ class checkRole
     return $permissions->pluck('name')->toArray();
 }
 
-    private function checkPermission($permissions, $routeName)
-    {
-        // Cek apakah routeName ada dalam permissions
-        // Implementasikan logika ini sesuai dengan kebutuhan Anda
-        return in_array($routeName, $permissions);
-    }
+private function checkPermission($permissions, $routeName)
+{
+    // Cek apakah routeName ada dalam permissions
+    // Implementasikan logika ini sesuai dengan kebutuhan Anda
+    return in_array($routeName, $permissions);
+}
+
 }

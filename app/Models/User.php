@@ -83,6 +83,13 @@ class User extends Authenticatable
 
     public function tugasitems()
     {
-        return $this->belongsToMany(TugasItem::class, UserTugasitem::class);
+        // return $this->belongsToMany(TugasItem::class, UserTugasitem::class, 'penanggungjawab_id');
+        return $this->belongsToMany(TugasItem::class, 'user_tugasitems', 'penanggungjawab_id')
+        ->withPivot('penanggungjawab_id');
+    }
+
+    public function userProyeks()
+    {
+        return $this->hasMany(UserProyek::class, 'assignee_user_id', 'id');
     }
 }
