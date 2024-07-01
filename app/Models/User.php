@@ -3,10 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Proyek;
-use App\Models\TugasItem;
-use App\Models\UserProyek;
-use App\Models\UserTugasitem;
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\UserProject;
+use App\Models\UserTask;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -59,37 +59,37 @@ class User extends Authenticatable
 
 
 
-    public function proyeks()
+    public function projects()
     {
         // return $this->belongsToMany(Proyek::class, 'user_proyeks')->withTimestamps();
-        return $this->belongsToMany(Proyek::class, 'user_proyeks')->withPivot('role_id', 'assigned_by_user_id')
+        return $this->belongsToMany(Project::class, 'user_projects')->withPivot('assigned_by_user_id')
             ->withTimestamps();
         // return $this->belongsToMany(Proyek::class, UserProyek::class);
     }
 
-    public function hasGlobalRole($role)
-    {
-        return $this->hasRole($role);
-    }
+    // public function hasGlobalRole($role)
+    // {
+    //     return $this->hasRole($role);
+    // }
 
     // Method untuk memeriksa apakah pengguna memiliki role dalam suatu proyek
-    public function hasRoleInProject($role, $projectId)
-    {
-        return $this->proyeks()
-            ->where('id', $projectId)
-            ->wherePivot('role_id', $role)
-            ->exists();
-    }
+    // public function hasRoleInProject($role, $projectId)
+    // {
+    //     return $this->proyeks()
+    //         ->where('id', $projectId)
+    //         ->wherePivot('role_id', $role)
+    //         ->exists();
+    // }
 
-    public function tugasitems()
+    public function tasks()
     {
         // return $this->belongsToMany(TugasItem::class, UserTugasitem::class, 'penanggungjawab_id');
-        return $this->belongsToMany(TugasItem::class, 'user_tugasitems', 'penanggungjawab_id')
-        ->withPivot('penanggungjawab_id');
+        return $this->belongsToMany(Task::class, 'user_tasks', 'project_manager_id')
+        ->withPivot('project_manager_id');
     }
 
-    public function userProyeks()
+    public function userProjects()
     {
-        return $this->hasMany(UserProyek::class, 'assignee_user_id', 'id');
+        return $this->hasMany(UserProject::class, 'assignee_user_id', 'id');
     }
 }

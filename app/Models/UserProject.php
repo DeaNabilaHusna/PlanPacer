@@ -6,20 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Models\Role;
 
-class UserProyek extends Model
+class UserProject extends Model
 {
     use HasFactory;
-    protected $table = "user_proyeks";
+    protected $table = "user_projects";
     protected $guarded = ["id"];
 
-    public function roles()
-    {
-        return $this->belongsTo(Role::class, 'role_id');
-    }
+    // public function roles()
+    // {
+    //     return $this->belongsTo(Role::class, 'role_id');
+    // }
 
-    public function proyek()
+    public function project()
     {
-        return $this->belongsTo(Proyek::class, 'proyek_id', 'id');
+        return $this->belongsTo(Project::class, 'project_id', 'id');
     }
     public function user()
     {

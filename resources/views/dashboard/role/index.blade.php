@@ -25,6 +25,7 @@ $segmentCount = count($segments);
             @endif
             <div class="flex justify-between items-center mb-4">
                 <h1 class="text-xl font-semibold text-defblack sm:text-lg">Role</h1>
+                @can('buat role')
                 <div class="flex items-center">
                     <a href="/main-menu/role/create">
                         <button type="button" class="flex justify center items-center text-sm rounded-md bg-navy text-defwhite gap-2 px-3 py-1.5 shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
@@ -34,6 +35,7 @@ $segmentCount = count($segments);
                             Tambah</button>
                     </a>
                 </div>
+                @endcan
             </div>
 
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -55,9 +57,9 @@ $segmentCount = count($segments);
 
                         </tr>
                     </thead>
-                    @foreach ($roles as $role)
 
                     <tbody>
+                        @foreach ($roles as $role)
                         <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
                             <td class="px-6 py-4 font-medium whitespace-nowrap">
                                 {{ $loop->iteration }}
@@ -69,32 +71,31 @@ $segmentCount = count($segments);
                                 @if($role->permissions->isNotEmpty())
                                 <div class="flex flex-wrap gap-1">
                                     @foreach($role->permissions as $permission)
-                                    <span class="inline-block bg-green-300 text-green-800 text-xs font-semibold py-1 px-2 rounded-full">{{ str_replace('_', ' ', $permission->name) }}</span>
+                                    <span class="inline-block bg-green-300 text-center text-green-800 text-xs font-semibold py-1 px-2 rounded-full">{{ str_replace('_', ' ', $permission->name) }}</span>
                                     @endforeach
                                 </div>
                                 @else
-                                <span>Belum diberikan hak akses</span>
+                                <span class="text-red-500">Belum diberikan hak akses</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 flex justify-center space-x-2">
-                                <!-- <button>
-                                    <a href="/main-menu/role/{{ $role->id }}" class="bg-blue-700 hover:bg-navy text-white font-bold py-2 px-4 border border-blue-700 rounded">
-                                        Detail
-                                    </a>
-                                </button> -->
-                                <a href="/main-menu/role/{{ $role->id }}/tambah-hak-akses" class="bg-emerald-600 hover:bg-emerald-900 text-white font-bold py-2 px-4 border border-emerald-700 rounded">
+                            <td class="px-6 py-4 flex justify-center items-center space-x-2">
+                                @can('buat role')
+                                <a href="/main-menu/role/{{ $role->id }}/tambah-hak-akses" class="text-center bg-emerald-600 hover:bg-emerald-900 text-white font-bold py-2 px-4 border border-emerald-700 rounded">
                                     Tambah Hak Akses
                                 </a>
-                                <button>
-                                    <a href="/main-menu/role/{{ $role->id }}/edit" class="bg-yellow hover:bg-orange-600 text-white font-bold py-2 px-4 border border-yellow rounded">
-                                        Edit
-                                    </a>
-                                </button>
+                                @endcan
+                                @can('edit role')
+                                <a href="/main-menu/role/{{ $role->id }}/edit" class="bg-yellow hover:bg-orange-600 text-white font-bold py-2 px-4 border border-yellow rounded">
+                                    Edit
+                                </a>
+                                @endcan
+                                @can('hapus role')
                                 <form action="/main-menu/role/{{ $role->id }}" method="post" class="mb-0">
                                     @method('delete')
                                     @csrf
                                     <button onclick="return confirm('Apakah anda yakin ingin menghapus role ini?')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 border border-red-700 rounded">Hapus</button>
                                 </form>
+                                @endcan
                             </td>
                         </tr>
                         @endforeach

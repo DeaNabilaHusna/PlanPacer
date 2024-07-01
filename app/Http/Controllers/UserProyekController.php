@@ -41,7 +41,7 @@ class UserProyekController extends Controller
         )
         ->get();
 
-        return view('dashboard.user.index', compact('kolaborators'));
+        return view('dashboard.kolaborator.index', compact('kolaborators'));
     }
 
 
@@ -93,7 +93,7 @@ class UserProyekController extends Controller
         ->first();
 
         // $roles = Role::pluck('name', 'id');
-        return view('dashboard.user.edit', [
+        return view('dashboard.kolaborator.edit', [
             'kolaborator' => $kolaborator,
             'roles' => $roles,
         ]);

@@ -49,7 +49,6 @@
                     <td class="px-6 py-4">
                         {{ \Carbon\Carbon::parse($tugasItem->tgl_selesai_tugas)->translatedFormat('l, d F Y') }}
                     </td>
-                    </td>
                     <td class="px-6 py-4">
                         @if($tugasItem->status_tugas_item == 'selesai')
                         <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Selesai</span>

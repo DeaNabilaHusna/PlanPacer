@@ -11,19 +11,19 @@ return new class extends Migration
      */
     // public function up(): void
     // {
-    //     Schema::create('progress', function (Blueprint $table) {
+    //     Schema::create('file_pendukungs', function (Blueprint $table) {
     //         $table->id();
     //         $table->foreignId('proyek_id');
-    //         $table->integer('persentase_progress');
+    //         $table->string('nama_file');
     //         $table->timestamps();
     //     });
     // }
     public function up(): void
     {
-        Schema::create('progress', function (Blueprint $table) {
+        Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
-            $table->integer('progress_percentage');
+            $table->string('file_name');
             $table->timestamps();
         });
     }
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('progress');
+        Schema::dropIfExists('documents');
     }
 };

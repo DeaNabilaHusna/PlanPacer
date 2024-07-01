@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Proyek;
-use App\Models\KartuTugas;
+use App\Models\Project;
+use App\Models\Modul;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\TugasItem;
+use App\Models\Task;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
@@ -16,8 +16,16 @@ use illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 
-class ProyekTugasController extends Controller
+class ProjectModulController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:buat modul', ['only' => ['create', 'store']]);
+        $this->middleware('permission:lihat modul', ['only' => ['show']]);
+        $this->middleware('permission:edit modul', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete modul', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -25,7 +33,7 @@ class ProyekTugasController extends Controller
     public function index(Request $request, $slug)
     {
         // Menggunakan $slug_proyek yang didapat dari URL
-        $proyek = Proyek::where('slug', $slug)
+        $proyek = Project::where('slug', $slug)
             ->where(function ($query) {
                 $query->where('user_id', Auth::id())
                     ->orWhereHas('users', function ($query) {
@@ -38,8 +46,8 @@ class ProyekTugasController extends Controller
         }
         // dd($proyek);
         // Ambil kartu tugas yang terkait dengan proyek
-        $tugas = KartuTugas::whereIn('proyek_id', $proyek->pluck('id'))->get();
-        $tugas->load('tugasItems');
+        $tugas = Modul::whereIn('project_id', $proyek->pluck('id'))->get();
+        $tugas->load('tasks');
 
 
         return view('dashboard.modul.proyektugas', [
@@ -53,7 +61,7 @@ class ProyekTugasController extends Controller
     public function create(Request $request, $slug)
     {
         // Ambil proyek berdasarkan slug
-        $proyek = Proyek::where('slug', $slug)
+        $proyek = Project::where('slug', $slug)
             ->where(function ($query) {
                 $query->where('user_id', Auth::id())
                     ->orWhereHas('users', function ($query) {
@@ -68,7 +76,7 @@ class ProyekTugasController extends Controller
         // Simpan slug proyek ke session
         session(['slug' => $slug]);
 
-        return view('dashboard.modul.tambahproyektugas', [
+        return view('dashboard.modul.create', [
             'proyek' => $proyek,
         ]);
     }
@@ -80,17 +88,17 @@ class ProyekTugasController extends Controller
 {
     try {
         $validatedData = $request->validate([
-            'nama_kartu' => [
+            'modul_name' => [
                 'required',
                 'max:255',
-                Rule::unique('kartu_tugas')->where(function ($query) use ($slug) {
-                    return $query->where('proyek_id', Proyek::where('slug', $slug)->first()->id);
+                Rule::unique('moduls')->where(function ($query) use ($slug) {
+                    return $query->where('project_id', Project::where('slug', $slug)->first()->id);
                 }),
             ],
         ]);
         
         // Ambil proyek berdasarkan slug
-        $proyek = Proyek::where('slug', $slug)
+        $proyek = Project::where('slug', $slug)
             ->where(function ($query) {
                 $query->where('user_id', Auth::id())
                     ->orWhereHas('users', function ($query) {
@@ -101,12 +109,12 @@ class ProyekTugasController extends Controller
         if (!$proyek) {
             return redirect()->back()->withErrors(['slug' => 'Proyek tidak ditemukan.']);
         }
-        $kartuSlug = Str::slug($validatedData['nama_kartu']) . '-' . $proyek->slug;
+        $kartuSlug = Str::slug($validatedData['modul_name']) . '-' . $proyek->slug;
         
         // Simpan data kartu tugas baru ke database
-        $validatedData['proyek_id'] = $proyek->id;
+        $validatedData['project_id'] = $proyek->id;
         $validatedData['slug'] = $kartuSlug; 
-        $tugas = KartuTugas::create($validatedData);
+        $tugas = Modul::create($validatedData);
 
         return redirect('/main-menu/proyek/' . $slug . '/modul')->with('success', 'Berhasil Membuat Modul Baru');
         // return redirect()->back()->with('success', 'Kartu Tugas berhasil dibuat. ID Tugas: ' . $tugas->id);
@@ -131,8 +139,8 @@ class ProyekTugasController extends Controller
      */
     public function edit($slug, $id)
     {
-        $proyek = Proyek::where('slug', $slug)->firstOrFail();
-        $kartuTugas = KartuTugas::where('id', $id)->where('proyek_id', $proyek->id)->firstOrFail();
+        $proyek = Project::where('slug', $slug)->firstOrFail();
+        $kartuTugas = Modul::where('id', $id)->where('project_id', $proyek->id)->firstOrFail();
 
         return view('dashboard.modul.edit', [
             'proyek' => $proyek,
@@ -147,13 +155,13 @@ class ProyekTugasController extends Controller
     public function update(Request $request, $slug, $id)
     {
         $validatedData = $request->validate([
-            'nama_kartu' => 'required|max:255',
+            'modul_name' => 'required|max:255',
         ]);
 
-        $proyek = Proyek::where('slug', $slug)->firstOrFail();
-        $kartuTugas = KartuTugas::where('id', $id)->where('proyek_id', $proyek->id)->firstOrFail();
+        $proyek = Project::where('slug', $slug)->firstOrFail();
+        $kartuTugas = Modul::where('id', $id)->where('project_id', $proyek->id)->firstOrFail();
 
-        $kartuTugas->nama_kartu = $validatedData['nama_kartu'];
+        $kartuTugas->modul_name = $validatedData['modul_name'];
         $kartuTugas->save();
 
         return redirect('/main-menu/proyek/' . $proyek->slug . '/modul')->with('success', 'Modul berhasil diperbarui.');
@@ -166,7 +174,7 @@ class ProyekTugasController extends Controller
     public function destroy(Request $request, $slug, $kartuslug)
     {
         // Ambil proyek berdasarkan slug
-        $proyek = Proyek::where('slug', $slug)
+        $proyek = Project::where('slug', $slug)
             ->where(function ($query) {
                 $query->where('user_id', Auth::id())
                     ->orWhereHas('users', function ($query) {
@@ -179,7 +187,7 @@ class ProyekTugasController extends Controller
         }
 
         // Temukan kartu tugas dengan ID yang diberikan 
-        $kartuTugas = KartuTugas::where('slug', $kartuslug)->where('proyek_id', $proyek->id)->first();
+        $kartuTugas = Modul::where('slug', $kartuslug)->where('project_id', $proyek->id)->first();
 
         if (!$kartuTugas) {
             abort(404); // Handle jika kartu tugas tidak ditemukan

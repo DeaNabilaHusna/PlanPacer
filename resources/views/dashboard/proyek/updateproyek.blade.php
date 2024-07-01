@@ -2,7 +2,7 @@
 @section('content')
 
 <section class="mb-4">
-    <form method="post" action="/main-menu/proyek/{{ $proyek->nama_proyek }}" enctype="multipart/form-data">
+    <form method="post" action="/main-menu/proyek/{{ $proyek->slug }}" enctype="multipart/form-data">
         @method('put')
         @csrf
         <div class="space-y-12 font-medium">

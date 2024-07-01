@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Proyek;
-use App\Models\TugasItem;
+use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class KartuTugas extends Model
+class Modul extends Model
 {
     use HasFactory;
 
@@ -23,7 +23,7 @@ class KartuTugas extends Model
 
     static::updating(function ($model) {
         // Cek apakah nama_kartu atau proyek_id berubah
-        if ($model->isDirty('nama_kartu') || $model->isDirty('proyek_id')) {
+        if ($model->isDirty('modul_name') || $model->isDirty('project_id')) {
             $model->generateSlug();
         }
     });
@@ -31,17 +31,17 @@ class KartuTugas extends Model
 
 public function generateSlug()
 {
-    $nama_kartu_slug = Str::slug($this->nama_kartu);
+    $modul_slug = Str::slug($this->modul_name);
     
     // Ambil proyek terkait dengan kartu ini
-    $proyek = $this->proyek()->first();
+    $project = $this->project()->first();
 
-    if ($proyek) {
-        $nama_proyek_slug = Str::slug($proyek->nama_proyek); // Sesuaikan dengan nama field proyek di model
-        $this->slug = $nama_kartu_slug . '-' . $nama_proyek_slug;
+    if ($project) {
+        $project_slug = Str::slug($project->project_name); // Sesuaikan dengan nama field project di model
+        $this->slug = $modul_slug . '-' . $project_slug;
     } else {
-        // Proyek tidak ditemukan, gunakan hanya nama_kartu
-        $this->slug = $nama_kartu_slug;
+        // project tidak ditemukan, gunakan hanya modul_name
+        $this->slug = $modul_slug;
     }
 
     // Pastikan slug unik
@@ -51,11 +51,11 @@ public function generateSlug()
     }
 }
 
-    public function proyek(){
-        return $this->belongsTo(Proyek::class);
+    public function project(){
+        return $this->belongsTo(Project::class);
     }
 
-    public function tugasitems(){
-        return $this->hasMany(TugasItem::class, 'kartu_id');
+    public function tasks(){
+        return $this->hasMany(Task::class, 'modul_id');
     }
 }

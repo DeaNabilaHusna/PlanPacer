@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use App\Models\Proyek;
+use App\Models\Project;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class FilePendukung extends Model
+class Document extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
 
-    public function proyek(){
-        return $this->belongsTo(Proyek::class);
+    public function project(){
+        return $this->belongsTo(Project::class);
     }
 }

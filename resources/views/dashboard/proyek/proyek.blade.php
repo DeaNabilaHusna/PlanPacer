@@ -27,6 +27,7 @@ $segmentCount = count($segments);
             <div class="flex justify-between items-center my-4">
                 <h1 class="text-xl font-semibold text-defblack sm:text-lg">Proyek</h1>
                 <div class="flex items-center">
+                    @can('buat proyek')
                     <a href="/main-menu/proyek/create">
                         <button type="button" class="flex justify center items-center text-sm rounded-md bg-navy text-defwhite gap-2 px-3 py-1.5 shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                             <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,6 +35,7 @@ $segmentCount = count($segments);
                             </svg>
                             Tambah</button>
                     </a>
+                    @endcan
                 </div>
             </div>
 
@@ -47,15 +49,15 @@ $segmentCount = count($segments);
                         @php
                         $bgColor = '';
                         $textColor = '';
-                        if ($proyek->status_proyek == 'sedang berjalan') {
+                        if ($proyek->project_status == 'sedang berjalan') {
                         $bgColor = 'bg-orange-300';
                         $textColor = 'text-orange-800';
-                        } elseif ($proyek->status_proyek == 'selesai') {
+                        } elseif ($proyek->project_status == 'selesai') {
                         $bgColor = 'bg-green-300';
                         $textColor = 'text-green-800';
                         }
                         @endphp
-                        <span class="{{ $bgColor }} {{ $textColor }} text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $proyek->status_proyek }}</span>
+                        <span class="{{ $bgColor }} {{ $textColor }} text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $proyek->project_status }}</span>
                         <div class="relative flex justify-center items-center bg-defgrey group">
                             <a href="#" id="dropdown-toggle">
                                 <svg width="22" height="6" viewBox="0 0 22 6" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -66,8 +68,13 @@ $segmentCount = count($segments);
                             </a>
                             <div id="dropdown-menu" class=" absolute group-focus:block top-full min-w-full w-max bg-defwhite shadow-md mt-1 mr-8 rounded ">
                                 <ul class="text-center border rounded">
+                                    @can('edit proyek')
                                     <li><a href="/main-menu/proyek/{{$proyek->slug}}/edit" class="px-4 py-1 hover:bg-gray-100 border-b">Edit</a></li>
+                                    @endcan
+                                    @can('lihat proyek')
                                     <li><a href="/main-menu/proyek/{{$proyek->slug}}" class="px-4 py-1 hover:bg-gray-100 border-b">Detail</a></li>
+                                    @endcan
+                                    @can('hapus proyek')
                                     <li>
                                         <form action="/main-menu/proyek/{{$proyek->slug}}" method="post" class="mb-0">
                                             @method('delete')
@@ -75,6 +82,7 @@ $segmentCount = count($segments);
                                             <button onclick="return confirm('Apakah anda yakin ingin menghapus proyek ini?')" class="px-4 py-1 hover:bg-gray-100 border-b">Hapus</button>
                                         </form>
                                     </li>
+                                    @endcan
                                 </ul>
                             </div>
                         </div>
@@ -88,8 +96,8 @@ $segmentCount = count($segments);
                     @endphp
                     <!-- <a href="/main-menu/proyek/{{ $proyek->nama_proyek }}/tugas"> -->
                     <a href="/main-menu/proyek/{{ $proyek->slug }}/modul">
-                    <h5 class="flex items-center gap-2 pt-2 text-xl font-bold tracking-tight text-defblack">
-                            {{ $proyek->nama_proyek }}
+                        <h5 class="flex items-center gap-2 pt-2 text-xl font-bold tracking-tight text-defblack">
+                            {{ $proyek->project_name }}
                             @if ($proyek->visibilitas == 'private')
                             {!! $lockIcon !!}
                             @endif
