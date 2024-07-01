@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\KartuTugas;
+use App\Models\Modul;
 use App\Models\User;
 use Illuminate\Support\Str;
-use App\Models\UserTugasitem;
+use App\Models\UserTask;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class TugasItem extends Model
+class Task extends Model
 {
     use HasFactory;
 
@@ -23,7 +23,7 @@ class TugasItem extends Model
         });
     
         static::updating(function ($model) {
-            if ($model->isDirty('nama_tugas_item') || $model->isDirty('kartu_id')) {
+            if ($model->isDirty('task_name') || $model->isDirty('modul_id')) {
                 $model->generateSlug();
             }
         });
@@ -31,17 +31,17 @@ class TugasItem extends Model
     
     public function generateSlug()
     {
-        $nama_tugas_slug = Str::slug($this->nama_tugas_item);
+        $tugas_slug = Str::slug($this->task_name);
         
         // Ambil proyek terkait dengan kartu ini
-        $kartu = $this->kartutugas()->first();
+        $modul = $this->modul()->first();
     
-        if ($kartu) {
-            $nama_kartu_slug = Str::slug($kartu->nama_kartu); // Sesuaikan dengan nama field kartu di model
-            $this->slug = $nama_tugas_slug . '-' . $nama_kartu_slug;
+        if ($modul) {
+            $modul_slug = Str::slug($modul->modul_name); // Sesuaikan dengan nama field modul di model
+            $this->slug = $tugas_slug . '-' . $modul_slug;
         } else {
-            // kartu tidak ditemukan, gunakan hanya nama_kartu
-            $this->slug = $nama_tugas_slug;
+            // modul tidak ditemukan, gunakan hanya nama_modul
+            $this->slug = $tugas_slug;
         }
     
         // Pastikan slug unik
@@ -51,18 +51,18 @@ class TugasItem extends Model
         }
     }
 
-    public function kartutugas()
+    public function modul()
     {
-        return $this->belongsTo(KartuTugas::class);
+        return $this->belongsTo(Modul::class);
     }
 
     public function user()
     {
-        return $this->belongsToMany(User::class, UserTugasitem::class);
+        return $this->belongsToMany(User::class, UserTask::class);
     }
-    public function penanggungjawab()
+    public function manager()
     {
-        return $this->belongsToMany(User::class, 'user_proyeks', 'proyek_id', 'assignee_user_id')
+        return $this->belongsToMany(User::class, 'user_projects', 'project_id', 'assignee_user_id')
             ->withTimestamps();
     }
 

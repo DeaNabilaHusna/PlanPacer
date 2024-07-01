@@ -10,27 +10,27 @@ use Spatie\Permission\Models\Role as SpatieRole;
 class Role extends SpatieRole
 {
     protected $fillable = [
-        'name', 'owned_by_id',
+        'name'
     ];
 
     // Relasi dengan pengguna yang memiliki role ini
 
 
     // Aturan validasi untuk nama role
-    public static function rules($roleId = null)
-    {
-        $userId = auth()->id(); // Ambil ID pengguna yang sedang masuk
+    // public static function rules($roleId = null)
+    // {
+    //     $userId = auth()->id(); // Ambil ID pengguna yang sedang masuk
 
-        return [
-            'name' => [
-                'required',
-                'max:255',
-                Rule::unique('roles')->where(function ($query) use ($userId) {
-                    return $query->where('owned_by_id', $userId); // Validasi keunikan berdasarkan owned_by_id
-                })->ignore($roleId),
-            ],
-        ];
-    }
+    //     return [
+    //         'name' => [
+    //             'required',
+    //             'max:255',
+    //             Rule::unique('roles')->where(function ($query) use ($userId) {
+    //                 return $query->where('owned_by_id', $userId); // Validasi keunikan berdasarkan owned_by_id
+    //             })->ignore($roleId),
+    //         ],
+    //     ];
+    // }
     protected static function boot()
     {
         parent::boot();

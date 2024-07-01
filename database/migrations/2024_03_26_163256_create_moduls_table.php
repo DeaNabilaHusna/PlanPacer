@@ -11,19 +11,22 @@ return new class extends Migration
      */
     // public function up(): void
     // {
-    //     Schema::create('progress', function (Blueprint $table) {
+    //     Schema::create('kartu_tugas', function (Blueprint $table) {
     //         $table->id();
     //         $table->foreignId('proyek_id');
-    //         $table->integer('persentase_progress');
+    //         $table->string('nama_kartu');
+    //         $table->string('slug')->unique(); 
     //         $table->timestamps();
     //     });
     // }
+
     public function up(): void
     {
-        Schema::create('progress', function (Blueprint $table) {
+        Schema::create('moduls', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
-            $table->integer('progress_percentage');
+            $table->string('modul_name');
+            $table->string('slug')->unique(); 
             $table->timestamps();
         });
     }
@@ -33,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('progress');
+        Schema::dropIfExists('moduls');
     }
 };

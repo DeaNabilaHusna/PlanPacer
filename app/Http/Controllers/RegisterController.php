@@ -24,7 +24,7 @@ class RegisterController extends Controller
         ]);
         $validatedData['password'] = Hash::make($validatedData['password']);
         $user = User::create($validatedData);
-        $user->assignRole('pic');
+        $user->assignRole('super admin');
 
         // dd('berhasil regis');
         return redirect('/login')->with('success', 'Registrasi Berhasil');

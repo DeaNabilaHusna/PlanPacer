@@ -3,23 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Proyek;
-use App\Models\UserProyek;
+use App\Models\Project;
+use App\Models\UserProject;
 use Illuminate\Http\Request;
-use App\Models\FilePendukung;
+use App\Models\Document;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
-class ProyekController extends Controller
+class ProjectController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:buat proyek', ['only' => ['create', 'store']]);
+        $this->middleware('permission:lihat proyek', ['only' => ['show']]);
+        $this->middleware('permission:edit proyek', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete proyek', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $proyeks = Proyek::where('user_id', Auth::id())
+        $proyeks = Project::where('user_id', Auth::id())
             ->orWhereHas('users', function ($query) {
                 $query->where('users.id', Auth::id());
             })
@@ -50,23 +58,25 @@ class ProyekController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'nama_proyek' => 'required|max:255',
-                'penanggungjawab_proyek' => 'max:255',
-                'url_proyek' => 'nullable|max:255',
-                'deskripsi_proyek' => 'nullable',
-                'tgl_mulai_proyek' => 'required|date',
-                'tgl_selesai_proyek' => 'required|date|after:tgl_mulai_proyek',
-                'visibilitas' => 'required',
-                'status_proyek' => 'required',
-                'nama_file.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
+                'project_name' => 'required|max:255',
+                'project_manager' => 'max:255',
+                'project_url' => 'nullable|max:255',
+                'project_location' => 'nullable|max:255',
+                'contact_person' => 'nullable|max:255',
+                'project_description' => 'nullable',
+                'project_start_date' => 'required|date',
+                'project_end_date' => 'required|date|after:tgl_mulai_proyek',
+                'visibility' => 'required',
+                'project_status' => 'required',
+                'file_name.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
                 'kolaborator.*' => 'nullable|exists:users,id',
             ]);
 
             $validatedData['user_id'] = auth()->user()->id;
-            $validatedData['penanggungjawab_proyek'] = auth()->user()->username;
+            $validatedData['project_manager'] = auth()->user()->username;
             $validatedData['kolaborator'] = json_encode($request->input('kolaborator', []));
 
-            $proyek = Proyek::create($validatedData);
+            $proyek = Project::create($validatedData);
 
             if ($request->has('kolaborator')) {
                 $proyek->users()->attach($request->input('kolaborator'));
@@ -74,19 +84,19 @@ class ProyekController extends Controller
 
             // file 
             $docs = [];
-            if ($files = $request->file('nama_file')) {
+            if ($files = $request->file('file_name')) {
                 foreach ($files as $key => $file) {
                     $extension = $file->getClientOriginalExtension();
                     $filename = $key . '-' . time() . '.' . $extension;
                     $path = $file->storeAs('uploads/docs', $filename);
                     $file->move($path, $filename);
                     $docs[] = [
-                        'proyek_id' => $proyek->id,
-                        'nama_file' => $path . $file,
+                        'project_id' => $proyek->id,
+                        'file_name' => $path . $file,
                     ];
                 }
             }
-            FilePendukung::insert($docs);
+            Document::insert($docs);
 
             return redirect('/main-menu/proyek')->with('success', 'Berhasil Membuat Proyek Baru');
         } catch (\Exception $e) {
@@ -95,17 +105,17 @@ class ProyekController extends Controller
         }
     }
 
-    public function show(Proyek $proyek, $slug, UserProyek $userProyek)
+    public function show(Project $proyek, $slug, UserProject $userProyek)
     {
         // $userProyek = UserProyek::where('assignee_user_id', Auth::id())->first();
         // dd($userProyek);
 
-        $proyek = Proyek::where('slug', $slug)->firstOrFail();
+        $proyek = Project::where('slug', $slug)->firstOrFail();
         $this->authorize('view', $proyek);
-        $docs = FilePendukung::where('proyek_id', $proyek->id)->get();
+        $docs = Document::where('project_id', $proyek->id)->get();
         return view('dashboard.proyek.detailproyek', [
             'proyek' => $proyek,
-            'file_pendukung' => $docs
+            'document' => $docs
         ]);
         // return $proyek;
     }
@@ -113,10 +123,10 @@ class ProyekController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Proyek $proyek, $slug)
+    public function edit(Project $proyek, $slug)
     {
-        $proyek = Proyek::where('slug', $slug)->firstOrFail();
-        $this->authorize('update', $proyek);
+        $proyek = Project::where('slug', $slug)->firstOrFail();
+        // $this->authorize('update', $proyek);
         $users = User::all();
         return view('dashboard.proyek.updateproyek', [
             'proyek' => $proyek,
@@ -127,43 +137,45 @@ class ProyekController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Proyek $proyek, $slug)
+    public function update(Request $request, Project $proyek, $slug)
     {
-        $proyek = Proyek::where('slug', $slug)->firstOrFail();
-        $this->authorize('update', $proyek);
+        $proyek = Project::where('slug', $slug)->firstOrFail();
+        // $this->authorize('update', $proyek);
         $validatedData = $request->validate([
-            'nama_proyek' => 'required|max:255',
-            'url_proyek' => 'nullable|max:255',
-            'deskripsi_proyek' => 'nullable',
-            'tgl_mulai_proyek' => 'required',
-            'tgl_selesai_proyek' => 'required',
-            'visibilitas' => 'required',
-            'status_proyek' => 'required',
-            'nama_file.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
+            'project_name' => 'required|max:255',
+            'project_url' => 'nullable|max:255',
+            'project_location' => 'nullable|max:255',
+            'contact_person' => 'nullable|max:255',
+            'project_description' => 'nullable',
+            'project_start_date' => 'required',
+            'project_end_date' => 'required',
+            'visibility' => 'required',
+            'project_status' => 'required',
+            'file_name.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
         ]);
 
         // Handle file updates
-        if ($request->hasFile('nama_file')) {
+        if ($request->hasFile('file_name')) {
             // Delete old files
             if ($proyek->files) {
                 foreach ($proyek->files as $file) {
-                    Storage::delete($file->nama_file);
+                    Storage::delete($file->file_name);
                 }
             }
 
             // Upload new files
             $docs = [];
-            foreach ($request->file('nama_file') as $key => $file) {
+            foreach ($request->file('file_name') as $key => $file) {
                 $extension = $file->getClientOriginalExtension();
                 $filename = $key . '-' . time() . '.' . $extension;
                 $path = $file->storeAs('uploads/docs', $filename);
                 $docs[] = [
-                    'proyek_id' => $proyek->id,
-                    'nama_file' => $path,
+                    'project_id' => $proyek->id,
+                    'file_name' => $path,
                 ];
             }
             // Insert new files
-            FilePendukung::insert($docs);
+            Document::insert($docs);
         }
 
         // Handle collaborators based on visibility
@@ -180,11 +192,11 @@ class ProyekController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Proyek $proyek, $slug)
+    public function destroy(Project $proyek, $slug)
     {
-        $proyek = Proyek::where('slug', $slug)->firstOrFail();
+        $proyek = Project::where('slug', $slug)->firstOrFail();
         $this->authorize('delete', $proyek);
-        Proyek::destroy($proyek->id);
+        Project::destroy($proyek->id);
         return redirect('/main-menu/proyek')->with('success', 'Berhasil Menghapus Proyek');
     }
    

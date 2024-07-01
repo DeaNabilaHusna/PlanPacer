@@ -4,14 +4,14 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Progress;
-use App\Models\KartuTugas;
-use App\Models\UserProyek;
-use App\Models\FilePendukung;   
+use App\Models\Modul;
+use App\Models\UserProject;
+use App\Models\Document;   
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Proyek extends Model
+class Project extends Model
 {
     use HasFactory;
 
@@ -22,39 +22,39 @@ class Proyek extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->slug = Str::slug($model->nama_proyek);
+            $model->slug = Str::slug($model->project_name);
         });
 
         static::updating(function ($model) {
-            $model->slug = Str::slug($model->nama_proyek);
+            $model->slug = Str::slug($model->project_name);
         });
     }
     public function users(){
-        return $this->belongsToMany(User::class, 'user_proyeks', 'proyek_id', 'assignee_user_id')
-            ->withPivot('role_id', 'assigned_by_user_id')
+        return $this->belongsToMany(User::class, 'user_projects', 'project_id', 'assignee_user_id')
+            ->withPivot('assigned_by_user_id')
             ->withTimestamps();
 
     }
 
-    public function kartuTugas(){
-        return $this->hasMany(KartuTugas::class);
+    public function moduls(){
+        return $this->hasMany(Modul::class);
     }
     
     public function progress(){
         return $this->hasMany(Progress::class);
     }
 
-    public function filePendukungs(){
-        return $this->hasMany(FilePendukung::class);
+    public function documents(){
+        return $this->hasMany(Document::class);
     }
 
-    public function userProyeks()
+    public function userProjects()
     {
-        return $this->hasMany(UserProyek::class, 'proyek_id');
+        return $this->hasMany(UserProject::class, 'project_id');
     }
 
     public function getRouteKeyName(): string
 {
-    return 'nama_proyek';
+    return 'project_name';
 }
 }
