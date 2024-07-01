@@ -23,7 +23,7 @@ class ProjectModulController extends Controller
         $this->middleware('permission:buat modul', ['only' => ['create', 'store']]);
         $this->middleware('permission:lihat modul', ['only' => ['show']]);
         $this->middleware('permission:edit modul', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:delete modul', ['only' => ['destroy']]);
+        $this->middleware('permission:hapus modul', ['only' => ['destroy']]);
     }
 
     /**
@@ -96,7 +96,7 @@ class ProjectModulController extends Controller
                 }),
             ],
         ]);
-        
+
         // Ambil proyek berdasarkan slug
         $proyek = Project::where('slug', $slug)
             ->where(function ($query) {
@@ -110,10 +110,10 @@ class ProjectModulController extends Controller
             return redirect()->back()->withErrors(['slug' => 'Proyek tidak ditemukan.']);
         }
         $kartuSlug = Str::slug($validatedData['modul_name']) . '-' . $proyek->slug;
-        
+
         // Simpan data kartu tugas baru ke database
         $validatedData['project_id'] = $proyek->id;
-        $validatedData['slug'] = $kartuSlug; 
+        $validatedData['slug'] = $kartuSlug;
         $tugas = Modul::create($validatedData);
 
         return redirect('/main-menu/proyek/' . $slug . '/modul')->with('success', 'Berhasil Membuat Modul Baru');
@@ -186,7 +186,7 @@ class ProjectModulController extends Controller
             abort(404); // Handle jika proyek tidak ditemukan
         }
 
-        // Temukan kartu tugas dengan ID yang diberikan 
+        // Temukan kartu tugas dengan ID yang diberikan
         $kartuTugas = Modul::where('slug', $kartuslug)->where('project_id', $proyek->id)->first();
 
         if (!$kartuTugas) {
