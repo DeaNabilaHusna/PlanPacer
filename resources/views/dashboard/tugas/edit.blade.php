@@ -41,36 +41,36 @@
                     </div>
                     <input type="hidden" name="proyek_id" value="{{ $proyek->id }}">
 
-                    @if ($proyek->visibility !== 'private')
-                    <div class="sm:col-span-4">
-                        <label for="project_manager_id" class="block text-sm font-medium leading-6 text-gray-900">Penanggung jawab</label>
-                        <div class="mt-2">
-                            <select id="project_manager_id" name="project_manager_id[]" multiple required class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                                @foreach($kolaborator as $user)
-                                <option value="{{ $user['id'] }}" {{ in_array($user['id'], old('project_manager_id', $tugasItem->penanggungjawab->pluck('project_manager_id')->toArray() ?? [])) ? 'selected' : '' }}>
-                                    {{ $user['email'] }}
-                                
-                                </option>
-                                @endforeach
-                            </select>
-                            @error('project_manager_id')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                    @else
-                    <div class="sm:col-span-4">
-                        <label for="project_manager_id" class="block text-sm font-medium leading-6 text-gray-900">Penanggung Jawab</label>
-                        <div class="mt-2">
-                            <select id="project_manager_id" name="project_manager_id[]" multiple disabled required class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                                <option value="{{ old('project_manager_id', $tugasItem->project_manager_id) }}" selected disabled>{{ auth()->user()->email }}</option>
-                            </select>
-                            @error('project_manager_id')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                    @endif
+                  @if ($proyek->visibility !== 'private')
+    <div class="sm:col-span-4">
+        <label for="project_manager_id" class="block text-sm font-medium leading-6 text-gray-900">Penanggung jawab</label>
+        <div class="mt-2">
+            <select id="project_manager_id" name="project_manager_id[]" multiple required class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                @foreach($kolaborator as $user)
+                <option value="{{ $user['id'] }}" {{ in_array($user['id'], old('project_manager_id', $tugasItem->penanggungjawab ? $tugasItem->penanggungjawab->pluck('project_manager_id')->toArray() : [])) ? 'selected' : '' }}>
+                    {{ $user['username'] }}
+                </option>
+                @endforeach
+            </select>
+            @error('project_manager_id')
+            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+@else
+    <div class="sm:col-span-4">
+        <label for="project_manager_id" class="block text-sm font-medium leading-6 text-gray-900">Penanggung Jawab</label>
+        <div class="mt-2">
+            <select id="project_manager_id" name="project_manager_id[]" multiple disabled required class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                <option value="{{ old('project_manager_id', $tugasItem->project_manager_id) }}" selected disabled>{{ auth()->user()->username }}</option>
+            </select>
+            @error('project_manager_id')
+            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+@endif
+
 
                     <div class="sm:col-span-4 flex space-x-12 justify-between">
                         <div>

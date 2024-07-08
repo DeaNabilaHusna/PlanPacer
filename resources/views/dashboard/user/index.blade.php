@@ -50,9 +50,9 @@ $segmentCount = count($segments);
                             <th scope="col" class="px-6 py-3 text-center">
                                 Email
                             </th>
-                            <th scope="col" class="px-6 py-3 text-center">
+                            <!-- <th scope="col" class="px-6 py-3 text-center">
                                 Role
-                            </th>
+                            </th> -->
                             <th scope="col" class="text-center px-6 py-3">
                                 Aksi
                             </th>
@@ -72,7 +72,7 @@ $segmentCount = count($segments);
                             <td class="px-6 py-4">
                                 {{ $user->email }}
                             </td>
-                            <td class="px-6 py-4">
+                            <!-- <td class="px-6 py-4">
                                 <div class="flex justify-center items-center">
                                     @if ($user->getRoleNames()->isNotEmpty())
                                     @foreach ($user->getRoleNames() as $roleName)
@@ -82,7 +82,7 @@ $segmentCount = count($segments);
                                     <p class="text-center text-red-500">Belum ditetapkan</p>
                                     @endif
                                 </div>
-                            </td>
+                            </td> -->
                             <td class="px-6 py-4 flex justify-center items-center space-x-2">
                                 @can('edit user')
                                 <a href="/main-menu/user/{{ $user->id }}/edit" class="bg-yellow hover:bg-orange-600 text-white font-bold py-2 px-4 border border-yellow rounded">

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Project;
+use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 
 class checkRoleCollaborators
@@ -83,34 +85,61 @@ class checkRoleCollaborators
     //     return redirect()->route('unauthorized');
     // }
 
-    public function handle(Request $request, Closure $next, $role): Response
+    // public function handle(Request $request, Closure $next, $role): Response
+    // {
+    //     if (!auth()->check()) {
+    //         Log::warning('User not authenticated. Redirecting to login.');
+    //         return redirect()->route('login');
+    //     }
+
+    //     $user = auth()->user();
+    //     Log::info('Authenticated user: ' . $user->id);
+    //     $namaproyek = $request->route('nama_proyek'); // Pastikan parameter proyek_id ada dalam route
+    //     Log::info('Proyek name from route: ' . $namaproyek);
+
+    //     if ($namaproyek) {
+    //         Log::info('Checking user project roles.');
+    //         $userProyek = UserProyek::where('assignee_user_id', $user->id)
+    //                                 ->where('proyek_id', $namaproyek)
+    //                                 ->whereHas('roles', function ($query) use ($role) {
+    //                                     $query->where('name', $role);
+    //                                 })
+    //                                 ->first();
+
+    //         if ($userProyek) {
+    //             Log::info('User has the required role. Proceeding to next middleware.');
+    //             return $next($request);
+    //         }
+    //     }
+
+    //     Log::warning('User does not have the required role or project ID is missing. Redirecting to unauthorized.');
+    //     return redirect()->route('unauthorized');
+    // }
+    public function handle(Request $request, Closure $next, $permission)
     {
-        if (!auth()->check()) {
-            Log::warning('User not authenticated. Redirecting to login.');
-            return redirect()->route('login');
+        $user = Auth::user();
+        $slug = $request->route('slug');
+        
+        // Ambil proyek berdasarkan slug
+        $project = Project::where('slug', $slug)->first();
+
+        if (!$project) {
+            abort(404, 'Proyek tidak ditemukan');
         }
 
-        $user = auth()->user();
-        Log::info('Authenticated user: ' . $user->id);
-        $namaproyek = $request->route('nama_proyek'); // Pastikan parameter proyek_id ada dalam route
-        Log::info('Proyek name from route: ' . $namaproyek);
-
-        if ($namaproyek) {
-            Log::info('Checking user project roles.');
-            $userProyek = UserProyek::where('assignee_user_id', $user->id)
-                                    ->where('proyek_id', $namaproyek)
-                                    ->whereHas('roles', function ($query) use ($role) {
-                                        $query->where('name', $role);
-                                    })
-                                    ->first();
-
-            if ($userProyek) {
-                Log::info('User has the required role. Proceeding to next middleware.');
-                return $next($request);
-            }
+        // Cek apakah user adalah pemilik proyek
+        if ($project->user_id === $user->id) {
+            return $next($request);
         }
 
-        Log::warning('User does not have the required role or project ID is missing. Redirecting to unauthorized.');
-        return redirect()->route('unauthorized');
+        // Cek apakah user adalah kolaborator dalam proyek tersebut dengan izin yang sesuai
+        $userRole = $project->users()->where('users.id', $user->id)->first()->pivot->role_id;
+        $role = Role::find($userRole);
+
+        if ($role && $role->permissions()->where('name', $permission)->exists()) {
+            return $next($request);
+        }
+
+        abort(403, 'Tidak memiliki izin');
     }
 }

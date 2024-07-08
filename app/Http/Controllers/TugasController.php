@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TugasItem;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use illuminate\Support\Facades\Auth;
 
@@ -18,7 +18,7 @@ class TugasController extends Controller
             $user = Auth::user();
     
             // Ambil semua tugas yang terkait dengan penanggungjawab_id user yang sedang login
-            $tugasItems = TugasItem::whereHas('users', function($query) use ($user) {
+            $tugasItems = Task::whereHas('user', function($query) use ($user) {
                 $query->where('user_tugasitems.penanggungjawab_id', $user->id);
             })->with('kartutugas')->get();
     
@@ -46,7 +46,7 @@ class TugasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TugasItem $tugasItem)
+    public function show(Task $tugasItem)
     {
         //
     }
@@ -54,7 +54,7 @@ class TugasController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TugasItem $tugasItem)
+    public function edit(Task $tugasItem)
     {
         //
     }
@@ -62,7 +62,7 @@ class TugasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TugasItem $tugasItem)
+    public function update(Request $request, Task $tugasItem)
     {
         //
     }
@@ -70,7 +70,7 @@ class TugasController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TugasItem $tugasItem)
+    public function destroy(Task $tugasItem)
     {
         //
     }

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Project extends Model
 {
+    
     use HasFactory;
 
     protected $guarded = ['id', 'slug'];
@@ -31,7 +32,7 @@ class Project extends Model
     }
     public function users(){
         return $this->belongsToMany(User::class, 'user_projects', 'project_id', 'assignee_user_id')
-            ->withPivot('assigned_by_user_id')
+            ->withPivot('role_id','assigned_by_user_id')
             ->withTimestamps();
 
     }

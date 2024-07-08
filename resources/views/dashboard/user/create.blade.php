@@ -38,20 +38,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="sm:col-span-4">
-                        <label for="roles" class="block text-sm font-medium leading-6 text-gray-900">Pilih Role</label>
-                        <div class="mt-2">
-                            @foreach($roles as $roleId => $roleName)
-                            <div class="flex items-center mb-2">
-                                <input id="{{ $roleId }}" name="roles" type="radio" value="{{ $roleId }}" class="form-radio h-5 w-5 text-indigo-600 transition duration-150 ease-in-out">
-                                <label for="{{ $roleId }}" class="ml-2 block text-sm leading-5 text-gray-900">{{ $roleName }}</label>
-                            </div>
-                            @endforeach
-                            @error('roles')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
+                  
 
 
                 </div>

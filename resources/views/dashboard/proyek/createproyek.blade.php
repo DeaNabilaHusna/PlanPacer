@@ -3,9 +3,9 @@
 
 <section class="mb-4">
     <form method="post" action="/main-menu/proyek" enctype="multipart/form-data">
-    @if(session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
-@endif
+        @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
 
         @csrf
         <div class="space-y-12 font-medium">
@@ -98,14 +98,14 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="sm:col-span-4 hidden" id="kolaboratorInput">
+                    <!-- <div class="sm:col-span-4 hidden" id="kolaboratorInput">
                         <label for="kolaborator" class="block text-sm font-medium leading-6 text-gray-900">Kolaborator</label>
 
                         <div class="mt-2">
                             <select id="kolaborator" name="kolaborator[]" class="block w-full md:w-80 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" multiple>
                                 @foreach($users as $user)
                                 @if($user->id !== auth()->user()->id)
-                                <option value="{{ $user->id }}">{{ $user->email }}</option>
+                                <option value="{{ $user->id }}">{{ $user->username }}</option>
                                 @endif
                                 @endforeach
                             </select>
@@ -113,6 +113,25 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
+                    </div> -->
+
+                    <div class="sm:col-span-4 hidden" id="kolaboratorInput">
+                        <label for="kolaborator" class="block text-sm font-medium leading-6 text-gray-900">Kolaborator</label>
+                        <div class="mt-2">
+                            <select id="kolaborator" name="kolaborator[]" class="block w-full md:w-80 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" multiple>
+                                @foreach($users as $user)
+                                @if($user->id !== auth()->user()->id)
+                                <option value="{{ $user->id }}">{{ $user->username }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                            @error('kolaborator')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div id="selectedKolaborators">
+    <!-- Container untuk menampilkan kolaborator yang dipilih -->
+</div>
                     </div>
 
                     <div class="sm:col-span-3">
@@ -198,7 +217,7 @@
     }
 </script>
 
-<script>
+<!-- <script>
     //library select2 untuk add kolabolator
     $(document).ready(function() {
         $('#kolaborator').select2();
@@ -241,6 +260,48 @@
             });
 
             displaySelectedKolaborator();
+        }
+    });
+</script> -->
+<script>
+    $(document).ready(function() {
+        $('#kolaborator').select2({
+            placeholder: 'Pilih kolaborator',
+            allowClear: true // Menambahkan opsi untuk menghapus pilihan
+        });
+
+        $('#kolaborator').on('change', function() {
+            displaySelectedKolaborator();
+        });
+
+        function displaySelectedKolaborator() {
+            var selectedKolaborators = $('#kolaborator').val();
+            var selectedKolaboratorHTML = '';
+
+            if (selectedKolaborators && selectedKolaborators.length > 0) {
+                selectedKolaborators.forEach(function(id, index) {
+                    var username = $('#kolaborator option[value="' + id + '"]').text();
+                    selectedKolaboratorHTML += '<div id="kolaborator_' + id + '" class="flex items-center mb-2">';
+                    selectedKolaboratorHTML += '<input type="hidden" name="kolaborator[' + id + '][id]" value="' + id + '">';
+                    selectedKolaboratorHTML += '<label class="mr-4">' + username + '</label>';
+                    selectedKolaboratorHTML += '<select name="kolaborator[' + id + '][role_id]" class="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">';
+                  
+                    @foreach($roles as $role)
+                        selectedKolaboratorHTML += '<option value="{{ $role->id }}">{{ $role->name }}</option>';
+                    @endforeach
+
+                    selectedKolaboratorHTML += '</select>';
+                    // selectedKolaboratorHTML += '<button type="button" class="text-red-500 font-bold ml-2" onclick="removeKolaborator(' + id + ')">x</button>';
+                    selectedKolaboratorHTML += '</div>';
+                });
+            }
+
+            $('#selectedKolaborators').html(selectedKolaboratorHTML);
+        }
+
+        function removeKolaborator(id) {
+            $('#kolaborator option[value="' + id + '"]').prop('selected', false);
+            $('#kolaborator').trigger('change');
         }
     });
 </script>

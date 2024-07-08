@@ -20,10 +20,10 @@ class ProjectModulController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:buat modul', ['only' => ['create', 'store']]);
-        $this->middleware('permission:lihat modul', ['only' => ['show']]);
-        $this->middleware('permission:edit modul', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:hapus modul', ['only' => ['destroy']]);
+        // $this->middleware('permission:buat modul', ['only' => ['create', 'store']]);
+        // $this->middleware('permission:lihat modul', ['only' => ['show']]);
+        // $this->middleware('permission:edit modul', ['only' => ['edit', 'update']]);
+        // $this->middleware('permission:hapus modul', ['only' => ['destroy']]);
     }
 
     /**
@@ -62,16 +62,17 @@ class ProjectModulController extends Controller
     {
         // Ambil proyek berdasarkan slug
         $proyek = Project::where('slug', $slug)
-            ->where(function ($query) {
-                $query->where('user_id', Auth::id())
-                    ->orWhereHas('users', function ($query) {
+        ->where(function ($query) {
+            $query->where('user_id', Auth::id())
+            ->orWhereHas('users', function ($query) {
                         $query->where('users.id', Auth::id());
                     });
-            })->first();
-
-        if (!$proyek) {
-            abort(404); // Handle jika proyek tidak ditemukan
-        }
+                })->first();
+                
+                if (!$proyek) {
+                    abort(404); // Handle jika proyek tidak ditemukan
+                }
+                // $this->authorize('create', $proyek);
 
         // Simpan slug proyek ke session
         session(['slug' => $slug]);
@@ -96,19 +97,20 @@ class ProjectModulController extends Controller
                 }),
             ],
         ]);
-
+        
         // Ambil proyek berdasarkan slug
         $proyek = Project::where('slug', $slug)
-            ->where(function ($query) {
-                $query->where('user_id', Auth::id())
-                    ->orWhereHas('users', function ($query) {
-                        $query->where('users.id', Auth::id());
-                    });
-            })->first();
+        ->where(function ($query) {
+            $query->where('user_id', Auth::id())
+            ->orWhereHas('users', function ($query) {
+                $query->where('users.id', Auth::id());
+            });
+        })->first();
 
         if (!$proyek) {
             return redirect()->back()->withErrors(['slug' => 'Proyek tidak ditemukan.']);
         }
+        // $this->authorize('create', $proyek);
         $kartuSlug = Str::slug($validatedData['modul_name']) . '-' . $proyek->slug;
 
         // Simpan data kartu tugas baru ke database
@@ -141,7 +143,8 @@ class ProjectModulController extends Controller
     {
         $proyek = Project::where('slug', $slug)->firstOrFail();
         $kartuTugas = Modul::where('id', $id)->where('project_id', $proyek->id)->firstOrFail();
-
+        
+        // $this->authorize('update', $proyek);
         return view('dashboard.modul.edit', [
             'proyek' => $proyek,
             'kartuTugas' => $kartuTugas,
@@ -157,9 +160,10 @@ class ProjectModulController extends Controller
         $validatedData = $request->validate([
             'modul_name' => 'required|max:255',
         ]);
-
+        
         $proyek = Project::where('slug', $slug)->firstOrFail();
         $kartuTugas = Modul::where('id', $id)->where('project_id', $proyek->id)->firstOrFail();
+        // $this->authorize('update', $proyek);
 
         $kartuTugas->modul_name = $validatedData['modul_name'];
         $kartuTugas->save();
@@ -175,16 +179,17 @@ class ProjectModulController extends Controller
     {
         // Ambil proyek berdasarkan slug
         $proyek = Project::where('slug', $slug)
-            ->where(function ($query) {
-                $query->where('user_id', Auth::id())
-                    ->orWhereHas('users', function ($query) {
-                        $query->where('users.id', Auth::id());
-                    });
-            })->first();
-
+        ->where(function ($query) {
+            $query->where('user_id', Auth::id())
+            ->orWhereHas('users', function ($query) {
+                $query->where('users.id', Auth::id());
+            });
+        })->first();
+        
         if (!$proyek) {
             abort(404); // Handle jika proyek tidak ditemukan
         }
+        // $this->authorize('destroy', $proyek);
 
         // Temukan kartu tugas dengan ID yang diberikan
         $kartuTugas = Modul::where('slug', $kartuslug)->where('project_id', $proyek->id)->first();
