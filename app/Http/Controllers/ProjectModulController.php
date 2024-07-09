@@ -24,6 +24,10 @@ class ProjectModulController extends Controller
         // $this->middleware('permission:lihat modul', ['only' => ['show']]);
         // $this->middleware('permission:edit modul', ['only' => ['edit', 'update']]);
         // $this->middleware('permission:hapus modul', ['only' => ['destroy']]);
+        $this->middleware('checkRoleCollaborators:buat modul', ['only' => ['create', 'store']]);
+        $this->middleware('checkRoleCollaborators:lihat modul', ['only' => ['show']]);
+        $this->middleware('checkRoleCollaborators:edit modul', ['only' => ['edit', 'update']]);
+        $this->middleware('checkRoleCollaborators:hapus modul', ['only' => ['destroy']]);
     }
 
     /**

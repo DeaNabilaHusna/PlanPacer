@@ -98,7 +98,7 @@ $segmentCount = count($segments);
                     <a href="/main-menu/proyek/{{ $proyek->slug }}/modul">
                         <h5 class="flex items-center gap-2 pt-2 text-xl font-bold tracking-tight text-defblack">
                             {{ $proyek->project_name }}
-                            @if ($proyek->visibilitas == 'private')
+                            @if ($proyek->visibility == 'private')
                             {!! $lockIcon !!}
                             @endif
                         </h5>

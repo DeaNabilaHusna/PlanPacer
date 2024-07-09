@@ -18,10 +18,14 @@ class ProjectTaskController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:buat tugas', ['only' => ['create', 'store']]);
-        $this->middleware('permission:lihat tugas', ['only' => ['show']]);
-        $this->middleware('permission:edit tugas', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:hapus tugas', ['only' => ['destroy']]);
+        // $this->middleware('permission:buat tugas', ['only' => ['create', 'store']]);
+        // $this->middleware('permission:lihat tugas', ['only' => ['show']]);
+        // $this->middleware('permission:edit tugas', ['only' => ['edit', 'update']]);
+        // $this->middleware('permission:hapus tugas', ['only' => ['destroy']]);
+        $this->middleware('checkRoleCollaborators:buat tugas', ['only' => ['create', 'store']]);
+        $this->middleware('checkRoleCollaborators:lihat tugas', ['only' => ['show']]);
+        $this->middleware('checkRoleCollaborators:edit tugas', ['only' => ['edit', 'update']]);
+        $this->middleware('checkRoleCollaborators:hapus tugas', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
