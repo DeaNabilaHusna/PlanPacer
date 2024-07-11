@@ -69,12 +69,20 @@ class User extends Authenticatable
     }
 
 
+    // public function tasks()
+    // {
+    //     // return $this->belongsToMany(TugasItem::class, UserTugasitem::class, 'penanggungjawab_id');
+    //     return $this->belongsToMany(Task::class, 'user_tasks', 'project_manager_id')
+    //     ->withPivot('project_manager_id');
+    // }
     public function tasks()
-    {
-        // return $this->belongsToMany(TugasItem::class, UserTugasitem::class, 'penanggungjawab_id');
-        return $this->belongsToMany(Task::class, 'user_tasks', 'project_manager_id')
-        ->withPivot('project_manager_id');
-    }
+{
+    // return $this->belongsToMany(Task::class, 'user_tasks', 'project_manager_id', 'task_id')
+    //             ->withPivot('project_id', 'modul_id', 'project_manager_email')
+    //             ->withTimestamps();
+    return $this->belongsToMany(Task::class, 'user_tasks', 'project_manager_id', 'task_id') ->withPivot('project_id', 'modul_id', 'project_manager_email')
+                ->withTimestamps();
+}
 
     public function userProjects()
     {

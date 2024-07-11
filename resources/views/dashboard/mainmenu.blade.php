@@ -119,7 +119,7 @@
             @endif
           </h5>
         </a>
-        <p class="py-1font-normal text-gray-700">{{ $project->jumlahKontributor }} Kontributor</p>
+        <p class="py-1font-normal text-gray-700">{{ $project->users_count }} Kontributor</p>
         <div class="flex justify-between mb-1">
           <span class="text-base font-sm text-defblack">Progress</span>
           <span class="text-sm font-sm text-defblack font-semibold">45%</span>
@@ -156,88 +156,28 @@
         </thead>
         <tbody>
           <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
+            @foreach ($tasks as $task)
             <td class="px-6 py-4 font-medium whitespace-nowrap">
-              1
+              {{ $loop->iteration }}
             </td>
             <td class="px-6 py-4">
-              Tugas 1
+              {{ $task->task_name }}
             </td>
             <td class="px-6 py-4">
-              Proyek 1
+              {{ $task->project_name }}
             </td>
             <td class="px-6 py-4">
-              01-01-2024
+            {{ \Carbon\Carbon::parse($task->task_end_date)->translatedFormat('l, d F Y') }}
             </td>
             <td class="px-6 py-4">
-              <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Selesai</span>
+              @if ($task->task_status == 'selesai')
+              <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $task->task_status }}</span>
+              @elseif ($task->task_status == 'dalam proses')
+              <span class="bg-orange-300 text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $task->task_status }}</span>
+              @endif
             </td>
-          </tr>
-          <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
-            <td class="px-6 py-4 font-medium whitespace-nowrap">
-              2
-            </td>
-            <td class="px-6 py-4">
-              Tugas 1
-            </td>
-            <td class="px-6 py-4">
-              Proyek 1
-            </td>
-            <td class="px-6 py-4">
-              01-01-2024
-            </td>
-            <td class="px-6 py-4">
-              <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Selesai</span>
-            </td>
-          </tr>
-          <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
-            <td class="px-6 py-4 font-medium whitespace-nowrap">
-              3
-            </td>
-            <td class="px-6 py-4">
-              Tugas 1
-            </td>
-            <td class="px-6 py-4">
-              Proyek 1
-            </td>
-            <td class="px-6 py-4">
-              01-01-2024
-            </td>
-            <td class="px-6 py-4">
-              <span class="bg-yellow text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Dalam Proses</span>
-            </td>
-          </tr>
-          <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
-            <td class="px-6 py-4 font-medium whitespace-nowrap">
-              4
-            </td>
-            <td class="px-6 py-4">
-              Tugas 1
-            </td>
-            <td class="px-6 py-4">
-              Proyek 1
-            </td>
-            <td class="px-6 py-4">
-              01-01-2024
-            </td>
-            <td class="px-6 py-4">
-              <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Selesai</span>
-            </td>
-          </tr>
-          <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
-            <td class="px-6 py-4 font-medium whitespace-nowrap">
-              5
-            </td>
-            <td class="px-6 py-4">
-              Tugas 1
-            </td>
-            <td class="px-6 py-4">
-              Proyek 1
-            </td>
-            <td class="px-6 py-4">
-              01-01-2024
-            </td>
-            <td class="px-6 py-4">
-              <span class="bg-yellow text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Dalam Proses</span>
+            @endforeach
+
           </tr>
         </tbody>
       </table>

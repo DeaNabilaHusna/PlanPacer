@@ -7,24 +7,33 @@ use Illuminate\Http\Request;
 use illuminate\Support\Facades\Auth;
 
 
-class TugasController extends Controller
+class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-            // Ambil user yang sedang login
-            $user = Auth::user();
-    
-            // Ambil semua tugas yang terkait dengan penanggungjawab_id user yang sedang login
-            $tugasItems = Task::whereHas('user', function($query) use ($user) {
-                $query->where('user_tugasitems.penanggungjawab_id', $user->id);
-            })->with('kartutugas')->get();
-    
-            // Kirim data tersebut ke view blade
-            return view('dashboard.tugas.index', compact('tugasItems'));
+        // // return view('dashboard.tugas.index', compact('tugasItems'));
+        // $user = Auth::user();
 
+        // // Ambil semua tugas yang terkait dengan penanggung jawab yang sedang login
+        // $tugasItems = $user->tasks;
+
+        // // Kirim data tersebut ke view blade
+        // return view('dashboard.tugas.index', compact('tugasItems'));
+        $user = Auth::user();
+
+    // Ambil semua tugas yang terkait dengan penanggung jawab yang sedang login
+    $tugasItems = Task::join('projects', 'tasks.project_id', '=', 'projects.id')
+                    ->whereHas('user', function($query) use ($user) {
+                        $query->where('project_manager_id', $user->id);
+                    })
+                    ->select('tasks.*', 'projects.project_name')
+                    ->get();
+
+    // Kirim data tersebut ke view blade
+    return view('dashboard.tugas.index', compact('tugasItems'));
     }
 
     /**

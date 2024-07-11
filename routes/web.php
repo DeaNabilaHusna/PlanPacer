@@ -13,7 +13,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectModulController;
 use App\Http\Controllers\ProjectTaskController;
-use App\Http\Controllers\TugasController;
+use App\Http\Controllers\TaskController;
 
 
 /*
@@ -100,7 +100,7 @@ Route::group(['middleware' => ['role:user|super admin|admin|project manager|anal
     // Route::delete('/main-menu/proyek/{slug}/modul/{modul}', [ProjectModulController::class, 'destroy'])->middleware('checkRoleCollaborators:hapus modul');
 
     // Tugas
-    Route::get('/main-menu/tugas', [TugasController::class, 'index']);
+    Route::get('/main-menu/tugas', [TaskController::class, 'index']);
     Route::resource('/main-menu/proyek/{slug}/modul/{modul}/tugas', ProjectTaskController::class);
     // Route::get('/main-menu/proyek/{slug}/modul/{modul}/tugas/create', [ProjectTaskController::class, 'create'])->middleware('checkRoleCollaborators:buat tugas');
     // Route::post('/main-menu/proyek/{slug}/modul/{modul}/tugas', [ProjectTaskController::class, 'store'])->middleware('checkRoleCollaborators:buat tugas');
