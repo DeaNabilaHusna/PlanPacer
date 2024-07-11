@@ -19,7 +19,7 @@
 
 <body class="bg-defwhite">
   <!-- ========== HEADER ========== -->
-  <header class="sticky top-0 inset-x-0 flex flex-wrap sm:justify-start sm:flex-nowrap z-[48] w-full bg-defwhite lg:bg-defwhite border-b text-sm py-2.5 sm:py-4 lg:ps-64 ">
+  <header class="sticky top-0 inset-x-0 flex flex-wrap sm:justify-start sm:flex-nowrap z-[48] w-full bg-[#f5f3fd] lg:bg-[#f5f3fd] border-b text-sm py-2.5 sm:py-4 lg:ps-64 ">
     <nav class="flex basis-full items-center w-full mx-auto px-4 sm:px-6 md:px-8" aria-label="Global">
       <div class="w-full flex items-center justify-end ms-auto sm:justify-between">
 
@@ -36,16 +36,22 @@
           <!-- End Navigation Toggle -->
         </div>
         <div class="flex flex-row items-center justify-end gap-2">
-          <label for="icon" class="sr-only">Cari disini</label>
-          <div class="relative">
-            <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-4">
-              <svg class="flex-shrink-0 size-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.3-4.3" />
-              </svg>
-            </div>
-            <input type="text" id="icon" name="icon" class="bg-defgrey py-2 px-4 ps-11 block w-full border-gray-200 rounded-3xl text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="Cari disini">
-          </div>
+        <form action="/main-menu/proyek">
+  <label for="icon" class="sr-only">Cari disini</label>
+  <div class="relative">
+    <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-4">
+      <svg class="flex-shrink-0 size-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+    </div>
+    <input type="text" id="icon" name="search" value="{{ request('search') }}" class="form-control bg-defwhite py-2 pr-20 ps-11 block w-full border-gray-200 rounded-3xl text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none placeholder-defcolor" placeholder="Cari disini">
+    <button type="submit" class="absolute inset-y-0 end-0 flex items-center bg-[#100844] text-white font-semibold py-2 px-4 rounded-r-3xl hover:bg-[#0d0738] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#100844]">
+      Cari
+    </button>
+  </div>
+</form>
+
           <button type="button" class="w-[2.375rem] h-[2.375rem] inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-defwhite hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none ">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <mask id="path-1-outside-1_252_977" maskUnits="userSpaceOnUse" x="1.10938" y="0.23053" width="17" height="19" fill="black">
@@ -92,9 +98,9 @@
 
   <!-- Sidebar -->
 
-  <div id="application-sidebar" class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 start-0 bottom-0 z-[60] w-64 bg-navy border-e border-gray-200 pt-7 pb-10 overflow-y-auto lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+  <div id="application-sidebar" class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 start-0 bottom-0 z-[60] w-64 bg-[#100844] border-e border-gray-200 pt-7 pb-10 overflow-y-auto lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
     <div class="px-auto">
-      <a class="flex-none href=""><h1 class=" text-2xl text-center"><span class="font-paytone text-bold text-defwhite">Plan<span class="text-yellow">Pacer</span></span></h1></a>
+      <a class="flex-none href=""><h1 class=" text-2xl text-center"><span class="font-paytone text-bold text-[#fcfbfe]">Plan<span class="text-yellow">Pacer</span></span></h1></a>
     </div>
 
     <nav class="p-6 w-full flex flex-col flex-wrap font-raleway">
@@ -122,7 +128,7 @@
             </svg>
             Tugas
           </a></li>
-          @hasrole('super admin|admin')
+        @hasrole('super admin|admin')
         <li><a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm font-semibold text-defwhite rounded-lg hover:bg-defwhite hover:text-defblack focus:text-defblack focus:bg-defwhite focus:font-extrabold {{ Request::is('main-menu/role*') ? 'bg-defwhite text-black' : ''}}" href="/main-menu/role">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" class="flex-shrink-0 size-4" viewBox="0 0 24 24">
               <path fill="#FCFEFE" d="M10 0 9 1v1H7v1H4L2 5a238 238 0 0 0 0 16l2 1h14l1-1 1-8-1-9-1-1h-3V2h-2V1l-1-1h-2Zm2 1v1l2 1v2H8V3l2-1V1h2ZM7 5v1h8V4h3v1h1v7a170 170 0 0 1-1 9H4l-1-1V5l1-1h3v1Z" />
@@ -140,7 +146,7 @@
           </a></li>
         <li>
           @endhasrole
-        <!-- <li><a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm font-semibold text-defwhite rounded-lg hover:bg-defwhite hover:text-defblack focus:text-defblack focus:bg-defwhite focus:font-extrabold {{ Request::is('main-menu/kolaborator*') ? 'bg-defwhite text-black' : ''}}" href="/main-menu/kolaborator">
+          <!-- <li><a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm font-semibold text-defwhite rounded-lg hover:bg-defwhite hover:text-defblack focus:text-defblack focus:bg-defwhite focus:font-extrabold {{ Request::is('main-menu/kolaborator*') ? 'bg-defwhite text-black' : ''}}" href="/main-menu/kolaborator">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" class="flex-shrink-0 size-4" viewBox="0 0 24 24">
               <path fill="#FCFEFE" d="M10 0 9 1v1H7v1H4L2 5a238 238 0 0 0 0 16l2 1h14l1-1 1-8-1-9-1-1h-3V2h-2V1l-1-1h-2Zm2 1v1l2 1v2H8V3l2-1V1h2ZM7 5v1h8V4h3v1h1v7a170 170 0 0 1-1 9H4l-1-1V5l1-1h3v1Z" />
               <path fill="#FCFEFE" d="M8 7 7 8v1H6L5 8v1l1 1 2-1 1-1V7H8ZM10 9v1h4l3-1h-7ZM8 12H7v1H6l-1-1v1l1 1h1l2-2H8ZM10 13v1h7v-1h-7ZM8 16l-1 1H5l1 1v1l2-1 1-2H8ZM10 17v1a100 100 0 0 0 7 0v-1h-7Z" />
@@ -165,7 +171,7 @@
   <!-- End Sidebar -->
 
   <!-- Content -->
-  <div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72 font-raleway">
+  <div class="w-full bg-[#f5f3fd] pt-10 px-4 sm:px-6 md:px-8 lg:ps-72 font-raleway">
     @yield('content')
   </div>
 </body>

@@ -7,6 +7,8 @@ use App\Models\Project;
 use App\Models\UserProject;
 use Illuminate\Http\Request;
 use App\Models\Document;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
@@ -33,7 +35,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $proyeks = Project::where('user_id', Auth::id())
+        $proyeks = Project::latest()->filter(request(['search']))->where('user_id', Auth::id())
             ->orWhereHas('users', function ($query) {
                 $query->where('users.id', Auth::id());
             })
@@ -83,57 +85,6 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-
-    // public function store(Request $request)
-    // {
-    //     try {
-    //         $validatedData = $request->validate([
-    //             'project_name' => 'required|max:255',
-    //             'project_manager' => 'max:255',
-    //             'project_url' => 'nullable|max:255',
-    //             'project_location' => 'nullable|max:255',
-    //             'contact_person' => 'nullable|max:255',
-    //             'project_description' => 'nullable',
-    //             'project_start_date' => 'required|date',
-    //             'project_end_date' => 'required|date|after:tgl_mulai_proyek',
-    //             'visibility' => 'required',
-    //             'project_status' => 'required',
-    //             'file_name.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
-    //             'kolaborator.*' => 'nullable|exists:users,id',
-    //         ]);
-
-    //         $validatedData['user_id'] = auth()->user()->id;
-    //         $validatedData['project_manager'] = auth()->user()->username;
-    //         $validatedData['kolaborator'] = json_encode($request->input('kolaborator', []));
-
-    //         $proyek = Project::create($validatedData);
-
-    //         if ($request->has('kolaborator')) {
-    //             $proyek->users()->attach($request->input('kolaborator'));
-    //         }
-
-    //         // file 
-    //         $docs = [];
-    //         if ($files = $request->file('file_name')) {
-    //             foreach ($files as $key => $file) {
-    //                 $extension = $file->getClientOriginalExtension();
-    //                 $filename = $key . '-' . time() . '.' . $extension;
-    //                 $path = $file->storeAs('uploads/docs', $filename);
-    //                 $file->move($path, $filename);
-    //                 $docs[] = [
-    //                     'project_id' => $proyek->id,
-    //                     'file_name' => $path . $file,
-    //                 ];
-    //             }
-    //         }
-    //         Document::insert($docs);
-
-    //         return redirect('/main-menu/proyek')->with('success', 'Berhasil Membuat Proyek Baru');
-    //     } catch (\Exception $e) {
-    //         Session::flash('error', $e->getMessage());
-    //         return back()->withInput();
-    //     }
-    // }
     public function store(Request $request)
     {
         try {
@@ -181,9 +132,14 @@ class ProjectController extends Controller
             }
             $docs = [];
             if ($files = $request->file('file_name')) {
-                foreach ($files as $key => $file) {
+                foreach ($files as $file) {
                     $extension = $file->getClientOriginalExtension();
-                    $filename = $key . '-' . time() . '.' . $extension;
+                    $fileNameWithoutExtension = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    $filename = $project->id . '-' . $fileNameWithoutExtension . '.' . $extension;
+                    // $extension = $file->getClientOriginalExtension();
+                    // $name = $file->getClientOriginalName();
+                    // $fileNameWithoutExtension = pathinfo($name, PATHINFO_FILENAME);
+                    // $filename = $key . '-' . $fileNameWithoutExtension . '.' . $extension;
                     $path = $file->storeAs('uploads/docs', $filename);
                     $file->move($path, $filename);
                     $docs[] = [
@@ -215,36 +171,12 @@ class ProjectController extends Controller
             'kolaborator' => $kolaborator
         ]);
     }
-//     public function show(Project $proyek, $slug, UserProject $userProyek)
-// {
-//     $proyek = Project::where('slug', $slug)
-//                     ->with(['users.roles']) // Eager loading pengguna dan peran
-//                     ->firstOrFail();
-//     $docs = $proyek->documents;
 
-//     return view('dashboard.proyek.detailproyek', [
-//         'proyek' => $proyek,
-//         'docs' => $docs
-//     ]);
-// }
-    
 
 
     /**
      * Show the form for editing the specified resource.
      */
-    // public function edit(Project $proyek, $slug)
-    // {
-    //     // dd($proyek);
-    //     // $this->authorize('update', $proyek);
-    //     // $proyek = Project::where('slug', $slug)->firstOrFail();
-    //     $users = User::all();
-    //     return view('dashboard.proyek.updateproyek', [
-    //         'proyek' => $proyek,
-    //         'users' => $users,
-    //     ]);
-    // }
-
     public function edit(Project $proyek, $slug)
     {
         $proyek = Project::where('slug', $slug)->firstOrFail();
@@ -258,7 +190,8 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-        public function update(Request $request, Project $proyek, $slug)
+
+    public function update(Request $request, Project $project, $slug)
     {
         try {
             $validatedData = $request->validate([
@@ -275,35 +208,59 @@ class ProjectController extends Controller
                 'file_name.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
                 'kolaborator.*.id' => 'nullable|exists:users,id',
                 'kolaborator.*.role_id' => 'nullable|exists:roles,id',
-                'file_name.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048'
             ]);
+            $project = Project::where('slug', $slug)->firstOrFail();
 
-            // Update proyek dengan data yang divalidasi
-            $proyek->fill($validatedData)->save();
+            // $validatedData['user_id'] = auth()->id();
+            // $validatedData['project_manager'] = auth()->user()->username;
+
+            $project->fill($validatedData)->save();
+
+            // Update atau tambahkan kolaborator
+            if ($request->has('kolaborator') && is_array($request->kolaborator)) {
+                $kolaborators = [];
+                foreach ($request->kolaborator as $kolaborator) {
+                    if (isset($kolaborator['id'])) {
+                        $kolaborators[$kolaborator['id']] = [
+                            'role_id' => $kolaborator['role_id'],
+                            'assigned_by_user_id' => auth()->id(),
+                        ];
+                    }
+                }
+                $project->users()->sync($kolaborators);
+            }
+
+            // Menghapus kolaborator yang dihapus
+            if ($request->has('removed_kolaborators')) {
+                $project->users()->detach($request->removed_kolaborators);
+            }
 
             // Menghapus file-file yang dihapus dari form
             if ($request->has('removed_files')) {
                 foreach ($request->removed_files as $file) {
+                    $filePath = storage_path('uploads/docs/' . $file);
+
                     // Hapus file dari storage
-                    Storage::delete($file);
-                    // Hapus entri dari tabel dokumen
-                    Document::where('file_name', $file)->delete();
+                    if (Storage::exists($filePath)) {
+                        Storage::delete($filePath);
+                    }
+                    // Hapus entri file dari database Document
+                    Document::where('file_name', $file)->where('project_id', $project->id)->delete();
                 }
             }
 
             // Menyimpan file-file baru yang diunggah
             if ($files = $request->file('file_name')) {
-                foreach ($files as $key => $file) {
+                // $projectId = $request->input('project_id');
+                foreach ($files as $file) {
                     $extension = $file->getClientOriginalExtension();
-                    $filename = $key . '-' . time() . '.' . $extension;
+                    $fileNameWithoutExtension = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    $filename = $project->id . '-' . $fileNameWithoutExtension . '.' . $extension;
                     $path = $file->storeAs('uploads/docs', $filename);
+                    $file->move($path, $filename);
 
-                    // Pindahkan file dari temporary storage ke storage yang ditentukan
-                    $file->move(storage_path('app/' . $path), $filename);
-
-                    // Simpan entri dokumen baru
                     Document::create([
-                        'project_id' => $proyek->id,
+                        'project_id' => $project->id,
                         'file_name' => $path,
                     ]);
                 }
@@ -318,63 +275,6 @@ class ProjectController extends Controller
 
 
 
-    // public function update(Request $request, Project $proyek, $slug)
-    // {
-    //     try {
-    //         // $this->authorize('update', $proyek);
-    //         $proyek = Project::where('slug', $slug)->firstOrFail();
-    //         $validatedData = $request->validate([
-    //             'project_name' => 'required|max:255',
-    //             'project_url' => 'nullable|max:255',
-    //             'project_location' => 'nullable|max:255',
-    //             'contact_person' => 'nullable|max:255',
-    //             'project_description' => 'nullable',
-    //             'project_start_date' => 'required',
-    //             'project_end_date' => 'required',
-    //             'visibility' => 'required',
-    //             'project_status' => 'required',
-    //             'file_name.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
-    //         ]);
-
-    //         // Handle file updates
-    //         if ($request->hasFile('file_name')) {
-    //             // Delete old files
-    //             if ($proyek->files) {
-    //                 foreach ($proyek->files as $file) {
-    //                     Storage::delete($file->file_name);
-    //                     Document::where('file_name', $file)->delete();
-    //                 }
-    //             }
-
-    //             // Upload new files
-    //             $docs = [];
-    //             foreach ($request->file('file_name') as $key => $file) {
-    //                 $extension = $file->getClientOriginalExtension();
-    //                 $filename = $key . '-' . time() . '.' . $extension;
-    //                 $path = $file->storeAs('uploads/docs', $filename);
-    //                 $docs[] = [
-    //                     'project_id' => $proyek->id,
-    //                     'file_name' => $path,
-    //                 ];
-    //             }
-    //             // Insert new files
-    //             Document::insert($docs);
-    //         }
-
-    //         // Handle collaborators based on visibility
-    //         if ($request->visibilitas === 'private') {
-    //             $proyek->kolaborators()->detach();
-    //         } else {
-    //             $validatedData['kolaborator'] = $request->kolaborator;
-    //         }
-
-    //         $proyek->update($validatedData);
-    //         return redirect('/main-menu/proyek')->with('success', 'Berhasil Mengupdate Proyek');
-    //     } catch (\Exception $e) {
-    //         Session::flash('error', $e->getMessage());
-    //         return back()->withInput();
-    //     }
-    // }
 
     /**
      * Remove the specified resource from storage.

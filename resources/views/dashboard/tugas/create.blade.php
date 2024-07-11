@@ -2,7 +2,7 @@
 @section('content')
 
 <section class="mb-4">
-    <form method="post" action="/main-menu/proyek/{{ $proyek->slug }}/modul/{{ $kartuTugas->slug }}/tugas" enctype="multipart/form-data" class="space-y-12 font-medium" id="tugas-form" name="tugas-form">
+    <form method="post" action="/main-menu/proyek/{{ $proyek->slug }}/modul/{{ $kartuTugas->slug }}/tugas" enctype="multipart/form-data" class="font-medium" id="tugas-form" name="tugas-form">
         @if(session('error'))
         <div class="text-red-500 text-lg font-bold">{{ session('error') }}</div>
         @endif

@@ -24,7 +24,7 @@
                     <div class="sm:col-span-4">
                         <label for="project_manager" class="block text-sm font-medium leading-6 text-gray-900">Penanggung Jawab</label>
                         <div class="mt-2">
-                            <input type="text" id="project_manager" name="project_manager" autocomplete="project_manager" value="{{ auth()->user()->username }}" readonly disabled class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                            <input type="text" id="project_manager" name="project_manager" autocomplete="project_manager" value="{{ old('project_manager', $proyek->project_manager) }}" readonly disabled class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                             @error('project_manager')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -183,21 +183,22 @@
                                         </g>
                                     </svg>
                                     <span class="w-40">{{ basename($file->file_name) }}</span>
-                                    <!-- <button type="button" class="text-red-500 font-bold ml-2" onclick="removeFile('{{ basename($file->file_name) }}')"> 
+                                    <button type="button" class="text-red-500 font-bold ml-2" onclick="removeFile('{{ $file->file_name }}')">
                                         <svg height="16px" width="16px" fill="#e60a0a" viewBox="0 0 512 512">
                                             <g id="SVGRepo_iconCarrier">
                                                 <polygon id="Close" points="328.96 30.2933333 298.666667 1.42108547e-14 164.48 134.4 30.2933333 1.42108547e-14 1.42108547e-14 30.2933333 134.4 164.48 1.42108547e-14 298.666667 30.2933333 328.96 164.48 194.56 298.666667 328.96 328.96 298.666667 194.56 164.48"></polygon>
                                             </g>
                                         </svg>
-                                    </button> -->
+                                    </button>
                                 </div>
                                 @endforeach
+                                
                             </div>
                             <div class="text-center">
                                 <div class="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
                                     <label for="file_name" class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
                                         <span>Unggah File Pendukung</span>
-                                        <input id="file_name" name="file_name[]" type="file" class="sr-only" onchange="displaySelectedFiles()" multiple>
+                                        <input id="file_name" name="file_name[]" type="file" class="hidden" onchange="handleFileUpload(event)" multiple>
                                     </label>
                                 </div>
                                 <p class="text-xs leading-5 text-gray-600 mt-2">:pdf,doc,docx,xls,xlsx,ppt,pptx hingga 10MB</p>
@@ -207,32 +208,29 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
-
                 </div>
             </div>
         </div>
 
         <div class="mt-6 flex items-center justify-end gap-x-6">
-        <a href="/main-menu/proyek"><button type="button" class="rounded-md bg-gray-400 px-3 py-2 shadow-sm hover:bg-gray-700 hover:text-bold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 text-sm font-semibold leading-6 text-defblack">Batal</button></a> 
+            <a href="/main-menu/proyek"><button type="button" class="rounded-md bg-gray-400 px-3 py-2 shadow-sm hover:bg-gray-700 hover:text-bold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 text-sm font-semibold leading-6 text-defblack">Batal</button></a>
             <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Simpan</button>
         </div>
     </form>
 
 </section>
-
 <script>
-    function displaySelectedFiles() {
-        var fileInput = document.getElementById('file_name');
-        var fileList = Array.from(fileInput.files);
-        var existingFiles = Array.from(document.querySelectorAll('#file-list .file-item')).map(el => el.getAttribute('data-file-name'));
+    function handleFileUpload(event) {
+    const fileList = event.target.files;
+    const fileContainer = document.getElementById('file-list');
 
-        var newFileListHTML = ''; // Inisialisasi variabel daftar nama file + HTML
-        fileList.forEach((file, index) => {
-            if (!existingFiles.includes(file.name)) {
-                newFileListHTML += `
-                    <div class="flex items-center gap-2 mt-2 file-item" data-file-name="${file.name}">
-                        <svg height="50px" width="50px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512.035 512.035" xml:space="preserve">
+    Array.from(fileList).forEach(file => {
+        const fileItem = document.createElement('div');
+        fileItem.classList.add('flex', 'items-center', 'gap-2', 'mt-2', 'file-item');
+        fileItem.setAttribute('data-file-name', file.name);
+
+        fileItem.innerHTML = `
+             <svg height="50px" width="50px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512.035 512.035" xml:space="preserve">
                                         <g transform="translate(1 1)">
                                             <polygon style="fill:#E2E3E5;" points="464.084,127.035 344.617,7.568 250.751,7.568 250.751,502.501 464.084,502.501 	" />
                                             <polygon style="fill:#CCCCCC;" points="438.484,127.035 319.017,7.568 225.151,7.568 225.151,502.501 438.484,502.501 	" />
@@ -259,79 +257,38 @@
                                             </g>
                                         </g>
                                     </svg>
-                        <span class="w-40">${file.name}</span>
-                        <button type="button" class="text-red-500 font-bold ml-2" onclick="removeFile('${file.name}')">
-                           <svg height="16px" width="16px" fill="#e60a0a" viewBox="0 0 512 512">
-                                            <g id="SVGRepo_iconCarrier">
-                                                <polygon id="Close" points="328.96 30.2933333 298.666667 1.42108547e-14 164.48 134.4 30.2933333 1.42108547e-14 1.42108547e-14 30.2933333 134.4 164.48 1.42108547e-14 298.666667 30.2933333 328.96 164.48 194.56 298.666667 328.96 328.96 298.666667 194.56 164.48"></polygon>
-                                            </g>
-                                        </svg>
-                        </button>
-                    </div>`;
-            }
-        });
+            <span class="w-40">${file.name}</span>
+            <button type="button" class="text-red-500 font-bold ml-2" onclick="removeFile('${file.name}')">
+                <svg height="16px" width="16px" fill="#e60a0a" viewBox="0 0 512 512">
+                    <g id="SVGRepo_iconCarrier">
+                        <polygon id="Close" points="328.96 30.2933333 298.666667 1.42108547e-14 164.48 134.4 30.2933333 1.42108547e-14 1.42108547e-14 30.2933333 134.4 164.48 1.42108547e-14 298.666667 30.2933333 328.96 164.48 194.56 298.666667 328.96 328.96 298.666667 194.56 164.48"></polygon>
+                    </g>
+                </svg>
+            </button>
+        `;
 
-        document.getElementById('file-list').innerHTML += newFileListHTML;
-
-        updateFileInput(fileInput, fileList.concat(existingFiles.map(fileName => new File([""], fileName))));
-    }
-
+        fileContainer.appendChild(fileItem);
+    });
+}
 
     function removeFile(fileName) {
-        var fileInput = document.getElementById('file_name');
-        var fileList = Array.from(fileInput.files).filter(file => file.name !== fileName);
+        // Tambahkan konfirmasi sebelum penghapusan 
+        if (confirm('Anda yakin ingin menghapus file ini?')) {
+            // Hapus file dari UI
+            $('.file-item[data-file-name="' + fileName + '"]').remove();
 
-        updateFileInput(fileInput, fileList);
-
-        var fileElement = document.querySelector(`#file-list .file-item[data-file-name="${fileName}"]`);
-        if (fileElement) {
-            fileElement.remove();
+            // Tandai file yang akan dihapus pada form
+            var removedFilesInput = $('<input>')
+                .attr('type', 'hidden')
+                .attr('name', 'removed_files[]')
+                .val(fileName);
+            $('form').append(removedFilesInput);
         }
     }
-
-    function removeExistingFile(fileName) {
-        // Fungsi ini tidak perlu diubah, sesuai dengan implementasi sebelumnya
-        var fileInput = document.getElementById('file_name');
-        var fileList = Array.from(fileInput.files).filter(file => file.name !== fileName);
-
-        updateFileInput(fileInput, fileList);
-
-        var fileElement = document.querySelector(`#file-list .file-item[data-file-name="${fileName}"]`);
-        if (fileElement) {
-            fileElement.remove();
-        }
-
-        var removedFilesInput = document.createElement('input');
-        removedFilesInput.type = 'hidden';
-        removedFilesInput.name = 'removed_files[]';
-        removedFilesInput.value = fileName;
-        document.getElementById('file-list').appendChild(removedFilesInput);
-    }
-
-    function updateFileInput(fileInput, fileList) {
-        var dataTransfer = new DataTransfer();
-        fileList.forEach(file => dataTransfer.items.add(file));
-        fileInput.files = dataTransfer.files;
-    }
-
-    // Untuk menampilkan file lama saat halaman dimuat
-    document.addEventListener('DOMContentLoaded', function() {
-        var existingFiles = Array.from(document.querySelectorAll('#file-list .file-item')).map(el => el.getAttribute('data-file-name'));
-        var fileInput = document.getElementById('file_name');
-        updateFileInput(fileInput, existingFiles.map(fileName => new File([""], fileName)));
-    });
 </script>
-<script>
-    //Func menampilkan kolom kolabolator
-    function toggleKolaborator(selectElement) {
-        var kolaboratorInput = document.getElementById('kolaboratorInput');
-        if (selectElement.value === 'terbatas') {
-            kolaboratorInput.classList.remove('hidden');
-        } else {
-            kolaboratorInput.classList.add('hidden');
-        }
-    }
 
+
+<script>
     $(document).ready(function() {
         $('#kolaborator').select2({
             placeholder: 'Pilih kolaborator',
@@ -351,28 +308,31 @@
                     var username = $('#kolaborator option[value="' + id + '"]').text();
                     var previousRole = $('#kolaborator_' + id + ' select[name="kolaborator[' + id + '][role_id]"]').val() || '';
 
-                    selectedKolaboratorHTML += '<div id="kolaborator_' + id + '" class="flex items-center gap-3 mt-2">';
-                    selectedKolaboratorHTML += '<input type="hidden" name="kolaborator[' + id + '][id]" value="' + id + '">';
-                    selectedKolaboratorHTML += '<label class="w-40 truncate block">' + username + '</label>';
-                    selectedKolaboratorHTML += '<select name="kolaborator[' + id + '][role_id]" class="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">';
+                    // Cek apakah kolaborator dengan ID ini sudah ditampilkan
+                    if ($('#kolaborator_' + id).length === 0) {
+                        selectedKolaboratorHTML += '<div id="kolaborator_' + id + '" class="flex items-center gap-3 mt-2">';
+                        selectedKolaboratorHTML += '<input type="hidden" name="kolaborator[' + id + '][id]" value="' + id + '">';
+                        selectedKolaboratorHTML += '<label class="w-40 truncate block">' + username + '</label>';
+                        selectedKolaboratorHTML += '<select name="kolaborator[' + id + '][role_id]" class="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">';
 
-                    @foreach($roles as $role)
-                    selectedKolaboratorHTML += '<option value="{{ $role->id }}" ' + (previousRole == '{{ $role->id }}' ? 'selected' : '') + '>{{ $role->name }}</option>';
-                    @endforeach
+                        @foreach($roles as $role)
+                        selectedKolaboratorHTML += '<option value="{{ $role->id }}" ' + (previousRole == '{{ $role->id }}' ? 'selected' : '') + '>{{ $role->name }}</option>';
+                        @endforeach
 
-                    selectedKolaboratorHTML += '</select>';
-                    selectedKolaboratorHTML += '</div>';
+                        selectedKolaboratorHTML += '</select>';
+                        selectedKolaboratorHTML += '</div>';
+                    }
                 });
             }
 
-            $('#selectedKolaborators').html(selectedKolaboratorHTML);
+            $('#selectedKolaborators').append(selectedKolaboratorHTML); 
         }
 
-        //hapus salah satu kolaborator
         function removeKolaborator(id) {
             $('#kolaborator option[value="' + id + '"]').prop('selected', false);
             $('#kolaborator').trigger('change');
         }
+
     });
 </script>
 

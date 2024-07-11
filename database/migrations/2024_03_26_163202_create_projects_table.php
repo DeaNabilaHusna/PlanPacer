@@ -44,7 +44,6 @@ return new class extends Migration
             $table->enum('project_status', ['sedang berjalan', 'selesai'])->default('sedang berjalan');
             $table->date('project_start_date')->default(now());;
             $table->date('project_end_date');
-            $table->json('kolaborator')->nullable();
             $table->timestamps();
         });
     }
