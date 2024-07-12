@@ -4,7 +4,7 @@
 <!-- Content -->
 <!-- Page Heading -->
 <header class="my-10">
-  <div class="rounded-2xl bg-[#DCD6F7] p-4 relative sm:bg-transparent md:bg-transparent md:bg-[#DCD6F7]">
+  <div class="rounded-2xl bg-[#DCD6F7] p-4 relative sm:bg-transparent md:bg-transparent md:bg-[#d1d0f5]">
     <div class="m-8">
       <p class="text-3xl font-extrabold text-defblack">Halo, {{ auth()->user()->username }}</p>
       <h1 class="block text-base font-semibold text-defblack sm:text-md">Selamat Datang Kembali</h1>

@@ -111,20 +111,25 @@
                             @enderror
                         </div>
                         <div id="selectedKolaborators">
-                            @if ($proyek->visibility === 'terbatas')
-                            @foreach($proyek->users as $kolaborator)
-                            <div id="kolaborator_{{ $kolaborator->id }}" class="flex items-center gap-3 mt-2">
-                                <input type="hidden" name="kolaborator[{{ $kolaborator->id }}][id]" value="{{ $kolaborator->id }}">
-                                <label class="w-40 truncate block">{{ $kolaborator->username }}</label>
-                                <select name="kolaborator[{{ $kolaborator->id }}][role_id]" class="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                                    @foreach($roles as $role)
-                                    <option value="{{ $role->id }}" {{ $kolaborator->pivot->role_id == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @endforeach
-                            @endif
-                        </div>
+    @if ($proyek->visibility === 'terbatas')
+    @foreach($proyek->users as $kolaborator)
+    <div id="kolaborator_{{ $kolaborator->id }}" class="flex items-center gap-3 mt-2">
+        <input type="hidden" name="kolaborator[{{ $kolaborator->id }}][id]" value="{{ $kolaborator->id }}">
+        <label class="w-40 truncate block">{{ $kolaborator->username }}</label>
+        <select name="kolaborator[{{ $kolaborator->id }}][role_id]" class="block w-40 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+            @foreach($roles as $role)
+            <option value="{{ $role->id }}" {{ $kolaborator->pivot->role_id == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+            @endforeach
+        </select>
+        <button type="button" class="ml-2 text-red-600 remove-kolaborator" data-id="{{ $kolaborator->id }}">Hapus</button>
+    </div>
+    @endforeach
+    @endif
+</div>
+
+<!-- Hidden input to store removed collaborators' IDs -->
+<input type="hidden" name="removed_kolaborators" id="removed_kolaborators">
+
                     </div>
 
                     <div class="sm:col-span-3">
@@ -328,13 +333,32 @@
             $('#selectedKolaborators').append(selectedKolaboratorHTML); 
         }
 
-        function removeKolaborator(id) {
-            $('#kolaborator option[value="' + id + '"]').prop('selected', false);
-            $('#kolaborator').trigger('change');
-        }
-
     });
+    document.addEventListener('DOMContentLoaded', function () {
+        const removedKolaboratorsInput = document.getElementById('removed_kolaborators');
+
+        document.querySelectorAll('.remove-kolaborator').forEach(button => {
+            button.addEventListener('click', function () {
+                const kolaboratorId = this.getAttribute('data-id');
+                const kolaboratorElement = document.getElementById(`kolaborator_${kolaboratorId}`);
+
+                // Remove kolaborator element from view
+                kolaboratorElement.remove();
+
+                // Add kolaborator ID to removed_kolaborators input
+                let removedKolaborators = removedKolaboratorsInput.value ? JSON.parse(removedKolaboratorsInput.value) : [];
+                removedKolaborators.push(kolaboratorId);
+                removedKolaboratorsInput.value = JSON.stringify(removedKolaborators);
+            });
+        });
+    });
+    // PENANDA
+    // 
+    // 
+    // 
+    // 
 </script>
+
 
 
 

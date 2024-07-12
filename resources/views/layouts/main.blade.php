@@ -36,21 +36,21 @@
           <!-- End Navigation Toggle -->
         </div>
         <div class="flex flex-row items-center justify-end gap-2">
-        <form action="/main-menu/proyek">
-  <label for="icon" class="sr-only">Cari disini</label>
-  <div class="relative">
-    <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-4">
-      <svg class="flex-shrink-0 size-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8" />
-        <path d="m21 21-4.3-4.3" />
-      </svg>
-    </div>
-    <input type="text" id="icon" name="search" value="{{ request('search') }}" class="form-control bg-defwhite py-2 pr-20 ps-11 block w-full border-gray-200 rounded-3xl text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none placeholder-defcolor" placeholder="Cari disini">
-    <button type="submit" class="absolute inset-y-0 end-0 flex items-center bg-[#100844] text-white font-semibold py-2 px-4 rounded-r-3xl hover:bg-[#0d0738] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#100844]">
-      Cari
-    </button>
-  </div>
-</form>
+          <form action="/main-menu/proyek">
+            <label for="icon" class="sr-only">Cari disini</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-4">
+                <svg class="flex-shrink-0 size-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
+              </div>
+              <input type="text" id="icon" name="search" value="{{ request('search') }}" class="form-control bg-defwhite py-2 pr-20 ps-11 block w-full border-gray-200 rounded-3xl text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none placeholder-defcolor" placeholder="Cari disini">
+              <button type="submit" class="absolute inset-y-0 end-0 flex items-center bg-[#100844] text-white font-semibold py-2 px-4 rounded-r-3xl hover:bg-[#0d0738] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#100844]">
+                Cari
+              </button>
+            </div>
+          </form>
 
           <button type="button" class="w-[2.375rem] h-[2.375rem] inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-defwhite hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none ">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
