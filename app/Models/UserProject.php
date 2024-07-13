@@ -12,11 +12,6 @@ class UserProject extends Model
     protected $table = "user_projects";
     protected $guarded = ["id"];
 
-    // public function roles()
-    // {
-    //     return $this->belongsTo(Role::class, 'role_id');
-    // }
-
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');
@@ -26,3 +21,4 @@ class UserProject extends Model
         return $this->belongsTo(User::class, 'user_id', 'assignee_user_id', 'id');
     }
 }
+

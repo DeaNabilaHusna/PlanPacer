@@ -15,58 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-        // User::updateOrCreate([
-        //     'username' => 'fitri',
-        //     'email' => 'fitri@gmail.com',
-        //     'password' => bcrypt('Fitri1234!'),
-        // ]);
-        // User::updateOrCreate([
-        //     'username' => 'muli',
-        //     'email' => 'muli@gmail.com',
-        //     'password' => bcrypt('Muli1234!'),
-        // ]);
-
-        // User::updateOrCreate([
-        //     'username' => 'lilo',
-        //     'email' => 'lilo@gmail.com',
-        //     'password' => bcrypt('Lilo1234!'),
-        // ]);
-
-        // User::updateOrCreate([
-        //     'username' => 'dea',
-        //     'email' => 'dea@gmail.com',
-        //     'password' => bcrypt('Dea1234!'),
-        // ]);
-
-        // User::updateOrCreate([
-        //     'username' => 'zayn',
-        //     'email' => 'zayn@gmail.com',
-        //     'password' => bcrypt('Zayn1234!'),
-        // ]);
-
-        // User::updateOrCreate([
-        //     'username' => 'doni',
-        //     'email' => 'doni@gmail.com',
-        //     'password' => bcrypt('Doni1234!'),
-        // ]);
-
-        // User::updateOrCreate([
-        //     'username' => 'risa',
-        //     'email' => 'risa@gmail.com',
-        //     'password' => bcrypt('Risa1234!'),
-        // ]);
-
-        // User::updateOrCreate([
-        //     'username' => 'lala',
-        //     'email' => 'lala@gmail.com',
-        //     'password' => bcrypt('Lala1234!'),
-        // ]);
+        $role_default = Role::updateOrCreate([
+            'name' => 'user',
+        ]);
 
         $role_super = Role::updateOrCreate([
             'name' => 'super admin',
@@ -135,7 +86,22 @@ class DatabaseSeeder extends Seeder
 
         // Berikan semua izin kepada super admin
         $role_super->syncPermissions($allPermissions);
-        
+
+        $role_default->syncPermissions([
+            'buat proyek',
+            'lihat proyek',
+            'edit proyek',
+            'hapus proyek',
+            'buat modul',
+            'lihat modul',
+            'edit modul',
+            'hapus modul',
+            'buat tugas',
+            'lihat tugas',
+            'edit tugas',
+            'hapus tugas'
+        ]);
+
         // $PermissionSatu = Permission::updateOrCreate([
         //     'name' => 'edit proyek',
         //     'guard_name' => 'web'

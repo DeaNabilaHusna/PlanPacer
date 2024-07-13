@@ -27,6 +27,10 @@ class UserController extends Controller
         return view('dashboard.user.index', [
             'users' => $users
         ]);
+        // $users = User::all();
+        // return view('dashboard.user.index', [
+        //     'users' => $users
+        // ]);
     }
 
     /**
@@ -34,10 +38,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::all()->pluck('name', 'id');
-        return view('dashboard.user.create', [
-            'roles' => $roles
-        ]);
+        // $roles = Role::all()->pluck('name', 'id');
+        // return view('dashboard.user.create', [
+        //     'roles' => $roles
+        // ]);
+        return view('dashboard.user.create');
     }
 
     /**
@@ -50,17 +55,18 @@ class UserController extends Controller
                 'username' => 'required|min:3|max:255',
                 'email' => 'required|email:dns|unique:users,email',
                 'password' => 'required|min:8|max:15|regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/',
-                'roles' => 'required|exists:roles,id',
+                // 'roles' => 'required|exists:roles,id',
             ]);
 
             $validatedData['password'] = bcrypt($validatedData['password']);
             $user = User::create($validatedData);
 
             // Ambil nama role berdasarkan ID
-            $roleName = Role::find($request->roles)->name;
+            // $roleName = Role::find($request->roles)->name;
 
             // Sinkronisasi role pada user
-            $user->syncRoles($roleName);
+            // $user->syncRoles($roleName);
+            $user->assignRole('user');
             return redirect('/main-menu/user')->with('success', 'User Berhasil Ditambahkan!');
         } catch (\Exception $e) {
             Session::flash('error', $e->getMessage());

@@ -61,32 +61,28 @@ class User extends Authenticatable
 
     public function projects()
     {
-        // return $this->belongsToMany(Proyek::class, 'user_proyeks')->withTimestamps();
-        return $this->belongsToMany(Project::class, 'user_projects')->withPivot('assigned_by_user_id')
-            ->withTimestamps();
-        // return $this->belongsToMany(Proyek::class, UserProyek::class);
+        // return $this->belongsToMany(Project::class, 'user_projects')->withPivot('role_id', 'assigned_by_user_id')
+        //     ->withTimestamps();
+        return $this->belongsToMany(Project::class, 'user_projects', 'assignee_user_id', 'project_id')
+                    ->withPivot('role_id', 'assigned_by_user_id')
+                    ->withTimestamps();
     }
 
-    // public function hasGlobalRole($role)
-    // {
-    //     return $this->hasRole($role);
-    // }
 
-    // Method untuk memeriksa apakah pengguna memiliki role dalam suatu proyek
-    // public function hasRoleInProject($role, $projectId)
+    // public function tasks()
     // {
-    //     return $this->proyeks()
-    //         ->where('id', $projectId)
-    //         ->wherePivot('role_id', $role)
-    //         ->exists();
+    //     // return $this->belongsToMany(TugasItem::class, UserTugasitem::class, 'penanggungjawab_id');
+    //     return $this->belongsToMany(Task::class, 'user_tasks', 'project_manager_id')
+    //     ->withPivot('project_manager_id');
     // }
-
     public function tasks()
-    {
-        // return $this->belongsToMany(TugasItem::class, UserTugasitem::class, 'penanggungjawab_id');
-        return $this->belongsToMany(Task::class, 'user_tasks', 'project_manager_id')
-        ->withPivot('project_manager_id');
-    }
+{
+    // return $this->belongsToMany(Task::class, 'user_tasks', 'project_manager_id', 'task_id')
+    //             ->withPivot('project_id', 'modul_id', 'project_manager_email')
+    //             ->withTimestamps();
+    return $this->belongsToMany(Task::class, 'user_tasks', 'project_manager_id', 'task_id') ->withPivot('project_id', 'modul_id', 'project_manager_email')
+                ->withTimestamps();
+}
 
     public function userProjects()
     {

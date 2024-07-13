@@ -34,33 +34,35 @@
             </thead>
             <tbody>
                 <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
+                    @foreach($tugasItems as $item)
                     <td class="px-6 py-4 font-medium whitespace-nowrap">
                         {{ $loop->iteration }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $tugasItem->nama_tugas_item }}
+                        {{ $item->task_name }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ $tugasItem->nama_proyek }}
+                        {{ $item->project_name }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ \Carbon\Carbon::parse($tugasItem->tgl_mulai_tugas)->translatedFormat('l, d F Y') }}
+                        {{ \Carbon\Carbon::parse($item->task_start_date)->translatedFormat('l, d F Y') }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ \Carbon\Carbon::parse($tugasItem->tgl_selesai_tugas)->translatedFormat('l, d F Y') }}
+                        {{ \Carbon\Carbon::parse($item->task_end_date)->translatedFormat('l, d F Y') }}
                     </td>
                     <td class="px-6 py-4">
-                        @if($tugasItem->status_tugas_item == 'selesai')
-                        <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Selesai</span>
-                        @else
-                        <span class="bg-yellow-100 text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Dalam Proses</span>
-                        @endif
+                    @if ($item->task_status == 'selesai')
+              <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $item->task_status }}</span>
+              @elseif ($item->task_status == 'dalam proses')
+              <span class="bg-orange-300 text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $item->task_status }}</span>
+              @endif
                     </td>
                     <td class="px-6 py-4">
                         <a href="/detailtugas" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
                             Detail
                         </a>
                     </td>
+                    @endforeach
                     <!-- <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
                         <td class="px-6 py-4 font-medium whitespace-nowrap">
                             5

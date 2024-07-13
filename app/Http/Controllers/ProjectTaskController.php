@@ -18,10 +18,14 @@ class ProjectTaskController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:buat tugas', ['only' => ['create', 'store']]);
-        $this->middleware('permission:lihat tugas', ['only' => ['show']]);
-        $this->middleware('permission:edit tugas', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:hapus tugas', ['only' => ['destroy']]);
+        // $this->middleware('permission:buat tugas', ['only' => ['create', 'store']]);
+        // $this->middleware('permission:lihat tugas', ['only' => ['show']]);
+        // $this->middleware('permission:edit tugas', ['only' => ['edit', 'update']]);
+        // $this->middleware('permission:hapus tugas', ['only' => ['destroy']]);
+        $this->middleware('checkRoleCollaborators:buat tugas', ['only' => ['create', 'store']]);
+        $this->middleware('checkRoleCollaborators:lihat tugas', ['only' => ['show']]);
+        $this->middleware('checkRoleCollaborators:edit tugas', ['only' => ['edit', 'update']]);
+        $this->middleware('checkRoleCollaborators:hapus tugas', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -87,7 +91,78 @@ class ProjectTaskController extends Controller
      * Store a newly created resource in storage.
      */
 
-    public function store(Request $request, $proyekslug, $modulslug)
+//     public function store(Request $request, $proyekslug, $modulslug)
+// {
+//     try {
+//         // Validasi data dari request
+//         $validatedData = $request->validate([
+//             'task_name' => [
+//                 'required',
+//                 'max:255',
+//                 Rule::unique('tasks')->where(function ($query) use ($proyekslug, $modulslug) {
+//                     $proyek = Project::where('slug', $proyekslug)->first();
+//                     $kartuTugas = Modul::where('slug', $modulslug)->first();
+//                     return $query->where('project_id', $proyek->id)
+//                         ->where('modul_id', $kartuTugas->id);
+//                 }),
+//             ],
+//             'task_description' => 'nullable',
+//             'task_status' => 'required',
+//             'task_start_date' => 'required|date',
+//             'task_end_date' => 'required|date',
+//             'project_manager_id' => 'nullable|array',
+//             'project_manager_id.*' => 'exists:users,id',
+//         ]);
+
+//         // Cari proyek berdasarkan slug
+//         $proyek = Project::where('slug', $proyekslug)->firstOrFail();
+
+//         // Cari kartu tugas berdasarkan slug
+//         $kartuTugas = Modul::where('slug', $modulslug)->firstOrFail();
+
+//         // Inisialisasi nilai default jika 'project_manager_id' kosong dan proyek adalah private
+//         if ($proyek->visibilitas === 'private' && empty($validatedData['project_manager_id'])) {
+//             $validatedData['project_manager_id'] = [auth()->user()->id];
+//         }
+
+//         $slug = Str::slug($validatedData['task_name']) . '-' . Str::random(5);
+
+//         $tugasItem = new Task();
+//         $tugasItem->project_id = $proyek->id;
+//         $tugasItem->modul_id = $kartuTugas->id;
+//         $tugasItem->task_name = $validatedData['task_name'];
+//         $tugasItem->task_description = $validatedData['task_description'];
+//         $tugasItem->task_status = $validatedData['task_status'];
+//         $tugasItem->task_start_date = $validatedData['task_start_date'];
+//         $tugasItem->task_end_date = $validatedData['task_end_date'];
+//         $tugasItem->slug = $slug;
+//         $tugasItem->save();
+//         // dd($tugasItem);
+
+//         // Simpan penanggung jawab 
+//         if (!empty($validatedData['project_manager_id'])) {
+//             foreach ($validatedData['project_manager_id'] as $userId) {
+//                 $user = User::findOrFail($userId);
+//                 UserTask::create([
+//                     'project_manager_id' => $userId,
+//                     'project_id' => $proyek->id,
+//                     'modul_id' => $kartuTugas->id,
+//                     'task_id' => $tugasItem->id,
+//                     'project_manager_email' => $user->email,
+//                 ]);
+//             }
+//         }
+
+//         return redirect("/main-menu/proyek/{$proyek->slug}/modul")
+//             ->with('success', 'Tugas berhasil ditambahkan ke Modul.');
+
+//     } catch (\Exception $e) {
+//         // Tangani pengecualian jika terjadi kesalahan
+//         Session::flash('error', $e->getMessage());
+//         return back()->withInput();
+//     }
+// }
+public function store(Request $request, $proyekslug, $modulslug)
 {
     try {
         // Validasi data dari request
@@ -117,7 +192,7 @@ class ProjectTaskController extends Controller
         $kartuTugas = Modul::where('slug', $modulslug)->firstOrFail();
 
         // Inisialisasi nilai default jika 'project_manager_id' kosong dan proyek adalah private
-        if ($proyek->visibilitas === 'private' && empty($validatedData['project_manager_id'])) {
+        if ($proyek->visibility === 'private' && empty($validatedData['project_manager_id'])) {
             $validatedData['project_manager_id'] = [auth()->user()->id];
         }
 
@@ -133,7 +208,6 @@ class ProjectTaskController extends Controller
         $tugasItem->task_end_date = $validatedData['task_end_date'];
         $tugasItem->slug = $slug;
         $tugasItem->save();
-        // dd($tugasItem);
 
         // Simpan penanggung jawab 
         if (!empty($validatedData['project_manager_id'])) {
@@ -143,6 +217,7 @@ class ProjectTaskController extends Controller
                     'project_manager_id' => $userId,
                     'project_id' => $proyek->id,
                     'modul_id' => $kartuTugas->id,
+                    'task_id' => $tugasItem->id,
                     'project_manager_email' => $user->email,
                 ]);
             }
@@ -157,6 +232,8 @@ class ProjectTaskController extends Controller
         return back()->withInput();
     }
 }
+
+
 
 
     /**

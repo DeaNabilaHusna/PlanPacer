@@ -58,7 +58,12 @@ class Task extends Model
 
     public function user()
     {
-        return $this->belongsToMany(User::class, UserTask::class);
+        // return $this->belongsToMany(User::class, UserTask::class, 'project_manager_id', 'task_id');
+        // return $this->belongsToMany(User::class, 'user_tasks', 'task_id', 'project_manager_id')
+        //         ->withPivot('project_id', 'modul_id', 'project_manager_email')
+        //         ->withTimestamps();
+        return $this->belongsToMany(User::class, 'user_tasks', 'task_id', 'project_manager_id')->withPivot('project_id', 'modul_id', 'project_manager_email')
+                ->withTimestamps();
     }
     public function manager()
     {
