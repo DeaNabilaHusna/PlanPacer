@@ -9,7 +9,7 @@
       <p class="text-3xl font-extrabold text-defblack">Halo, {{ auth()->user()->username }}</p>
       <h1 class="block text-base font-semibold text-defblack sm:text-md">Selamat Datang Kembali</h1>
     </div>
-    <img src="/../images/header-pic.png" alt="" class="absolute -top-16 right-10 w-[260px] h-auto z-10 mt-[-1.5rem] hidden md:block">
+    <img src="/../images/header-pic.png" alt="" class="absolute -top-16 right-24 w-[260px] h-auto z-10 mt-[-1.5rem] hidden md:block">
   </div>
 </header>
 

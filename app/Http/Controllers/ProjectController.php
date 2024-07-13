@@ -211,9 +211,6 @@ class ProjectController extends Controller
             ]);
             $project = Project::where('slug', $slug)->firstOrFail();
 
-            // $validatedData['user_id'] = auth()->id();
-            // $validatedData['project_manager'] = auth()->user()->username;
-
             $project->fill($validatedData)->save();
 
             // Update atau tambahkan kolaborator
@@ -230,10 +227,6 @@ class ProjectController extends Controller
                 $project->users()->sync($kolaborators);
             }
 
-            // Menghapus kolaborator yang dihapus
-            // if ($request->has('removed_kolaborators')) {
-            //     $project->users()->detach($request->removed_kolaborators);
-            // }
             if ($request->has('removed_kolaborators')) {
                 $removedKolaborators = json_decode($request->removed_kolaborators, true);
                 $project->users()->detach($removedKolaborators);
