@@ -219,6 +219,8 @@ class ProjectModulController extends Controller
                     'handled_by_email' => User::find($userId)->email,
                 ]);
             }
+
+            $proyek->updateStatus();
             return redirect('/main-menu/proyek/' . $slug . '/modul')->with('success', 'Berhasil Membuat Modul Baru');
         } catch (\Exception $e) {
             Session::flash('error', $e->getMessage());
@@ -328,7 +330,7 @@ class ProjectModulController extends Controller
                     'handled_by_id' => $userId, // Ensure this is set correctly
                 ];
             }, $userIds));
-    
+            $proyek->updateStatus();
             return redirect('/main-menu/proyek/' . $slug . '/modul')->with('success', 'Berhasil Memperbarui Modul');
         } catch (\Exception $e) {
             Session::flash('error', $e->getMessage());

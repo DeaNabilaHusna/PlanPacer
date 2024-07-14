@@ -27,6 +27,25 @@ class Modul extends Model
         if ($model->isDirty('modul_name') || $model->isDirty('project_id')) {
             $model->generateSlug();
         }
+
+        static::saving(function ($modul) {
+            // Memeriksa apakah modul_status diubah menjadi 'selesai'
+            if ($modul->isDirty('modul_status') && $modul->modul_status === 'selesai') {
+                // Jika selesai, periksa status proyek
+                $project = Project::find($modul->project_id);
+                $project->updateStatus();
+            }
+
+            // Memeriksa apakah modul perlu diubah menjadi 'terlambat'
+            if ($modul->modul_status !== 'selesai' && $modul->modul_end_date < now()) {
+                $modul->modul_status = 'terlambat';
+            }
+        });
+
+        static::saved(function ($modul) {
+            $project = Project::find($modul->project_id);
+            $project->updateStatus();
+        });
     });
 }
 

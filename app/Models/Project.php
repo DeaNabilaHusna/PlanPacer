@@ -29,13 +29,47 @@ class Project extends Model
         static::updating(function ($model) {
             $model->slug = Str::slug($model->project_name);
         });
+        
     }
+
+    public function updateStatus()
+    {
+        $this->load('moduls');
+
+        $isCompleted = $this->moduls->every(function ($modul) {
+            return $modul->modul_status === 'selesai';
+        });
+
+        if ($isCompleted) {
+            $this->project_status = 'selesai';
+        } else {
+            $hasOngoingModul = $this->moduls->contains(function ($modul) {
+                return $modul->modul_status === 'dalam proses' && $modul->modul_end_date < now();
+            });
+
+            if ($hasOngoingModul || $this->project_end_date < now()) {
+                $this->project_status = 'terlambat';
+            }
+        }
+
+        $this->save();
+    }
+
+    public function calculateProgress()
+    {
+        $totalModuls = $this->moduls->count();
+        $completedModuls = $this->moduls->where('modul_status', 'selesai')->count();
+
+        return $totalModuls > 0 ? ($completedModuls / $totalModuls) * 100 : 0;
+    }
+    
     public function users()
     {
         return $this->belongsToMany(User::class, 'user_projects', 'project_id', 'assignee_user_id')
             ->withPivot('role_id', 'assigned_by_user_id')
             ->withTimestamps();
     }
+
 
     public function moduls()
     {

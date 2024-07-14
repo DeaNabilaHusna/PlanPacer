@@ -119,16 +119,13 @@ Route::group(['middleware' => ['role:user|super admin|admin|project manager|anal
     // User
     Route::resource('/main-menu/user', UserController::class);
 
-    // Kolaborator (assuming it's for managing collaborators)
+    // Kolaborator
     // Route::get('/main-menu/kolaborator', [UserProyekController::class, 'index'])->middleware('permission:lihat kolaborator');
     // Route::put('/main-menu/kolaborator/{kolaborator}', [UserProyekController::class, 'update'])->middleware('permission:edit kolaborator');
     // Route::delete('/main-menu/kolaborator/{kolaborator}', [UserProyekController::class, 'destroy'])->middleware('permission:hapus kolaborator');
 
     // Lainnya
     Route::post('/logout', [LoginController::class, 'logout']);
-    // Route::get('/detailtugas', function () {
-    //     return view('detailtugas');
-    // });
 });
 
 // Route::middleware(['auth'])->group(function () {

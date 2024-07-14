@@ -4,7 +4,7 @@
 <!-- Content -->
 <!-- Page Heading -->
 <header class="my-10">
-  <div class="rounded-2xl bg-[#DCD6F7] p-4 relative sm:bg-transparent md:bg-transparent md:bg-[#d1d0f5]">
+  <div class="rounded-2xl bg-[#c9c8f3] p-4 relative sm:bg-transparent md:bg-transparent md:bg-[#c9c8f3]">
     <div class="m-8">
       <p class="text-3xl font-extrabold text-defblack">Halo, {{ auth()->user()->username }}</p>
       <h1 class="block text-base font-semibold text-defblack sm:text-md">Selamat Datang Kembali</h1>
@@ -18,7 +18,7 @@
 <section>
   <h1 class="block text-xl font-semibold text-defblack sm:text-lg mb-4">Overview</h1>
   <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-12">
-    <div class="flex justify-start items-center w-50 h-20 bg-[#424874] rounded-lg">
+    <div class="flex justify-start items-center w-auto h-20 bg-[#424874] rounded-lg">
       <svg class="mx-6" fill="#ffffff" width="30px" height="30px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
         <g>
           <path d="M2,9H9V2H2Zm9-7V9h7V2ZM2,18H9V11H2Zm9,0h7V11H11Z" />
@@ -29,7 +29,7 @@
         <span class="text-sm">Proyek</span>
       </div>
     </div>
-    <div class="flex justify-start items-center w-50 h-20 bg-[#535C91] rounded-lg">
+    <div class="flex justify-start items-center w-auto h-20 bg-[#535C91] rounded-lg">
       <svg class="mx-6" width="30px" height="30px" viewBox="0 0 512 512" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <style type="text/css">
           .st0 {
@@ -55,6 +55,40 @@
       <div class="mx-6 text-defwhite">
         <h1 class="text-3xl font-semibold">{{ $projectComplete }}</h1>
         <span class="text-sm">Proyek Selesai</span>
+      </div>
+    </div>
+    <div class="flex justify-start items-center w-auto h-20 bg-[#7f8ac5] rounded-lg">
+    <svg width="30px" height="30px" class="mx-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5 2h16v20H3V2h2zm14 18V4H5v16h14zM7 6h10v2H7V6zm10 4H7v2h10v-2zM7 14h7v2H7v-2z" fill="#ffffff"/>
+</svg>
+      <div class="mx-6 text-defwhite">
+        <h1 class="text-3xl font-semibold">{{ $moduls }}</h1>
+        <span class="text-sm">Modul</span>
+      </div>
+    </div>
+    <div class="flex justify-start items-center w-50 h-20 bg-[#9290C3] rounded-lg">
+      <svg fill="#ffffff" class="mx-6" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30px" height="30px" viewBox="0 0 47 47" xml:space="preserve">
+        <g>
+          <g id="Layer_1_22_">
+            <g>
+              <path d="M6.12,38.52V5.136h26.962v28.037l5.137-4.243V2.568C38.219,1.15,37.07,0,35.652,0h-32.1C2.134,0,0.985,1.15,0.985,2.568
+				v38.519c0,1.418,1.149,2.568,2.567,2.568h22.408L22.33,38.52H6.12z" />
+              <path d="M45.613,27.609c-0.473-0.446-1.2-0.467-1.698-0.057l-11.778,9.734l-7.849-4.709c-0.521-0.312-1.188-0.219-1.603,0.229
+				c-0.412,0.444-0.457,1.117-0.106,1.613l8.506,12.037c0.238,0.337,0.625,0.539,1.037,0.543c0.004,0,0.008,0,0.012,0
+				c0.408,0,0.793-0.193,1.035-0.525l12.6-17.173C46.149,28.78,46.084,28.055,45.613,27.609z" />
+              <path d="M27.306,8.988H11.897c-1.418,0-2.567,1.15-2.567,2.568s1.149,2.568,2.567,2.568h15.408c1.418,0,2.566-1.15,2.566-2.568
+				S28.724,8.988,27.306,8.988z" />
+              <path d="M27.306,16.691H11.897c-1.418,0-2.567,1.15-2.567,2.568s1.149,2.568,2.567,2.568h15.408c1.418,0,2.566-1.149,2.566-2.568
+				C29.874,17.841,28.724,16.691,27.306,16.691z" />
+              <path d="M27.306,24.395H11.897c-1.418,0-2.567,1.15-2.567,2.568s1.149,2.568,2.567,2.568h15.408c1.418,0,2.566-1.15,2.566-2.568
+				C29.874,25.545,28.724,24.395,27.306,24.395z" />
+            </g>
+          </g>
+        </g>
+      </svg>
+      <div class="mx-6 text-defwhite">
+        <h1 class="text-3xl font-semibold">{{ $modulComplete }}</h1>
+        <span class="text-sm">Modul Selesai</span>
       </div>
     </div>
   </div>

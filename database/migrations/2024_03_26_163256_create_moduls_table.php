@@ -18,8 +18,8 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->string('modul_name');
             $table->string('modul_description')->nullable();
-            $table->enum('modul_status', ['dalam proses', 'selesai'])->default('dalam proses');
-            $table->date('modul_start_date')->default(now());;
+            $table->enum('modul_status', ['dalam proses', 'selesai', 'terlambat'])->default('dalam proses');
+            $table->date('modul_start_date')->default(now());
             $table->date('modul_end_date');
             $table->string('slug')->unique();
             $table->timestamps();

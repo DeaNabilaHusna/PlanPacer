@@ -41,7 +41,7 @@ return new class extends Migration
             $table->string('project_location')->nullable();
             $table->string('contact_person')->nullable();
             $table->enum('visibility', ['private', 'terbatas'])->default('private');
-            $table->enum('project_status', ['sedang berjalan', 'selesai'])->default('sedang berjalan');
+            $table->enum('project_status', ['sedang berjalan', 'selesai', 'terlambat'])->default('sedang berjalan');
             $table->date('project_start_date')->default(now());;
             $table->date('project_end_date');
             $table->timestamps();
