@@ -57,31 +57,6 @@
         <span class="text-sm">Proyek Selesai</span>
       </div>
     </div>
-    <div class="flex justify-start items-center w-50 h-20 bg-[#9290C3] rounded-lg">
-      <svg fill="#ffffff" class="mx-6" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30px" height="30px" viewBox="0 0 47 47" xml:space="preserve">
-        <g>
-          <g id="Layer_1_22_">
-            <g>
-              <path d="M6.12,38.52V5.136h26.962v28.037l5.137-4.243V2.568C38.219,1.15,37.07,0,35.652,0h-32.1C2.134,0,0.985,1.15,0.985,2.568
-				v38.519c0,1.418,1.149,2.568,2.567,2.568h22.408L22.33,38.52H6.12z" />
-              <path d="M45.613,27.609c-0.473-0.446-1.2-0.467-1.698-0.057l-11.778,9.734l-7.849-4.709c-0.521-0.312-1.188-0.219-1.603,0.229
-				c-0.412,0.444-0.457,1.117-0.106,1.613l8.506,12.037c0.238,0.337,0.625,0.539,1.037,0.543c0.004,0,0.008,0,0.012,0
-				c0.408,0,0.793-0.193,1.035-0.525l12.6-17.173C46.149,28.78,46.084,28.055,45.613,27.609z" />
-              <path d="M27.306,8.988H11.897c-1.418,0-2.567,1.15-2.567,2.568s1.149,2.568,2.567,2.568h15.408c1.418,0,2.566-1.15,2.566-2.568
-				S28.724,8.988,27.306,8.988z" />
-              <path d="M27.306,16.691H11.897c-1.418,0-2.567,1.15-2.567,2.568s1.149,2.568,2.567,2.568h15.408c1.418,0,2.566-1.149,2.566-2.568
-				C29.874,17.841,28.724,16.691,27.306,16.691z" />
-              <path d="M27.306,24.395H11.897c-1.418,0-2.567,1.15-2.567,2.568s1.149,2.568,2.567,2.568h15.408c1.418,0,2.566-1.15,2.566-2.568
-				C29.874,25.545,28.724,24.395,27.306,24.395z" />
-            </g>
-          </g>
-        </g>
-      </svg>
-      <div class="mx-6 text-defwhite">
-        <h1 class="text-3xl font-semibold">{{ $taskComplete }}</h1>
-        <span class="text-sm">Tugas Selesai</span>
-      </div>
-    </div>
   </div>
 </section>
 <section class="my-6">
@@ -129,58 +104,6 @@
         </div>
       </div>
       @endforeach
-    </div>
-  </div>
-  <div>
-    <h1 class="block text-xl font-semibold text-defblack sm:text-lg my-4">Tugas Hari Ini</h1>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table class="w-full text-sm text-left rtl:text-right text-gray-500 font-raleway">
-        <thead class="text-xs text-defwhite uppercase bg-[#9290C3]">
-          <tr>
-            <th scope="col" class="px-6 py-3">
-
-            </th>
-            <th scope="col" class="px-6 py-3">
-              Tugas
-            </th>
-            <th scope="col" class="px-6 py-3">
-              Proyek
-            </th>
-            <th scope="col" class="px-6 py-3">
-              Tenggat Waktu
-            </th>
-            <th scope="col" class="px-6 py-3">
-              Status
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
-            @foreach ($tasks as $task)
-            <td class="px-6 py-4 font-medium whitespace-nowrap">
-              {{ $loop->iteration }}
-            </td>
-            <td class="px-6 py-4">
-              {{ $task->task_name }}
-            </td>
-            <td class="px-6 py-4">
-              {{ $task->project_name }}
-            </td>
-            <td class="px-6 py-4">
-            {{ \Carbon\Carbon::parse($task->task_end_date)->translatedFormat('l, d F Y') }}
-            </td>
-            <td class="px-6 py-4">
-              @if ($task->task_status == 'selesai')
-              <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $task->task_status }}</span>
-              @elseif ($task->task_status == 'dalam proses')
-              <span class="bg-orange-300 text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $task->task_status }}</span>
-              @endif
-            </td>
-            @endforeach
-
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </section>

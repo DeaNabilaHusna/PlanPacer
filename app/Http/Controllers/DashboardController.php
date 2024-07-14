@@ -30,21 +30,21 @@ class DashboardController extends Controller
         })
             ->where('project_status', 'selesai')
             ->count();
-        $taskComplete = Task::where('task_status', 'selesai')
-            ->orderBy('task_end_date')
-            ->with('modul')
-            ->count();
-        $tasks = Task::join('projects', 'tasks.project_id', '=', 'projects.id')
-            ->whereHas('user', function ($query) use ($user) {
-                $query->where('project_manager_id', $user->id);
-            })
-            ->select('tasks.*', 'projects.project_name')
-            ->orderBy('task_end_date', 'desc')
-            ->limit(10)
-            ->get();
+        // $taskComplete = Task::where('task_status', 'selesai')
+        //     ->orderBy('task_end_date')
+        //     ->with('modul')
+        //     ->count();
+        // $tasks = Task::join('projects', 'tasks.project_id', '=', 'projects.id')
+        //     ->whereHas('user', function ($query) use ($user) {
+        //         $query->where('project_manager_id', $user->id);
+        //     })
+        //     ->select('tasks.*', 'projects.project_name')
+        //     ->orderBy('task_end_date', 'desc')
+        //     ->limit(10)
+        //     ->get();
 
 
-        return view('dashboard.mainmenu', compact('projects', 'tasks', 'projectCount', 'projectComplete', 'taskComplete'));
+        return view('dashboard.mainmenu', compact('projects', 'projectCount', 'projectComplete'));
     }
     // public function index()
     // {

@@ -17,7 +17,7 @@
   <title>PlanPacer</title>
 </head>
 
-<body class="bg-defwhite">
+<body class="h-full bg-[#f5f3fd]"">
   <!-- ========== HEADER ========== -->
   <header class="sticky top-0 inset-x-0 flex flex-wrap sm:justify-start sm:flex-nowrap z-[48] w-full bg-[#f5f3fd] lg:bg-[#f5f3fd] border-b text-sm py-2.5 sm:py-4 lg:ps-64 ">
     <nav class="flex basis-full items-center w-full mx-auto px-4 sm:px-6 md:px-8" aria-label="Global">
@@ -171,7 +171,9 @@
   <!-- End Sidebar -->
 
   <!-- Content -->
-  <div class="w-full bg-[#f5f3fd] pt-10 px-4 sm:px-6 md:px-8 lg:ps-72 font-raleway">
+  <!-- <div class="w-full bg-[#f5f3fd] pt-10 px-4 sm:px-6 md:px-8 lg:ps-72 font-raleway"> -->
+  <div class="w-full bg-[#f5f3fd] py-6 px-4 sm:px-6 md:px-8 lg:ps-72 font-raleway">
+
     @yield('content')
   </div>
 </body>

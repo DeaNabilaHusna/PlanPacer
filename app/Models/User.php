@@ -4,12 +4,10 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Project;
-use App\Models\Task;
+use App\Models\Modul;
 use App\Models\UserProject;
-use App\Models\UserTask;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -47,40 +45,29 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // public function proyek(){
-    //     return $this->hasMany(Proyek::class);
-    // }
-
     protected static function booted()
     {
         parent::booted();
         Log::info('User model booted and HasRoles trait used.');
     }
 
-
-
     public function projects()
     {
-        // return $this->belongsToMany(Project::class, 'user_projects')->withPivot('role_id', 'assigned_by_user_id')
-        //     ->withTimestamps();
         return $this->belongsToMany(Project::class, 'user_projects', 'assignee_user_id', 'project_id')
                     ->withPivot('role_id', 'assigned_by_user_id')
                     ->withTimestamps();
     }
 
+//     public function tasks()
+// {
+//     return $this->belongsToMany(Task::class, 'user_tasks', 'project_manager_id', 'task_id') ->withPivot('project_id', 'modul_id', 'project_manager_email')
+//                 ->withTimestamps();
+// }
 
-    // public function tasks()
-    // {
-    //     // return $this->belongsToMany(TugasItem::class, UserTugasitem::class, 'penanggungjawab_id');
-    //     return $this->belongsToMany(Task::class, 'user_tasks', 'project_manager_id')
-    //     ->withPivot('project_manager_id');
-    // }
-    public function tasks()
+public function moduls()
 {
-    // return $this->belongsToMany(Task::class, 'user_tasks', 'project_manager_id', 'task_id')
-    //             ->withPivot('project_id', 'modul_id', 'project_manager_email')
-    //             ->withTimestamps();
-    return $this->belongsToMany(Task::class, 'user_tasks', 'project_manager_id', 'task_id') ->withPivot('project_id', 'modul_id', 'project_manager_email')
+    return $this->belongsToMany(Modul::class, 'user_moduls', 'handled_by_id', 'modul_id')
+    ->withPivot('project_id', 'handled_by_email')
                 ->withTimestamps();
 }
 

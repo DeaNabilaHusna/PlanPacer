@@ -80,7 +80,7 @@ Route::group(['middleware' => ['role:user|super admin|admin|project manager|anal
       Route::resource('main-menu/proyek', ProjectController::class)->parameters([
         'proyek' => 'slug'
     ]);
-    Route::get('/download/{filename}', 'DownloadController@download')->name('download');
+    // Route::get('/download/{filename}', 'DownloadController')->name('download');
     // Route::get('/main-menu/proyek', [ProjectController::class, 'index']);
     // Route::get('/main-menu/proyek/create', [ProjectController::class, 'create']);
     // Route::post('/main-menu/proyek', [ProjectController::class, 'store']);
@@ -100,8 +100,9 @@ Route::group(['middleware' => ['role:user|super admin|admin|project manager|anal
     // Route::delete('/main-menu/proyek/{slug}/modul/{modul}', [ProjectModulController::class, 'destroy'])->middleware('checkRoleCollaborators:hapus modul');
 
     // Tugas
-    Route::get('/main-menu/tugas', [TaskController::class, 'index']);
-    Route::resource('/main-menu/proyek/{slug}/modul/{modul}/tugas', ProjectTaskController::class);
+    // Route::get('/main-menu/tugas', [TaskController::class, 'index']);
+    // Route::resource('/main-menu/proyek/{slug}/modul/{modul}/tugas', ProjectTaskController::class);
+
     // Route::get('/main-menu/proyek/{slug}/modul/{modul}/tugas/create', [ProjectTaskController::class, 'create'])->middleware('checkRoleCollaborators:buat tugas');
     // Route::post('/main-menu/proyek/{slug}/modul/{modul}/tugas', [ProjectTaskController::class, 'store'])->middleware('checkRoleCollaborators:buat tugas');
     // Route::get('/main-menu/proyek/{slug}/modul/{modul}/tugas/{tugas}', [ProjectTaskController::class, 'show'])->middleware('checkRoleCollaborators:lihat tugas');
