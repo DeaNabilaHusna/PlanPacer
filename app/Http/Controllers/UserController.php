@@ -105,7 +105,7 @@ class UserController extends Controller
             $request->validate([
                 'username' => 'required|min:3|max:255',
                 'password' => 'nullable|min:8|max:15|regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/',
-                'roles' => 'required',
+                'roles' => 'nullable',
             ]);
 
             $data = [
@@ -116,7 +116,9 @@ class UserController extends Controller
                 $data['password'] = bcrypt($request->password);
             }
             $user->update($data);
-            $user->syncRoles($request->roles);
+            if (!empty($request->roles)) {
+                $user->syncRoles($request->roles);
+            }
             return redirect('/main-menu/user')->with('success', 'User Berhasil Diperbarui!');
         } catch (\Exception $e) {
             Session::flash('error', $e->getMessage());

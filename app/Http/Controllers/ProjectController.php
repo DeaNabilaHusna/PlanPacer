@@ -7,6 +7,9 @@ use App\Models\Project;
 use App\Models\UserProject;
 use Illuminate\Http\Request;
 use App\Models\Document;
+use App\Notifications\ProjectUpdated;
+use App\Notifications\ProjectAssigned;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -45,30 +48,9 @@ class ProjectController extends Controller
             $proyek->jumlahKontributor = $jumlahKontributor;
         }
         // dd ($proyek->users);
-        return view('dashboard.proyek.proyek', compact('proyeks'));
+        return view('dashboard.proyek.index', compact('proyeks'));
     }
 
-    // public function index()
-    // {
-    //     $proyeks = Project::where('user_id', Auth::id())
-    //         ->orWhereJsonContains('kolaborator', Auth::id()) // Filter by collaborators including the current user
-    //         ->get();
-
-    //     foreach ($proyeks as $proyek) {
-    //         // Mengambil kolaborator dalam bentuk array
-    //         $kolaboratorArray = DB::table('projects')
-    //             ->select('kolaborator')
-    //             ->where('id', $proyek->id)
-    //             ->pluck('kolaborator')
-    //             ->toArray();
-
-    //         // Menghitung jumlah kolaborator
-    //         $jumlahKontributor = count(json_decode($kolaboratorArray[0], true));
-    //         $proyek->jumlahKontributor = $jumlahKontributor;
-    //     }
-
-    //     return view('dashboard.proyek.proyek', compact('proyeks'));
-    // }
 
     /**
      * Show the form for creating a new resource.
@@ -78,7 +60,7 @@ class ProjectController extends Controller
 
         $users = User::all();
         $roles = Role::all();
-        return view('dashboard.proyek.createproyek', compact('users', 'roles'));
+        return view('dashboard.proyek.create', compact('users', 'roles'));
     }
 
 
@@ -136,10 +118,6 @@ class ProjectController extends Controller
                     $extension = $file->getClientOriginalExtension();
                     $fileNameWithoutExtension = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                     $filename = $project->id . '-' . $fileNameWithoutExtension . '.' . $extension;
-                    // $extension = $file->getClientOriginalExtension();
-                    // $name = $file->getClientOriginalName();
-                    // $fileNameWithoutExtension = pathinfo($name, PATHINFO_FILENAME);
-                    // $filename = $key . '-' . $fileNameWithoutExtension . '.' . $extension;
                     $path = $file->storeAs('uploads/docs', $filename);
                     $file->move($path, $filename);
                     $docs[] = [
@@ -149,6 +127,10 @@ class ProjectController extends Controller
                 }
                 Document::insert($docs);
             }
+            $kolaborators = $project->users;
+            Notification::send($kolaborators, new ProjectAssigned($project, auth()->user()));
+            // Notification::send($kolaborators, new ProjectAssigned($project, auth()->user(), auth()->user()->username));
+
 
             return redirect('/main-menu/proyek')->with('success', 'Berhasil Membuat Proyek Baru');
         } catch (\Exception $e) {
@@ -165,7 +147,7 @@ class ProjectController extends Controller
         $kolaborator = $proyek->users()->withPivot('role_id')->get();
         // dd($kolaborator);
         $docs = $proyek->documents;
-        return view('dashboard.proyek.detailproyek', [
+        return view('dashboard.proyek.detail', [
             'proyek' => $proyek,
             'docs' => $docs,
             'kolaborator' => $kolaborator
@@ -185,7 +167,7 @@ class ProjectController extends Controller
         $collaborators = $proyek->users()->withPivot('role_id')->get();
         $files = $proyek->documents;
 
-        return view('dashboard.proyek.updateproyek', compact('proyek', 'users', 'roles', 'collaborators', 'files'));
+        return view('dashboard.proyek.edit', compact('proyek', 'users', 'roles', 'collaborators', 'files'));
     }
     /**
      * Update the specified resource in storage.
@@ -263,14 +245,15 @@ class ProjectController extends Controller
                 }
             }
 
+            $kolaborators = $project->users;
+            Notification::send($kolaborators, new ProjectUpdated($project, auth()->user()));
+
             return redirect('/main-menu/proyek')->with('success', 'Berhasil Mengupdate Proyek');
         } catch (\Exception $e) {
             Session::flash('error', $e->getMessage());
             return back()->withInput();
         }
     }
-
-
 
 
     /**

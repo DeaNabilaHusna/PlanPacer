@@ -131,9 +131,7 @@ $segmentCount = count($segments);
                                         <span class="truncate font-medium">{{ basename($doc->file_name) ?: '–' }}</span> <!-- Assuming $file->name contains the file name -->
                                     </div>
                                 </div>
-                                <!-- <div class="ml-4 flex-shrink-0">
-                                    <a href="{{ route('download', $doc->file_name) }}" class="font-medium text-indigo-600 hover:text-indigo-500">Download</a>
-                                </div> -->
+                               
                             </li>
                             @endforeach
                         </ul>

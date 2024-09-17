@@ -247,7 +247,6 @@
     }
 </script>
 <script>
-    //Func menampilkan kolom kolabolator
     function toggleKolaborator(selectElement) {
         var kolaboratorInput = document.getElementById('kolaboratorInput');
         if (selectElement.value === 'terbatas') {

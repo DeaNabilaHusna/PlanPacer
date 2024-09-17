@@ -4,7 +4,7 @@
 <!-- Content -->
 <!-- Page Heading -->
 <header class="my-10">
-  <div class="rounded-2xl bg-[#c9c8f3] p-4 relative sm:bg-transparent md:bg-transparent md:bg-[#c9c8f3]">
+  <div class="rounded-2xl bg-[#c1c0f0] p-4 relative">
     <div class="m-8">
       <p class="text-3xl font-extrabold text-defblack">Halo, {{ auth()->user()->username }}</p>
       <h1 class="block text-base font-semibold text-defblack sm:text-md">Selamat Datang Kembali</h1>
@@ -16,7 +16,7 @@
 
 <!-- End Page Heading -->
 <section>
-  <h1 class="block text-xl font-semibold text-defblack sm:text-lg mb-4">Overview</h1>
+  <h1 class="block text-xl font-semibold text-gray-600 sm:text-lg mb-4">Overview</h1>
   <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-12">
     <div class="flex justify-start items-center w-auto h-20 bg-[#424874] rounded-lg">
       <svg class="mx-6" fill="#ffffff" width="30px" height="30px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -58,9 +58,9 @@
       </div>
     </div>
     <div class="flex justify-start items-center w-auto h-20 bg-[#7f8ac5] rounded-lg">
-    <svg width="30px" height="30px" class="mx-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M5 2h16v20H3V2h2zm14 18V4H5v16h14zM7 6h10v2H7V6zm10 4H7v2h10v-2zM7 14h7v2H7v-2z" fill="#ffffff"/>
-</svg>
+      <svg width="30px" height="30px" class="mx-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 2h16v20H3V2h2zm14 18V4H5v16h14zM7 6h10v2H7V6zm10 4H7v2h10v-2zM7 14h7v2H7v-2z" fill="#ffffff" />
+      </svg>
       <div class="mx-6 text-defwhite">
         <h1 class="text-3xl font-semibold">{{ $moduls }}</h1>
         <span class="text-sm">Modul</span>
@@ -95,7 +95,7 @@
 </section>
 <section class="my-6">
   <div>
-    <h1 class="block text-xl font-semibold text-defblack sm:text-lg mb-4">Proyek</h1>
+    <h1 class="block text-xl font-semibold text-gray-600 sm:text-lg mb-4">Proyek</h1>
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-12">
       @foreach ($projects as $project )
       <div class="max-w-sm h-min p-6 bg-defwhite border border-gray-200 rounded-lg shadow ">
@@ -109,6 +109,9 @@
           } elseif ($project->project_status == 'selesai') {
           $bgColor = 'bg-green-300';
           $textColor = 'text-green-800';
+          }elseif ($project->project_status == 'selesai') {
+          $bgColor = 'bg-orange-500';
+          $textColor = 'text-red-800';
           }
           @endphp
           <span class="{{ $bgColor }} {{ $textColor }} text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $project->project_status }}</span>
@@ -138,6 +141,60 @@
         </div>
       </div>
       @endforeach
+    </div>
+  </div>
+  <div>
+    <h1 class="block text-xl font-semibold text-gray-600 sm:text-lg my-4">Modul</h1>
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 font-raleway">
+        <thead class="text-xs text-defwhite uppercase bg-[#9290C3]">
+          <tr>
+            <th scope="col" class="px-6 py-3">
+
+            </th>
+            <th scope="col" class="px-6 py-3">
+              Modul
+            </th>
+            <th scope="col" class="px-6 py-3">
+              Proyek
+            </th>
+            <th scope="col" class="px-6 py-3">
+              Tenggat Waktu
+            </th>
+            <th scope="col" class="px-6 py-3">
+              Status
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($modules as $modul)
+          <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
+            <td class="px-6 py-4 font-medium whitespace-nowrap">
+              {{ $loop->iteration }}
+            </td>
+            <td class="px-6 py-4">
+              {{ $modul->modul_name }}
+            </td>
+            <td class="px-6 py-4">
+              {{ $modul->project_name }}
+            </td>
+            <td class="px-6 py-4">
+              {{ \Carbon\Carbon::parse($modul->modul_end_date)->translatedFormat('l, d F Y') }}
+            </td>
+            <td class="px-6 py-4">
+              @if ($modul->modul_status == 'selesai')
+              <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $modul->modul_status }}</span>
+              @elseif ($modul->modul_status == 'dalam proses')
+              <span class="bg-orange-300 text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $modul->modul_status }}</span>
+              @elseif ($modul->modul_status == 'terlambat')
+              <span class="bg-orange-500 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $modul->modul_status }}</span>
+              @endif
+            </td>
+            
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
     </div>
   </div>
 </section>

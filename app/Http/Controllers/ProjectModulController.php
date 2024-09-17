@@ -37,62 +37,6 @@ class ProjectModulController extends Controller
     /**
      * Display a listing of the resource.
      */
-
-    // public function index(Request $request, $slug)
-    // {
-
-    //     // Menggunakan $slug_proyek yang didapat dari URL
-    //     $proyek = Project::where('slug', $slug)
-    //         ->where(function ($query) {
-    //             $query->where('user_id', Auth::id())
-    //                 ->orWhereHas('users', function ($query) {
-    //                     $query->where('users.id', Auth::id());
-    //                 });
-    //         })->get();
-
-    //     if (!$proyek) {
-    //         abort(404); // Handle jika proyek tidak ditemukan
-    //     }
-    //     // dd($proyek);
-    //     // Ambil kartu tugas yang terkait dengan proyek
-    //     $tugas = Modul::whereIn('project_id', $proyek->pluck('id'))->get();
-    //     // $tugas->load('tasks');
-
-
-    //     return view('dashboard.modul.proyektugas', [
-    //         'tugas' => $tugas,
-    //         'proyek' => $proyek,
-    //     ]);
-    // }
-
-    // public function index(Request $request, $slug)
-    // {
-    //     // Mendapatkan proyek berdasarkan slug
-    //     $proyek = Project::where('slug', $slug)
-    //         ->where(function ($query) {
-    //             $query->where('user_id', Auth::id())
-    //                 ->orWhereHas('users', function ($query) {
-    //                     $query->where('users.id', Auth::id());
-    //                 });
-    //         })->get(); // Gunakan first() untuk mendapatkan satu proyek
-
-    //     if (!$proyek) {
-    //         abort(404); // Handle jika proyek tidak ditemukan
-    //     }
-
-    //     // Mendapatkan project_id dari proyek yang ditemukan
-    //     $projectId = $proyek->first()->id;
-    //     $handledByIds = UserModul::where('modul_id', $tugasItem->id)->pluck('handled_by_id')->toArray();
-
-    //     // Ambil kartu tugas yang terkait dengan proyek
-    //     $tugas = Modul::where('project_id', $projectId)->get();
-
-    //     return view('dashboard.modul.proyektugas', [
-    //         'tugas' => $tugas,
-    //         'proyek' => $proyek,
-    //         'handledByIds' => $handledByIds
-    //     ]);
-    // }
     public function index(Request $request, $slug)
     {
         // Mendapatkan proyek berdasarkan slug
@@ -124,7 +68,7 @@ class ProjectModulController extends Controller
             $handledByIdsArray[$tugasItem->id] = $handledByIds;
         }
         $users = User::all();
-        return view('dashboard.modul.proyektugas', [
+        return view('dashboard.modul.index', [
             'tugas' => $tugas,
             'proyek' => $proyek,
             'handledByIdsArray' => $handledByIdsArray,
@@ -245,6 +189,7 @@ class ProjectModulController extends Controller
     $kolaborator = DB::table('user_moduls')
         ->join('users', 'user_moduls.handled_by_id', '=', 'users.id')
         ->where('user_moduls.project_id', $proyek->id)
+        ->where('user_moduls.modul_id', $modul->id)
         ->select('users.*')
         ->get();
 
@@ -338,81 +283,6 @@ class ProjectModulController extends Controller
         }
     }
     
-    
-    
-
-    // public function update(Request $request, $slug, $modulId)
-    // {
-    //     try {
-    //         // Fetch the existing Modul record by its ID
-    //         $modul = Modul::findOrFail($modulId);
-
-    //         // Validate the request data
-    //         $validatedData = $request->validate([
-    //             'modul_name' => [
-    //                 'required',
-    //                 'max:255',
-    //                 Rule::unique('moduls')->where(function ($query) use ($slug, $modul) {
-    //                     return $query->where('project_id', Project::where('slug', $slug)->first()->id)
-    //                         ->where('id', '!=', $modul->id); // Exclude current modul from unique check
-    //                 }),
-    //             ],
-    //             'modul_description' => 'nullable',
-    //             'modul_status' => 'required',
-    //             'modul_start_date' => 'required|date',
-    //             'modul_end_date' => 'required|date',
-    //             'handled_by_id' => 'nullable|array',
-    //             'handled_by_id.*' => 'exists:users,id',
-    //         ]);
-
-    //         // Fetch the project by its slug
-    //         $proyek = Project::where('slug', $slug)->firstOrFail();
-
-    //         // Check if the project is private and no handled_by_id is provided
-    //         if ($proyek->visibility === 'private' && empty($validatedData['handled_by_id'])) {
-    //             $validatedData['handled_by_id'] = [auth()->user()->id];
-    //         }
-
-    //         // Generate a new slug if the modul_name has changed
-    //         if ($modul->modul_name !== $validatedData['modul_name']) {
-    //             $kartuSlug = Str::slug($validatedData['modul_name']) . '-' . $proyek->slug;
-    //             $validatedData['slug'] = $kartuSlug;
-    //         }
-
-    //         // Update the modul record with the new data
-    //         $modul->update($validatedData);
-    //         // $modul->users()->sync($validatedData['handled_by_id']);
-    //         $modul->users()->sync(array_map(function ($userId) {
-    //             $user = User::find($userId);
-    //             return [
-    //                 'handled_by_email' => $user->email,
-    //                 'updated_at' => now(),
-    //             ];
-    //         }, $validatedData['handled_by_id']));
-    //         return redirect('/main-menu/proyek/' . $slug . '/modul')->with('success', 'Berhasil Memperbarui Modul');
-    //     } catch (\Exception $e) {
-    //         Session::flash('error', $e->getMessage());
-    //         return back()->withInput();
-    //     }
-    // }
-
-    // public function update(Request $request, $slug, $id)
-    // {
-    //     $validatedData = $request->validate([
-    //         'modul_name' => 'required|max:255',
-    //     ]);
-
-    //     $proyek = Project::where('slug', $slug)->firstOrFail();
-    //     $kartuTugas = Modul::where('id', $id)->where('project_id', $proyek->id)->firstOrFail();
-    //     // $this->authorize('update', $proyek);
-
-    //     $kartuTugas->modul_name = $validatedData['modul_name'];
-    //     $kartuTugas->save();
-
-    //     return redirect('/main-menu/proyek/' . $proyek->slug . '/modul')->with('success', 'Modul berhasil diperbarui.');
-    // }
-
-
     /**
      * Remove the specified resource from storage.
      */

@@ -10,7 +10,7 @@
         @method('PUT')
         <div class="space-y-12 font-medium">
             <div class="border-b border-gray-900/10 pb-12">
-                <h2 class="text-base font-semibold leading-7 text-gray-900">Tambah Modul</h2>
+                <h2 class="text-base font-semibold leading-7 text-gray-900">Edit Modul</h2>
                 <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div class="sm:col-span-4">
                         <label for="modul_name" class="block text-sm font-medium leading-6 text-gray-900">Nama Modul</label>

@@ -106,7 +106,9 @@ $segmentCount = count($segments);
             <span class="text-sm font-sm text-defblack font-semibold">{{ round($proyek->calculateProgress()) }}%</span>
         </div>
         <div class="w-full bg-[#DCD6F7] rounded-full h-2.5 mt-2">
-        <div class="bg-[#424874] h-2.5 rounded-full" style="width: {{ round($proyek->calculateProgress()) }}%;"></div>
+       <div class="bg-[#424874] h-2.5 rounded-full" style="width: {{ round($proyek->calculateProgress()) }}%;">
+</div>
+
     </div>
     </div>
     @endforeach
@@ -119,7 +121,6 @@ $segmentCount = count($segments);
 </div>
 @endif
 
-        @endsection
         <script>
             document.addEventListener('DOMContentLoaded', (event) => {
                 const container = document.querySelector('html'); // Bisa diganti dengan elemen kontainer yang lebih spesifik
@@ -142,3 +143,5 @@ $segmentCount = count($segments);
                 });
             });
         </script>
+        @endsection
+        

@@ -58,9 +58,12 @@
                         <button type="submit" class="w-28 rounded-md bg-yellow px-3 py-1.5 text-sm font-semibold leading-6 text-defwhite shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Masuk</button>
                     </div>
 
-                    <p class="text-center text-base">Atau lanjutkan dengan</p>
-                    <button class="flex justify-center items-center w-full h-9 bg-defwhite rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-slate-400 hover:text-defwhite hover:font-bold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"><img src="images/google.png" alt=""><span class="px-3 text-base font-medium">Google</span></button>
-                    <div class="text-center"><a href="#" class="hover:text-yellow">Lupa kata sandi</a> <span class="px-5">|</span> <a href="/registrasi" class="hover:text-yellow">Buat akun</a></div>
+                    <!-- <p class="text-center text-base">Atau lanjutkan dengan</p>
+                    <button class="flex justify-center items-center w-full h-9 bg-defwhite rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-slate-400 hover:text-defwhite hover:font-bold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"><img src="images/google.png" alt=""><span class="px-3 text-base font-medium">Google</span></button> -->
+                    <div class="text-center">
+                        <a href="#" class="hover:text-yellow">Lupa kata sandi</a> 
+                        <span class="px-5">|</span> 
+                        <a href="/registrasi" class="hover:text-yellow">Buat akun</a></div>
                 </form>
             </div>
         </div>

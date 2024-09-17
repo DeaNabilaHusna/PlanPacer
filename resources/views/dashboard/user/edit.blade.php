@@ -30,7 +30,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="sm:col-span-4">
+                    <!-- <div class="sm:col-span-4">
                         <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Kata Sandi</label>
                         <div class="mt-2">
                             <input type="password" name="password" id="password" autocomplete="password" autofocus value="{{ old('password') }}" class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
@@ -38,8 +38,8 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
-                    </div>
-                    <div class="sm:col-span-4">
+                    </div> -->
+                    <!-- <div class="sm:col-span-4">
                         <label for="roles" class="block text-sm font-medium leading-6 text-gray-900">Pilih Role</label>
                         <div class="mt-2">
                             @foreach($roles as $roleId => $roleName)
@@ -52,7 +52,7 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
-                    </div>
+                    </div> -->
 
 
 

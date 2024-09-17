@@ -57,19 +57,25 @@
     <section>
 
         <div id="" class="slide">
-            <div class="relative">
-                <img class="w-full h-auto object-cover z-0 max-h-screen" src="images/home.png" alt="Image">
-                <div class="absolute top-1/2 left-0 transform -translate-y-1/2 text-defwhite ml-4">
-                    <div class="container mx-auto px-4">
-                        <h1 class="text-4xl mb-4 fonte-raleway">Atur Rencana Proyek, dengan <br> <span
-                                class="font-paytone font-black text-defwhite">Plan<span
-                                    class="text-yellow">Pacer</span>.</span></h1>
-                        <p class="text-sm">Solusi manajemen proyek yang inovatif <br> dirancang untuk membantu tim dan
-                            individu mengatur, melacak, <br>dan mengeksekusi proyek mereka dengan efisiensi dan
-                            keberhasilan yang maksimal.</p>
-                    </div>
-                </div>
-            </div>
+        <div class="relative min-h-screen bg-gray-800">
+    <img class="absolute inset-0 w-full h-full object-cover z-0" src="images/home.png" alt="Image">
+    <div class="absolute top-1/2 left-0 transform -translate-y-1/2 text-defwhite p-4 z-10 w-full md:w-auto">
+        <div class="container mx-auto md:ml-4">
+            <h1 class="text-2xl sm:text-4xl mb-4 font-raleway text-left">
+                Atur Rencana Proyek, dengan <br> 
+                <span class="font-paytone font-black text-defwhite">
+                    Plan<span class="text-yellow">Pacer</span>.
+                </span>
+            </h1>
+            <p class="text-xs sm:text-sm text-left">
+                Solusi manajemen proyek yang inovatif <br> dirancang untuk membantu tim dan
+                individu mengatur, melacak, <br> dan mengeksekusi proyek mereka dengan efisiensi dan
+                keberhasilan yang maksimal.
+            </p>
+        </div>
+    </div>
+</div>
+
         </div>
     </section>
     {{-- Hero Section End  --}}

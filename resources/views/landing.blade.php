@@ -266,7 +266,7 @@
                 <div class="flex items-center justify-end md:w-1/2">
                     <div class="lg:relative rounded">
                         <div class="rounded-lg">
-                            <img class="w-max" src="images/rectangle.png" />
+                            <img class="w-full lg:w-[500px] lg:h-[282px] max-w-full max-h-full" src="images/point1.jpeg" />
                         </div>
                     </div>
 
@@ -277,7 +277,7 @@
                 <div class="flex items-center md:w-1/2">
                     <div class="lg:relative rounded">
                         <div class="rounded-lg">
-                            <img class="w-max" src="images/rectangle.png" />
+                            <img class="w-full lg:w-[500px] lg:h-[282px] max-w-full max-h-full" src="images/point2.jpeg" />
                         </div>
                     </div>
 
@@ -303,7 +303,7 @@
                 <div class="flex items-center justify-end md:w-1/2">
                     <div class="lg:relative rounded">
                         <div class="rounded-lg">
-                            <img class="w-max" src="images/rectangle.png" />
+                            <img class="w-full lg:w-[500px] lg:h-[282px] max-w-full max-h-full" src="images/point3.jpeg" />
                         </div>
                     </div>
 
@@ -313,7 +313,7 @@
                 <div class="flex items-center md:w-1/2">
                     <div class="lg:relative rounded">
                         <div class="rounded-lg">
-                            <img class="w-max" src="images/rectangle.png" />
+                            <img class="w-full lg:w-[500px] lg:h-[282px] max-w-full max-h-full" src="images/point4.jpeg" />
                         </div>
                     </div>
 
