@@ -9,24 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    // public function up(): void
-    // {
-    //     Schema::create('kartu_tugas', function (Blueprint $table) {
-    //         $table->id();
-    //         $table->foreignId('proyek_id');
-    //         $table->string('nama_kartu');
-    //         $table->string('slug')->unique(); 
-    //         $table->timestamps();
-    //     });
-    // }
-
     public function up(): void
     {
         Schema::create('moduls', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
+            $table->foreignId('project_id')
+                ->constrained('projects')
+                ->onDelete('cascade');
             $table->string('modul_name');
-            $table->string('slug')->unique(); 
+            $table->string('modul_description')->nullable();
+            $table->enum('modul_status', ['dalam proses', 'selesai', 'terlambat'])->default('dalam proses');
+            $table->date('modul_start_date')->default(now());
+            $table->date('modul_end_date');
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }

@@ -5,18 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserTask extends Model
+class UserModul extends Model
 {
     use HasFactory;
-    protected $table = "user_tasks";
+    protected $table = "user_moduls";
     protected $guarded = ["id"];
-
-    public function tasks()
+    public function moduls()
     {
-        return $this->belongsTo(Task::class, 'id');
+        return $this->belongsTo(Modul::class, 'id');
     }
     public function users()
     {
-        return $this->belongsTo(User::class, 'project_manager_id', 'id');
+        return $this->belongsTo(User::class, 'handled_by_id', 'id');
     }
 }

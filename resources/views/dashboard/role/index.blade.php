@@ -59,10 +59,19 @@ $segmentCount = count($segments);
                     </thead>
 
                     <tbody>
+                        @php
+                        $iteration = 0;
+                        @endphp
                         @foreach ($roles as $role)
+                        @if(Auth::user()->roles->contains($role) || $role->name === 'user')
+                        @continue
+                        @endif
+                        @php
+                        $iteration++;
+                        @endphp
                         <tr class="bg-white border-b hover:bg-defgrey text-defblack ">
                             <td class="px-6 py-4 font-medium whitespace-nowrap">
-                                {{ $loop->iteration }}
+                                {{ $iteration }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $role->name }}

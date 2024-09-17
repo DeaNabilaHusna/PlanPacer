@@ -46,11 +46,14 @@ $segmentCount = count($segments);
             $bgColor = '';
             $textColor = '';
             if ($proyek->project_status == 'sedang berjalan') {
-            $bgColor = 'bg-orange-300';
+            $bgColor = 'bg-amber-300';
             $textColor = 'text-orange-800';
             } elseif ($proyek->project_status == 'selesai') {
             $bgColor = 'bg-green-300';
             $textColor = 'text-green-800';
+            }elseif ($proyek->project_status == 'terlambat') {
+            $bgColor = 'bg-orange-500';
+            $textColor = 'text-red-800';
             }
             @endphp
             <span class="{{ $bgColor }} {{ $textColor }} text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $proyek->project_status }}</span>
@@ -100,11 +103,13 @@ $segmentCount = count($segments);
         <p class="py-1font-normal text-gray-700">{{ $proyek->jumlahKontributor }} Kontributor</p>
         <div class="flex justify-between mb-1">
             <span class="text-base font-sm text-defblack">Progress</span>
-            <span class="text-sm font-sm text-defblack font-semibold">45%</span>
+            <span class="text-sm font-sm text-defblack font-semibold">{{ round($proyek->calculateProgress()) }}%</span>
         </div>
-        <div class="w-full bg-[#DCD6F7] rounded-full h-2.5">
-            <div class="bg-[#424874] h-2.5 rounded-full" style="width: 45%"></div>
-        </div>
+        <div class="w-full bg-[#DCD6F7] rounded-full h-2.5 mt-2">
+       <div class="bg-[#424874] h-2.5 rounded-full" style="width: {{ round($proyek->calculateProgress()) }}%;">
+</div>
+
+    </div>
     </div>
     @endforeach
 </div>
@@ -116,7 +121,6 @@ $segmentCount = count($segments);
 </div>
 @endif
 
-        @endsection
         <script>
             document.addEventListener('DOMContentLoaded', (event) => {
                 const container = document.querySelector('html'); // Bisa diganti dengan elemen kontainer yang lebih spesifik
@@ -139,3 +143,5 @@ $segmentCount = count($segments);
                 });
             });
         </script>
+        @endsection
+        
